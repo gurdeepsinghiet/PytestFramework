@@ -1,0 +1,163 @@
+{
+  "entitlement": {
+    "externalId": "",
+    "creationDate": "2022-01-25 06:43",
+    "lastModifiedDate": "2022-01-25 06:43",
+    "entitlementAsWhole": false,
+    "eId": "",
+    "id": "",
+    "startDate": "2022-01-01",
+    "expiry": {
+      "neverExpires": true
+    },
+    "customer": {
+      "id": "",
+      "name": "",
+      "identifier": "",
+      "externalId": ""
+    },
+
+    "state": "ENABLE",
+
+
+    "productKeys": {
+      "totalRegisteredQuantity": "1",
+      "productKey": [
+        {
+          "pkId": "",
+          "creationDate": "2022-01-25 06:43",
+          "lastModifiedDate": "2022-01-25 06:43",
+          "startDate": "2022-01-25",
+          "expiry": {
+            "neverExpires": true
+          },
+          "id": "",
+          "enforcement": {
+            "id": "",
+            "name": "Sentinel RMS",
+            "version": "10.0"
+          },
+          "totalQuantity": 100,
+          "availableQuantity": 100,
+          "splittedQuantity": 0,
+          "activationMethod": "FIXED",
+          "fixedQuantity": 1,
+          "state": "ENABLE",
+          "item": {
+            "itemProduct": {
+              "product": {
+                "externalId": "",
+                "id": "",
+                "identifier": "",
+                "nameVersion": {
+                  "name": "",
+                  "version": ""
+                }
+              }
+            }
+          },
+          "activationAttributes": {
+            "activationAttribute": [
+              {
+                "groupName": "LOCKING",
+                "subGroupName": "",
+                "name": "SECONDARY_1_FINGERPRINT",
+                "value": "",
+                "readOnly": true,
+                "mandatory": true,
+                "associatedAttribute": null
+              },
+              {
+                "groupName": "LOCKING",
+                "subGroupName": "",
+                "name": "PRIMARY_1_FINGERPRINT",
+                "value": "",
+                "readOnly": true,
+                "mandatory": true,
+                "associatedAttribute": null
+              },
+              {
+                "groupName": "LOCKING",
+                "subGroupName": "",
+                "name": "PRIMARY_1_CRITERIA",
+                "value": "4",
+                "readOnly": true,
+                "mandatory": false,
+                "associatedAttribute": {
+                  "name": "PRIMARY_1_INFO",
+                  "value": "",
+                  "readOnly": true,
+                  "mandatory": true
+                }
+              }
+            ]
+          },
+          "customAttributes": null,
+          "productKeyFingerprints": {
+            "totalRegisteredQuantity": "1",
+            "productKeyFingerprint": [
+              {
+                "id": "f7055e96-80d9-4f00-8b8f-73a6ffd1f828",
+                "friendlyName": "FP-12345",
+                "registeredQuantity": "1"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "entitlementAttributes": {
+      "entitlementAttribute": [
+        {
+          "name": "DURATION",
+          "value": "2160",
+          "isSANL": false,
+          "groupName": "CLOUD_SERVED",
+          "subGroupName": ""
+        },
+        {
+          "name": "RENEW_FREQUENCY",
+          "value": "24",
+          "isSANL": false,
+          "groupName": "CLOUD_SERVED",
+          "subGroupName": ""
+        },
+        {
+          "name": "USAGE_SYNC_FREQUENCY",
+          "value": "1",
+          "isSANL": false,
+          "groupName": "CLOUD_SERVED",
+          "subGroupName": ""
+        },
+        {
+          "name": "FINGERPRINT_REGISTRATION",
+          "value": "true",
+          "isSANL": false,
+          "groupName": "CLOUD_SERVED",
+          "subGroupName": ""
+        },
+        {
+          "name": "IS_REDUNDANT",
+          "value": "false",
+          "isSANL": false,
+          "groupName": "POLICY",
+          "subGroupName": ""
+        },
+        {
+          "name": "REDUNDANCY_MAJORITY_RULE",
+          "value": "true",
+          "isSANL": false,
+          "groupName": "POLICY",
+          "subGroupName": ""
+        },
+        {
+          "name": "REDUNDANT_SERVERS",
+          "value": "3",
+          "isSANL": false,
+          "groupName": "LOCKING",
+          "subGroupName": ""
+        }
+      ]
+    }
+  }
+}

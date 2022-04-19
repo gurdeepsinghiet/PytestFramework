@@ -1,0 +1,11 @@
+FROM python:3.8.0-slim
+MAINTAINER Thales-Automation-Group
+COPY . /PytestHighend
+WORKDIR /PytestHighend
+RUN apt-get update \
+&& apt-get install gcc -y \
+&& apt-get clean
+RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /PytestHighend/EMSWS
+RUN ["pytest", "-v", "--html=./../AutomationReport/report.html","EMSWS.py"]
+CMD tail -f /dev/null
