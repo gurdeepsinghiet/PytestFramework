@@ -1,12 +1,7 @@
 import json
-import numpy as np
 import requests
-from jsonpath_ng.ext import parse
 import Constant
 import logging
-import random
-import string
-from EMSAssertion import EMSAssertionFactory
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName

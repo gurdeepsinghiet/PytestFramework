@@ -8,9 +8,13 @@ url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
-
-
 class LicenseModelfactory(object):
+
+    def updateLicencezModelAttribute(LM_ATTR_Name, value, response_LM_json):
+        jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
+        for match in jsonpath_expression.find(response_LM_json):
+            if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
+                match.value["value"] = value
 
     def addFlexibleLicenceModelStandalone(self,LMNameGenerator, response_LM_json):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
@@ -41,10 +45,6 @@ class LicenseModelfactory(object):
         lmId = response_LM_json["licenseModel"]["id"]
         self.LMNeworksProperties = [LM_name, lmId]
         return self
-
-
-
-
 
     def getLMStandProperties(self):
         return self.LMStandaloneProperties

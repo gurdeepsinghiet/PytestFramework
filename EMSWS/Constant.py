@@ -7,3 +7,4 @@ productJsonPath='../jsonFiles/product.json'
 contactJsonPath='../jsonFiles/contact.json'
 customerJsonPath='../jsonFiles/customer.json'
 entitlementJsonPath='../jsonFiles/entitlement.json'
+test_createLeaseProduct_DataFramePath="../EMSDataFrame/NameSpaceDataFrame.py"

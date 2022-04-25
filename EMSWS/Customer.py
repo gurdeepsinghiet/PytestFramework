@@ -1,3 +1,9 @@
+import json
+import requests
+from jsonpath_ng.ext import parse
+import Constant
+import logging
+
 class CustomerFactory:
     def addCustomer(self, customerJsonPath, customerNameGenerator, contact_id):
         customerFile = open(customerJsonPath, 'r')

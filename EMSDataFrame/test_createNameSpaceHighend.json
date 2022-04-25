@@ -1,0 +1,10 @@
+{
+  "NameSpaceName": "HighendTesting",
+  "FeatureName"  : "HighendFeature",
+  "FeatureVersion" : "1.0",
+  "ProductName" : "HighendProductName",
+  "ProductVersion" : "1.0",
+  "CustomerName" : "HighendCust",
+  "ContactEmail" : "HighendThales@ems.com",
+  "Password"   : "Thales@123"
+}

@@ -1,7 +1,5 @@
 import json
-import numpy as np
 import requests
-from jsonpath_ng.ext import parse
 import Constant
 import logging
 LOGGER = logging.getLogger(__name__)
