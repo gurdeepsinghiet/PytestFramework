@@ -1,4 +1,3 @@
-import pytest
 import json
 import numpy as np
 import requests
@@ -206,6 +205,9 @@ def fun2():
 
 def fun1():
     return "c"
+
+
+
 
 
 

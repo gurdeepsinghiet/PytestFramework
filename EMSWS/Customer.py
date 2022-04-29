@@ -1,16 +1,21 @@
 import json
 import requests
-from jsonpath_ng.ext import parse
-import Constant
 import logging
-
+import os
+import Constant
+LOGGER = logging.getLogger(__name__)
+url = Constant.EMSURL
+username = Constant.EMSUserName
+password = Constant.EMSPassword
 class CustomerFactory:
+
     def addCustomer(self, customerJsonPath, customerNameGenerator, contact_id):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         customerFile = open(customerJsonPath, 'r')
         customerFileData = customerFile.read()
         customer_json_object = json.loads(customerFileData)
         customerFile.close()
-        customerName = customerNameGenerator + self.Upper_Lower_string(9)
+        customerName = customerNameGenerator + self.RandomString(9)
         customer_json_object["customer"]["name"] = customerName
         customer_json_object["customer"]["identifier"] = customerName
         customer_json_object["customer"]["contacts"]["contact"][0]["id"] = contact_id

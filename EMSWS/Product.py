@@ -2,6 +2,7 @@ import json
 import requests
 import Constant
 import logging
+import os
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -10,12 +11,13 @@ password = Constant.EMSPassword
 class ProductFactory(object):
 
     def addProductNonLVH(self,productJsonPath, productNameGenerator, nameSpace_name, feature_name, feature_version):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         productFile = open(productJsonPath, 'r')
         productFileData = productFile.read()
         product_json_object = json.loads(productFileData)
         productFile.close()
         product_json_object["product"]["namespace"]["name"] = nameSpace_name
-        product_json_object["product"]["nameVersion"]["name"] = productNameGenerator + self.Upper_Lower_string(9)
+        product_json_object["product"]["nameVersion"]["name"] = productNameGenerator + self.RandomString(9)
         product_json_object["product"]["nameVersion"]["version"] = feature_version
         product_json_object["product"]["productFeatures"]["productFeature"][0]["feature"]["nameVersion"][
             "name"] = feature_name

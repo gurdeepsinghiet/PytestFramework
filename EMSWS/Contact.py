@@ -1,5 +1,4 @@
 import json
-import numpy as np
 import requests
 import Constant
 import logging
@@ -8,15 +7,13 @@ url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
-
-
 class ContactFactory:
     def addStandardContact(self, contactJsonPath, contactNameGenerator, emailString):
         contactFile = open(contactJsonPath, 'r')
         contactFileData = contactFile.read()
         contact_json_object = json.loads(contactFileData)
         contactFile.close()
-        contact_json_object["contact"]["name"] = contactNameGenerator + self.Upper_Lower_string(9)
+        contact_json_object["contact"]["name"] = contactNameGenerator + self.RandomString(9)
         contact_json_object["contact"]["password"] = "Thales@123"
         contact_json_object["contact"]["contactType"] = "Standard"
         contact_json_object["contact"]["emailId"] = emailString + str(
@@ -33,8 +30,6 @@ class ContactFactory:
         contact_emailId = responseTextContact["contact"]["emailId"]
         self.contactStandardProperties = [contact_name, conatct_id, contact_emailId]
         return self
-
-
 
     def getContactProperties(self):
         return self.contactStandardProperties

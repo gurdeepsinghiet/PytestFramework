@@ -1,7 +1,6 @@
 import json
-import numpy as np
+import os
 import requests
-from jsonpath_ng.ext import parse
 import Constant
 import logging
 LOGGER = logging.getLogger(__name__)
@@ -13,6 +12,7 @@ password = Constant.EMSPassword
 class Entitlementfacory(object):
 
     def createEntitlementNONLVH(self,productNmae, productVesrion, customerName, entitlementJsonPath):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         entitlementFile = open(entitlementJsonPath, 'r')
         entitlemenetFileData = entitlementFile.read()
         entitlement_json_object = json.loads(entitlemenetFileData)

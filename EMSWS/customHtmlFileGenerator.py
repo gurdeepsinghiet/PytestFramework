@@ -1,11 +1,13 @@
-class CustomeReportGenerator:
+import logging
+import os
+import  Constant
+LOGGER = logging.getLogger(__name__)
+class CustomeReportGenerator():
 
     def __init__(self):
         pass
-
-
-    def reportGenerator(self,testcaseName):
-
+    def reportGenerator(self):
+        running_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         preExistingTemplete="<html>"+"<head>"+"<style"
         preExistingTemplete +="td {vertical-align: middle;font-size: 15px;word-wrap:break-word;}"
         preExistingTemplete += "th {vertical-align: top;background: #d1ecf1;color: black;}"
@@ -29,7 +31,7 @@ class CustomeReportGenerator:
         preExistingTemplete += "</head>"
         preExistingTemplete += "<body>"
         preExistingTemplete += "<div id='Puytest' class='white_content' style='display: block;'>"
-        preExistingTemplete += "<div style='background-color:#d1ecf1;text-align:center'><p>TC_SM-109608_RegistrationToken_withoutCustomer_windows__1_ Create Customer through WS</p></div>"
+        preExistingTemplete += "<div style='background-color:#d1ecf1;text-align:center'><p>"+running_testcases+"</p></div>"
         preExistingTemplete += "<table border='1' cellpadding='8' cellspacing='0'>"
         preExistingTemplete += "<tbody>"
         preExistingTemplete += "<tr>"
@@ -45,48 +47,40 @@ class CustomeReportGenerator:
         preExistingTemplete += "<th width='15%'>User Vars</th>"
         preExistingTemplete += "<th width='10%'>ScreenShot</th>"
         preExistingTemplete += "</tr>"
-        preExistingTemplete += "<tr>"
-        preExistingTemplete += "<td>UpdateXMLData</td>"
-        preExistingTemplete += "<td width='150px'>"
-        preExistingTemplete += "<div>[xml=contact.xml, tags=name;password;emailId, value=endcustkeyclock{{Rint5}}{{Rint5}}{{Rint5}};Thales@123;endcustkeyclock{{Rint5}}{{Rint5}}{{Rint5}}@sntinelcloud.com]</div>"
-        preExistingTemplete += "</td>"
-        preExistingTemplete += "<td>200</td>"
-        preExistingTemplete += "<td>200</td>"
-        preExistingTemplete += "<td width='150px'><div><div></div></div></td>"
-        preExistingTemplete += "<td width='150px'>"
-        preExistingTemplete += "<div>&lt;contact&gt;&lt;id/&gt;&lt;name&gt;endcustkeyclock163391633916339&lt;/name&gt;&lt;password&gt;Thales@123&lt;/password&gt;&lt;phoneNumber/&gt;&lt;defaultLocale&gt;en&lt;/defaultLocale&gt;&lt;state&gt;ENABLE&lt;/state&gt;&lt;emailId&gt;endcustkeyclock323753237532375@sntinelcloud.com&lt;/emailId&gt;&lt;refId1&gt;ContactrefId1&lt;/refId1&gt;&lt;refId2&gt;ContactrefId2&lt;/refId2&gt;&lt;/contact&gt;<div></div></div>"
-        preExistingTemplete += "</td>"
-        preExistingTemplete += "<td>242ms</td>"
-        preExistingTemplete += "<td>Pass</td>"
-        preExistingTemplete += "<td><div><div></div></div></td>"
-        preExistingTemplete += "<td><div>[Rint5=16339, Rint5=32375]</div></td>"
-        preExistingTemplete += "<td></td>"
-        preExistingTemplete += "</tr>"
+        preExistingTemplete += self.tableGenerator()
         preExistingTemplete += "</tbody>"
         preExistingTemplete += "</table>"
         preExistingTemplete += "</div>"
         preExistingTemplete += "</div>"
         preExistingTemplete += "</body>"
         preExistingTemplete += "</html>"
-        return preExistingTemplete
+        openHtmlFile = open(Constant.emsReportPath+running_testcases+".html","w")
+        openHtmlFile.write(preExistingTemplete)
+        openHtmlFile.close()
 
-
-    def tableGenerator(self,data):
-        preExistingTempleteData = "<tr>"
-        preExistingTempleteData += "<td>UpdateXMLData</td>"
-        preExistingTempleteData += "<td width='150px'>"
-        preExistingTempleteData += "<div>[xml=contact.xml, tags=name;password;emailId, value=endcustkeyclock{{Rint5}}{{Rint5}}{{Rint5}};Thales@123;endcustkeyclock{{Rint5}}{{Rint5}}{{Rint5}}@sntinelcloud.com]</div>"
-        preExistingTempleteData += "</td>"
-        preExistingTempleteData += "<td>200</td>"
-        preExistingTempleteData += "<td>200</td>"
-        preExistingTempleteData += "<td width='150px'><div><div></div></div></td>"
-        preExistingTempleteData += "<td width='150px'>"
-        preExistingTempleteData += "<div>&lt;contact&gt;&lt;id/&gt;&lt;name&gt;endcustkeyclock163391633916339&lt;/name&gt;&lt;password&gt;Thales@123&lt;/password&gt;&lt;phoneNumber/&gt;&lt;defaultLocale&gt;en&lt;/defaultLocale&gt;&lt;state&gt;ENABLE&lt;/state&gt;&lt;emailId&gt;endcustkeyclock323753237532375@sntinelcloud.com&lt;/emailId&gt;&lt;refId1&gt;ContactrefId1&lt;/refId1&gt;&lt;refId2&gt;ContactrefId2&lt;/refId2&gt;&lt;/contact&gt;<div></div></div>"
-        preExistingTempleteData += "</td>"
-        preExistingTempleteData += "<td>242ms</td>"
-        preExistingTempleteData += "<td>Pass</td>"
-        preExistingTempleteData += "<td><div><div></div></div></td>"
-        preExistingTempleteData += "<td><div>[Rint5=16339, Rint5=32375]</div></td>"
-        preExistingTempleteData += "<td></td>"
-        preExistingTempleteData += "</tr>"
+    def tableGenerator(self):
+        reportDataDic=self.getReportData()
+        preExistingTempleteData = ""
+        for data in reportDataDic:
+            preExistingTempleteData += "<tr>"
+            preExistingTempleteData += "<td>"+data["Api_Name"]+"</td>"
+            preExistingTempleteData += "<td width='150px'>"
+            preExistingTempleteData += "<div>"+data["inputs"]+"</div>"
+            preExistingTempleteData += "</td>"
+            preExistingTempleteData += "<td>"+str(data["Expected_Code"])+"</td>"
+            preExistingTempleteData += "<td>"+str(data["actual_Code"])+"</td>"
+            preExistingTempleteData += "<td width='150px'><div>"+str(data["Expected_Response"])+"<div></div></div></td>"
+            preExistingTempleteData += "<td width='150px'>"
+            preExistingTempleteData += "<div><div>"+str(data["Act_Response"])+"</div></div>"
+            preExistingTempleteData += "</td>"
+            preExistingTempleteData += "<td>"+str(data["Response_time"])+"</td>"
+            preExistingTempleteData += "<td>"+data["Status"]+"</td>"
+            preExistingTempleteData += "<td><div><div></div></div></td>"
+            preExistingTempleteData += "<td><div></div></td>"
+            preExistingTempleteData += "<td></td>"
+            preExistingTempleteData += "</tr>"
         return preExistingTempleteData
+
+    def getReportData(self)->list:
+        LOGGER.info(self.data)
+        return self.data
