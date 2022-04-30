@@ -1,0 +1,17 @@
+{
+  "productKey": {
+    "totalQuantity": 100,
+    "activationMethod": "FIXED",
+    "fixedQuantity": 1,
+    "item": {
+      "itemProduct": {
+        "product": {
+          "nameVersion": {
+            "name": "",
+            "version": ""
+          }
+        }
+      }
+    }
+  }
+}
