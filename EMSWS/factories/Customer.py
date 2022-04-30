@@ -2,7 +2,7 @@ import json
 import requests
 import logging
 import os
-import Constant
+import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName

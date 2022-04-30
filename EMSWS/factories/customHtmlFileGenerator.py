@@ -1,6 +1,6 @@
 import logging
 import os
-import  Constant
+import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
 class CustomeReportGenerator():
 

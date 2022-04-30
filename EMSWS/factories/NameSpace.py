@@ -1,7 +1,7 @@
 import json
 import requests
 import os
-import Constant
+import EMSWS.Constant as Constant
 import pytest
 import logging
 from pathlib import Path

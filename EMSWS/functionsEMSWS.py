@@ -191,11 +191,26 @@ def createEntitlementNONLVH(productNmae,productVesrion,customerName,entitlementJ
     LOGGER.info(json_object1)
     LOGGER.info('================end===================')
     responseEntitlement = requests.post(url + '/ems/api/v5/entitlements', json_object1, auth=(username, password))
+    print(responseEntitlement.text)
     response_entitlement = json.loads(responseEntitlement.text)
+
     eid = response_entitlement["entitlement"]["eId"]
     id = response_entitlement["entitlement"]["id"]
     LOGGER.info(eid)
     return [eid, id]
+
+def addProductKeyEntitlment(productName,productVersion,eId,productKeyJsonPath):
+    productKeyFile = open(productKeyJsonPath, 'r')
+    productKeyFileData = productKeyFile.read()
+    productKey_json_object = json.loads(productKeyFileData)
+    productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["name"] = productName
+    productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["version"] = productVersion
+    productKeyFile.close()
+    json_object1 = json.dumps(productKey_json_object)
+    responseEntitlement = requests.post(url + '/ems/api/v5/entitlements/eId='+eId+'/productKeys', json_object1, auth=(username, password))
+    print(responseEntitlement.text)
+
+
 
 def fun():
     return fun2()

@@ -3,19 +3,20 @@ import json
 import os
 import requests
 from jsonpath_ng.ext import parse
-import Constant
+import  EMSWS.Constant as Constant
 import logging
 import random
 import sys
 import string
-from EMSAssertion import EMSAssertionFactory
-from NameSpace import NameSpacefactory
-from Feature import FeatureFactory
-from Product import  ProductFactory
-from Contact import ContactFactory
-from Entitlement import Entitlementfacory
-from LicenceModel import LicenseModelfactory
-from customHtmlFileGenerator import CustomeReportGenerator
+
+from EMSWS.factories.NameSpace import NameSpacefactory
+from EMSWS.factories.EMSAssertion import EMSAssertionFactory
+from EMSWS.factories.Feature import FeatureFactory
+from EMSWS.factories.Product import  ProductFactory
+from EMSWS.factories.Contact import ContactFactory
+from EMSWS.factories.Entitlement import Entitlementfacory
+from EMSWS.factories.LicenceModel import LicenseModelfactory
+from EMSWS.factories.customHtmlFileGenerator import CustomeReportGenerator
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName

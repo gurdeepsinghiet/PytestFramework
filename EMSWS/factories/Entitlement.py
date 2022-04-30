@@ -1,7 +1,7 @@
 import json
 import os
 import requests
-import Constant
+import  EMSWS.Constant as Constant
 import logging
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -34,6 +34,19 @@ class Entitlementfacory(object):
         LOGGER.info(eid)
         LOGGER.info(id)
         return self
+
+    def addProductKeyEntitlment(productName, productVersion, eId, productKeyJsonPath):
+        productKeyFile = open(productKeyJsonPath, 'r')
+        productKeyFileData = productKeyFile.read()
+        productKey_json_object = json.loads(productKeyFileData)
+        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["name"] = productName
+        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"][
+            "version"] = productVersion
+        productKeyFile.close()
+        json_object1 = json.dumps(productKey_json_object)
+        responseEntitlement = requests.post(url + '/ems/api/v5/entitlements/eId=' + eId + '/productKeys', json_object1,
+                                            auth=(username, password))
+        print(responseEntitlement.text)
 
 
     def getEntitlementProperties(self)->list:

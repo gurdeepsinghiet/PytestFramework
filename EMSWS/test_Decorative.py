@@ -1,6 +1,6 @@
-import functionsEMSWS
-import Constant
-from EMSFuntions import EMSFactory
+
+import EMSWS.Constant as Constant
+
 
 
 def test_createLeaseProduct(emsObjectFixture,request):

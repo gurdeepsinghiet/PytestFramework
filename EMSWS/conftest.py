@@ -1,8 +1,8 @@
 import  pytest
 import os
 import logging
-from EMSFuntions import EMSFactory
-from customHtmlFileGenerator import CustomeReportGenerator
+from EMSWS.factories.EMSFuntions import EMSFactory
+from EMSWS.factories.customHtmlFileGenerator import CustomeReportGenerator
 LOGGER = logging.getLogger(__name__)
 @pytest.fixture(autouse=True)
 def emsObjectFixture():
