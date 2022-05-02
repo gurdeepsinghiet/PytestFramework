@@ -1,8 +1,6 @@
-import json
-import requests
 import  EMSWS.Constant as Constant
 import logging
-import numpy as np
+from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -10,25 +8,24 @@ password = Constant.EMSPassword
 
 class ContactFactory:
     def addStandardContact(self, contactJsonPath, contactNameGenerator, emailString):
-        contactFile = open(contactJsonPath, 'r')
-        contactFileData = contactFile.read()
-        contact_json_object = json.loads(contactFileData)
-        contactFile.close()
-        contact_json_object["contact"]["name"] = contactNameGenerator + self.RandomString(9)
-        contact_json_object["contact"]["password"] = "Thales@123"
-        contact_json_object["contact"]["contactType"] = "Standard"
-        contact_json_object["contact"]["emailId"] = emailString + str(
-            np.random.randint(1000000, 7000000)) + "@Thales.com"
-        contactFile = open(contactJsonPath, "w")
-        json.dump(contact_json_object, contactFile)
-        contactFile.close()
-        contactFile = open(contactJsonPath, 'r')
-        contactupdated_json = contactFile.read()
-        responseContact = requests.post(url + '/ems/api/v5/contacts', contactupdated_json, auth=(username, password))
-        responseTextContact = json.loads(responseContact.text)
-        contact_name = responseTextContact["contact"]["name"]
-        conatct_id = responseTextContact["contact"]["id"]
-        contact_emailId = responseTextContact["contact"]["emailId"]
+        utility = UtilityClass()
+        running_testcases = utility.runningPytestCaseName()
+        LOGGER.info(running_testcases)
+        # getting the name of Current exectuting Function
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        contactname=contactNameGenerator + self.RandomString(9)
+        emailStr=emailString + self.RandomString(9) + "@Thales.com"
+        contactUpdated_json = self.UpdateJsonPath(contactJsonPath, ['$.contact.name', '$.contact.password',
+                                                                     '$.contact.contactType','$.contact.emailId'],
+                                                  [contactname,"Thales@123", "Standard",emailStr])
+        LOGGER.info(contactUpdated_json)
+        response = self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), "201")
+        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+            customerJson = utility.convertJsontoDictinary(response[0])
+            contact_name = customerJson["contact"]["name"]
+            conatct_id = customerJson["contact"]["id"]
+            contact_emailId = customerJson["contact"]["emailId"]
         self.contactStandardProperties = [contact_name, conatct_id, contact_emailId]
         return self
 
