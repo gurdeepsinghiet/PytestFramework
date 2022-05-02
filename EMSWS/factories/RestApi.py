@@ -3,7 +3,8 @@ import logging
 import EMSWS.Constant as Constant
 import pytest
 import json
-
+from EMSWS.Utilities import UtilityClass
+from jsonpath_ng.ext import parse
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -56,3 +57,27 @@ class RestApiUtilityFactory(object):
 
     def putRequest(self):
         pass
+
+    def UpdateJsonPath(self,jsonpath,jsontagsList,jsonValueList):
+        ReportParameters = {}
+        ReportParameters["Api_Name"] = "UpdateJsonPath"
+        ReportParameters["inputs"] = jsonpath
+        ReportParameters["Expected_Code"] = "200"
+        with open(jsonpath) as f:
+            jsonData = json.load(f)
+        LOGGER.info(jsonData)
+        for i, jsonxpath in enumerate(jsontagsList):
+            LOGGER.info(jsonxpath)
+            jsonpath_expression = parse(jsonxpath)
+            LOGGER.info(jsonpath_expression)
+            jsonpath_expression.find(jsonData)
+            jsonpath_expression.update(jsonData, jsonValueList[i])
+        response = json.dumps(jsonData, indent=2)
+        LOGGER.info(response)
+        ReportParameters["actual_Code"] = "200"
+        ReportParameters["Response_time"] = ""
+        ReportParameters["Act_Response"] = response
+        ReportParameters["Status"] = "Pass"
+        ReportParameters["Expected_Response"] = ""
+        self.data.append(ReportParameters)
+        return response

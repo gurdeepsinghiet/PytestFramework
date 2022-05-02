@@ -8,7 +8,7 @@ class CustomeReportGenerator():
         pass
     def reportGenerator(self):
         running_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        preExistingTemplete="<html>"+"<head>"+"<style"
+        preExistingTemplete="<html>"+"<head>"+"<style>"
         preExistingTemplete +="td {vertical-align: middle;font-size: 15px;word-wrap:break-word;}"
         preExistingTemplete += "th {vertical-align: top;background: #d1ecf1;color: black;}"
         preExistingTemplete += ".topcorner{position:absolute;top:0;right:0;width: 3%;cursor:pointer;z-index: +1;}"
@@ -45,7 +45,7 @@ class CustomeReportGenerator():
         preExistingTemplete += "<th width='10%'>Status</th>"
         preExistingTemplete += "<th width='15%'>Comments</th>"
         preExistingTemplete += "<th width='15%'>User Vars</th>"
-        preExistingTemplete += "<th width='10%'>ScreenShot</th>"
+
         preExistingTemplete += "</tr>"
         preExistingTemplete += self.tableGenerator()
         preExistingTemplete += "</tbody>"
@@ -77,7 +77,7 @@ class CustomeReportGenerator():
             preExistingTempleteData += "<td>"+data["Status"]+"</td>"
             preExistingTempleteData += "<td><div><div></div></div></td>"
             preExistingTempleteData += "<td><div></div></td>"
-            preExistingTempleteData += "<td></td>"
+
             preExistingTempleteData += "</tr>"
         return preExistingTempleteData
 

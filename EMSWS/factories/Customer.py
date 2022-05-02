@@ -2,6 +2,7 @@ import json
 import requests
 import logging
 import os
+from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -10,24 +11,21 @@ password = Constant.EMSPassword
 class CustomerFactory:
 
     def addCustomer(self, customerJsonPath, customerNameGenerator, contact_id):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        customerFile = open(customerJsonPath, 'r')
-        customerFileData = customerFile.read()
-        customer_json_object = json.loads(customerFileData)
-        customerFile.close()
-        customerName = customerNameGenerator + self.RandomString(9)
-        customer_json_object["customer"]["name"] = customerName
-        customer_json_object["customer"]["identifier"] = customerName
-        customer_json_object["customer"]["contacts"]["contact"][0]["id"] = contact_id
-        customerFile = open(customerJsonPath, "w")
-        json.dump(customer_json_object, customerFile)
-        customerFile.close()
-        customerFile = open(customerJsonPath, 'r')
-        customerUpdate_json = customerFile.read()
-        responseCustomer = requests.post(url + '/ems/api/v5/customers', customerUpdate_json, auth=(username, password))
-        responseTextCustomer = json.loads(responseCustomer.text)
-        customer_name = responseTextCustomer["customer"]["name"]
-        customer_id = responseTextCustomer["customer"]["id"]
+        utility = UtilityClass()
+        running_testcases = utility.runningPytestCaseName()
+        LOGGER.info(running_testcases)
+        # getting the name of Current exectuting Function
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        customername=customerNameGenerator + self.RandomString(9)
+        customerUpdate_json = self.UpdateJsonPath(customerJsonPath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
+                                                  [customername,customername,contact_id])
+        LOGGER.info(customerUpdate_json)
+        response = self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), "201")
+        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+            customerJson = utility.convertJsontoDictinary(response[0])
+            customer_name = customerJson["customer"]["name"]
+            customer_id = customerJson["customer"]["id"]
         self.customerProperties = [customer_name, customer_id]
         return self
 

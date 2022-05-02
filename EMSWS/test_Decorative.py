@@ -1,12 +1,8 @@
-
 import EMSWS.Constant as Constant
-
-
-
+from EMSWS.factories.EMSFuntions import EMSFactory
 def test_createLeaseProduct(emsObjectFixture,request):
     testname = request.node.name
     ems=emsObjectFixture['ems']
-    #ems=EMSFactory()
     ems\
     .addNameSpace(Constant.nameSpaceJsonPath,"namespace")\
     .searchFlexibleLicenseModel()\
@@ -15,24 +11,21 @@ def test_createLeaseProduct(emsObjectFixture,request):
     .addProductNonLVH(Constant.productJsonPath,"pytestprod",ems.getNamespaceProps()[0],ems.getFeatureProperties()[0],ems.getFeatureProperties()[1])\
     .getAssertions(ems.getProductProperties()[2], ems.getFeatureProperties()[0])\
     .getAssertions(ems.getProductProperties()[3], ems.getFeatureProperties()[0])\
-    .getAssertions(testname,"test_createLeaseProduct")\
-
-
+    .getAssertions(testname,"test_createLeaseProduct")
 
 def test_createNameSpaceLDK(emsObjectFixture):
     #ems = EMSFactory()
     ems = emsObjectFixture['ems']
     ems\
-    .createNameSpace()
-
+    .createNameSpace()\
+    .addStandardContact(Constant.contactJsonPath,"emscontact","bnnn")\
+    .addCustomer(Constant.customerJsonPath,"bnm",ems.getContactProperties()[1])
 
 def test_createNameSpaceHighend(emsObjectFixture):
     #ems = EMSFactory()
     ems = emsObjectFixture['ems']
     ems\
-    .createNameSpace()
-
-
+    .searchFlexibleLicenseModel()
 
 def test_createLeaseProduct_new(emsObjectFixture,request):
     testname = request.node.name
@@ -46,8 +39,4 @@ def test_createLeaseProduct_new(emsObjectFixture,request):
     .addProductNonLVH(Constant.productJsonPath,"pytestprod",ems.getNamespaceProps()[0],ems.getFeatureProperties()[0],ems.getFeatureProperties()[1])\
     .getAssertions(ems.getProductProperties()[2], ems.getFeatureProperties()[0])\
     .getAssertions(ems.getProductProperties()[3], ems.getFeatureProperties()[1])\
-    .getAssertions(testname,"test_createLeaseProduct")\
-
-
-    
-
+    .getAssertions(testname,"test_createLeaseProduct")

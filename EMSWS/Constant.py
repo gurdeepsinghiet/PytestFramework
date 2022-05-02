@@ -1,7 +1,6 @@
 EMSURL=""
 EMSUserName=""
 EMSPassword=""
-
 nameSpaceJsonPath='../jsonFiles/nameSpace.json'
 featureJsonPath='../jsonFiles/feature.json'
 productJsonPath='../jsonFiles/product.json'

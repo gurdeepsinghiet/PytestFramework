@@ -11,12 +11,15 @@ from EMSWS.factories.Entitlement import Entitlementfacory
 from EMSWS.factories.LicenceModel import LicenseModelfactory
 from EMSWS.factories.customHtmlFileGenerator import CustomeReportGenerator
 from EMSWS.factories.RestApi import RestApiUtilityFactory
+from EMSWS.factories.Customer import CustomerFactory
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
-class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,ContactFactory,Entitlementfacory,LicenseModelfactory,CustomeReportGenerator,RestApiUtilityFactory):
+class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
+                 ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,CustomeReportGenerator,
+                 RestApiUtilityFactory):
 
     def __init__(self):
         self.data=[]

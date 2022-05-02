@@ -17,15 +17,8 @@ class FeatureFactory(object):
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        FeatureFileData = utility.readFile(featureJsonPath)
-        LOGGER.info(FeatureFileData)
-        feature_json_object = utility.convertJsontoDictinary(FeatureFileData)
-        feature_json_object["feature"]["namespace"]["name"] = nameSpace_name
-        feature_json_object["feature"]["nameVersion"]["name"] = FeatureNameGenerator + self.RandomString(9)
-        feature_json_object["feature"]["nameVersion"]["version"] = "1.0"
-        feature_json_object["feature"]["featureLicenseModels"]["featureLicenseModel"][0]["licenseModel"][
-            "name"] = LM_name
-        feature_json = utility.convertDictinarytoJson(feature_json_object)
+        feature_json = self.UpdateJsonPath(featureJsonPath, ['$.feature.nameVersion.name','$.feature.nameVersion.version','$..namespace.name','$..featureLicenseModel[0].licenseModel.name'],
+                                           [FeatureNameGenerator + self.RandomString(9),"1.0",nameSpace_name,LM_name])
         LOGGER.info(feature_json)
         response = self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(), "201")
         if response[1] == 201 or response[1] == 204 or response[1] == 200:
