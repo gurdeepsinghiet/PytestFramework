@@ -20,6 +20,7 @@ class RestApiUtilityFactory(object):
             reportParam.setInputs(requestBody)
             reportParam.setExpectedCode(expectedresCode)
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
+            LOGGER.info(postapiResponse)
             # Collectin data for Report
             if postapiResponse.status_code == 201 or postapiResponse.status_code == 204 or postapiResponse.status_code == 200:
                 response_dictionary = json.loads(postapiResponse.text)
@@ -40,6 +41,13 @@ class RestApiUtilityFactory(object):
                 LOGGER.error(postapiResponse.text)
                 pytest.fail("Problem with creating Entity")
         except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
@@ -74,6 +82,12 @@ class RestApiUtilityFactory(object):
                 pytest.fail("Problem with getting Entity")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
         return [getapiResponse.text, getapiResponse.status_code, reportParam.getReportParameters()]
