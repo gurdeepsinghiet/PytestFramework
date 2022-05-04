@@ -1,9 +1,9 @@
 import requests
 import logging
 import EMSWS.Constant as Constant
+from EMSWS.ReportParameters import ReportParam
 import pytest
 import json
-from EMSWS.Utilities import UtilityClass
 from jsonpath_ng.ext import parse
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -13,41 +13,70 @@ password = Constant.EMSPassword
 class RestApiUtilityFactory(object):
 
     def PostRequest(self, requestUrl, requestBody, ApiName,expectedresCode):
-        ReportParameters = {}
+        reportParam = ReportParam()
+
         try:
-            ReportParameters["Api_Name"] = ApiName
-            ReportParameters["inputs"] = requestBody
-            ReportParameters["Expected_Code"] = expectedresCode
+            reportParam.setApiName(ApiName)
+            reportParam.setInputs(requestBody)
+            reportParam.setExpectedCode(expectedresCode)
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
             # Collectin data for Report
             if postapiResponse.status_code == 201 or postapiResponse.status_code == 204 or postapiResponse.status_code == 200:
                 response_dictionary = json.loads(postapiResponse.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
-                ReportParameters["actual_Code"] = postapiResponse.status_code
-                ReportParameters["Response_time"] = postapiResponse.elapsed.total_seconds()
-                ReportParameters["Act_Response"] = postapiResponse.text
-                ReportParameters["Status"] = "Pass"
-                ReportParameters["Expected_Response"] = ""
-
+                reportParam.setActualCode(postapiResponse.status_code)
+                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(postapiResponse.text)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
             else:
-                ReportParameters["Act Response"] = postapiResponse.text
-                ReportParameters["Expected_Response"] = ""
+                reportParam.setActualCode(postapiResponse.status_code)
+                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(postapiResponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
                 LOGGER.error(postapiResponse.text)
-                ReportParameters["actual_Code"] = postapiResponse.status_code
-                ReportParameters["Response_time"] = postapiResponse.elapsed.total_seconds()
-                # Collecting data for Report Status if Test step fail
-                ReportParameters["Status"] = "Failed"
-                self.data.append(ReportParameters)
-                pytest.fail("Problem with creating nameSpace")
+                pytest.fail("Problem with creating Entity")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
-        self.data.append(ReportParameters)
+        self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
-        return [postapiResponse.text,postapiResponse.status_code,ReportParameters]
+        return [postapiResponse.text,postapiResponse.status_code,reportParam.getReportParameters()]
 
-    def getRequest(self):
-        pass
+    def getRequest(self, requestUrl, requestBody, ApiName,expectedresCode):
+
+        reportParam = ReportParam()
+        try:
+            reportParam.setApiName(ApiName)
+            reportParam.setInputs(requestBody)
+            reportParam.setExpectedCode(expectedresCode)
+            getapiResponse = requests.get(requestUrl, requestBody, auth=(username, password))
+            # Collectin data for Report
+            if getapiResponse.status_code == 201 or getapiResponse.status_code == 204 or getapiResponse.status_code == 200:
+                response_dictionary = json.loads(getapiResponse.text)
+                LOGGER.info(response_dictionary)
+                # Collecting data for Report Status if Test step Pass
+                reportParam.setActualCode(getapiResponse.status_code)
+                reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(getapiResponse.text)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+            else:
+                LOGGER.error(getapiResponse.text)
+                reportParam.setActualCode(getapiResponse.status_code)
+                reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(getapiResponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                pytest.fail("Problem with getting Entity")
+        except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+        self.data.append(reportParam.getReportParameters())
+        LOGGER.info(self.data)
+        return [getapiResponse.text, getapiResponse.status_code, reportParam.getReportParameters()]
 
     def deleteRequest(self):
         pass
