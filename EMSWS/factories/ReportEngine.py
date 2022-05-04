@@ -10,7 +10,8 @@ class ReportGenerator():
         running_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         preExistingTemplete="<html>"+"<head>"+"<style>"
         preExistingTemplete +="td {vertical-align: middle;font-size: 15px;word-wrap:break-word;}"
-        preExistingTemplete += "th {vertical-align: top;background: #d1ecf1;color: black;}"
+        preExistingTemplete += "td div { max-height:350px;overflow-x: hidden;overflow-y:auto}"
+        preExistingTemplete += "th {vertical-align: top;background: #3ad32c;color: black;}"
         preExistingTemplete += ".topcorner{position:absolute;top:0;right:0;width: 3%;cursor:pointer;z-index: +1;}"
         preExistingTemplete += ".black_overlay{display: none;position: fixed;top: 0%;left: 0%;width: 100%;height: 100%;background-color: grey;z-index:1001;-moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);}"
         preExistingTemplete += " .white_content {display: none;position: fixed;top: 10%;left:20px;width: 85%;height: 60%;padding: 16px;border: 2px solid ged;background-color: white;z-index:1002;overflow: auto;}"
@@ -31,7 +32,7 @@ class ReportGenerator():
         preExistingTemplete += "</head>"
         preExistingTemplete += "<body>"
         preExistingTemplete += "<div id='Puytest' class='white_content' style='display: block;'>"
-        preExistingTemplete += "<div style='background-color:#d1ecf1;text-align:center'><p>"+running_testcases+"</p></div>"
+        preExistingTemplete += "<div style='background-color:#3ad32c;text-align:center'><p style='font-size: 34px;'>"+running_testcases+"</p></div>"
         preExistingTemplete += "<table border='1' cellpadding='8' cellspacing='0'>"
         preExistingTemplete += "<tbody>"
         preExistingTemplete += "<tr>"
@@ -51,11 +52,13 @@ class ReportGenerator():
         preExistingTemplete += "</table>"
         preExistingTemplete += "</div>"
         preExistingTemplete += "</div>"
+        preExistingTemplete += "<script src = '../assets/main.js'> </script>"
         preExistingTemplete += "</body>"
         preExistingTemplete += "</html>"
         openHtmlFile = open(Constant.emsReportPath+running_testcases+".html","w")
         openHtmlFile.write(preExistingTemplete)
         openHtmlFile.close()
+
 
     def tableGenerator(self):
         reportDataDic=self.getReportData()
