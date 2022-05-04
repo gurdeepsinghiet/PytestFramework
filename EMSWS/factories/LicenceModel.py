@@ -65,15 +65,21 @@ class LicenseModelfactory(object):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
+        utility = UtilityClass()
+        running_testcases = utility.runningPytestCaseName()
+        LOGGER.info(running_testcases)
+        # getting the name of Current exectuting Function
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
-        responseLM1 = requests.post(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                    response_LM_json1, auth=(username, password))
-        responseTextLM = json.loads(responseLM1.text)
-        LOGGER.info(responseTextLM)
-        LM_name = responseTextLM["licenseModel"]["name"]
-        lmId = response_LM_json["licenseModel"]["id"]
-        self.LMStandaloneProperties=[LM_name, lmId]
+        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                                    response_LM_json1, currentApiFuncName(), "201")
+        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+            lmNetworkJson = utility.convertJsontoDictinary(response[0])
+            LM_name = lmNetworkJson["licenseModel"]["name"]
+            lmId = lmNetworkJson["licenseModel"]["id"]
+            self.LMStandaloneProperties = [LM_name, lmId]
         return self
 
     def updateLicencezModelAttribute(self,LM_ATTR_Name, value, response_LM_json):
@@ -89,15 +95,20 @@ class LicenseModelfactory(object):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
+        utility = UtilityClass()
+        running_testcases = utility.runningPytestCaseName()
+        LOGGER.info(running_testcases)
+        # getting the name of Current exectuting Function
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
-        responseLM1 = requests.post(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                    response_LM_json1, auth=(username, password))
-        responseTextLM = json.loads(responseLM1.text)
-        LOGGER.info(responseTextLM)
-        LM_name = responseTextLM["licenseModel"]["name"]
-        lmId = response_LM_json["licenseModel"]["id"]
-        self.LMNeworksProperties = [LM_name, lmId]
+        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), "201")
+        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+            lmNetworkJson = utility.convertJsontoDictinary(response[0])
+            LM_name = lmNetworkJson["licenseModel"]["name"]
+            lmId = lmNetworkJson["licenseModel"]["id"]
+            self.LMNeworksProperties = [LM_name, lmId]
         return self
 
     def getLMStandProperties(self):
