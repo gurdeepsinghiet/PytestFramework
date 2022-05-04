@@ -45,35 +45,16 @@ class LicenseModelfactory(object):
         LOGGER.info(running_testcases)
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        FlexibleLicenseModelReportPorps = {}
-        FlexibleLicenseModelReportPorps["Api_Name"] = currentApiFuncName()
-        FlexibleLicenseModelReportPorps["inputs"] = ""
-        FlexibleLicenseModelReportPorps["Expected_Code"] = "201"
-        responseEnforcement = requests.get(url + '/ems/api/v5/enforcements?name=Sentinel RMS',
-                                           auth=(username, password))
-        if responseEnforcement.status_code == 201 or responseEnforcement.status_code == 204 or responseEnforcement.status_code == 200:
-            FlexibleLicenseModelReportPorps["actual_Code"] = responseEnforcement.status_code
-            FlexibleLicenseModelReportPorps["Response_time"] = responseEnforcement.elapsed.total_seconds()
-            FlexibleLicenseModelReportPorps["Status"] = "Pass"
-            response_Enforcement = json.loads(responseEnforcement.text)
-            FlexibleLicenseModelReportPorps["Act_Response"] = "response_Enforcement"
-            FlexibleLicenseModelReportPorps["Expected_Response"] = ""
-            LOGGER.info(response_Enforcement)
-            enforcementId = response_Enforcement["enforcements"]["enforcement"][0]["id"]
+        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS', "", currentApiFuncName(), "200")
+        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+            enforcementJson = utility.convertJsontoDictinary(response[0])
+            enforcementId = enforcementJson["enforcements"]["enforcement"][0]["id"]
             self.enforcementProps = [enforcementId]
-            responseFlexibleLicenseModel = requests.get(url + '/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model',auth=(username, password))
-            if responseFlexibleLicenseModel.status_code == 201 or responseFlexibleLicenseModel.status_code == 204 or responseFlexibleLicenseModel.status_code == 200:
-                response_LM_json = json.loads(responseFlexibleLicenseModel.text)
-                LOGGER.info(response_LM_json)
-                self.FlexibleLicenseModelJson = response_LM_json
-                self.data.append(FlexibleLicenseModelReportPorps)
-
-            else:
-                LOGGER.error(responseFlexibleLicenseModel.text)
-                pytest.fail("getting FlexibleLicenseModel is giving error failed")
-        else:
-            LOGGER.error(responseEnforcement.text)
-            pytest.fail("getting Enforcement is giving error failed")
+            responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),"200")
+            if responseFlexibleLicenseModel[1] == 201 or responseFlexibleLicenseModel[1] == 204 or responseFlexibleLicenseModel[1] == 200:
+                flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
+                LOGGER.info(flexibleLicenseModelJson)
+                self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
 
 
