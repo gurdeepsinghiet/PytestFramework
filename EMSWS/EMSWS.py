@@ -1,5 +1,5 @@
-import functionsEMSWS
-import Constant
+from EMSWS import functionsEMSWS
+import  EMSWS.Constant as Constant
 
 def test_Product_Network_NONLVH():
 
