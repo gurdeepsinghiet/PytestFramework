@@ -5,11 +5,11 @@ import string
 from EMSWS.factories.NameSpace import NameSpacefactory
 from EMSWS.factories.EMSAssertion import EMSAssertionFactory
 from EMSWS.factories.Feature import FeatureFactory
-from EMSWS.factories.Product import  ProductFactory
+from EMSWS.factories.Product import ProductFactory
 from EMSWS.factories.Contact import ContactFactory
 from EMSWS.factories.Entitlement import Entitlementfacory
 from EMSWS.factories.LicenceModel import LicenseModelfactory
-from EMSWS.factories.customHtmlFileGenerator import CustomeReportGenerator
+from EMSWS.factories.ReportEngine import ReportGenerator
 from EMSWS.factories.RestApi import RestApiUtilityFactory
 from EMSWS.factories.Customer import CustomerFactory
 LOGGER = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
-                 ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,CustomeReportGenerator,
+                 ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
                  RestApiUtilityFactory):
 
     def __init__(self):

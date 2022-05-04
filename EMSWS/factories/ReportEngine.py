@@ -2,7 +2,7 @@ import logging
 import os
 import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
-class CustomeReportGenerator():
+class ReportGenerator():
 
     def __init__(self):
         pass
@@ -39,13 +39,12 @@ class CustomeReportGenerator():
         preExistingTemplete += "<th width='20%'>Inputs</th>"
         preExistingTemplete += "<th width='10%'>Exp. Ret. Code</th>"
         preExistingTemplete += "<th width='10%'>Act Ret. Code</th>"
-        preExistingTemplete += "<th width='25%'>Exp Respone</th>"
+        preExistingTemplete += "<th width='25%'>Exp Response</th>"
         preExistingTemplete += "<th width='25%'>Act Response</th>"
         preExistingTemplete += "<th width='10%'>Response Time</th>"
         preExistingTemplete += "<th width='10%'>Status</th>"
         preExistingTemplete += "<th width='15%'>Comments</th>"
         preExistingTemplete += "<th width='15%'>User Vars</th>"
-
         preExistingTemplete += "</tr>"
         preExistingTemplete += self.tableGenerator()
         preExistingTemplete += "</tbody>"
@@ -77,10 +76,13 @@ class CustomeReportGenerator():
             preExistingTempleteData += "<td>"+data["Status"]+"</td>"
             preExistingTempleteData += "<td><div><div></div></div></td>"
             preExistingTempleteData += "<td><div></div></td>"
-
             preExistingTempleteData += "</tr>"
         return preExistingTempleteData
 
     def getReportData(self)->list:
         LOGGER.info(self.data)
         return self.data
+
+
+    def ConsolidatedReport(self):
+        pass
