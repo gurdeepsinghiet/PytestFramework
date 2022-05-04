@@ -88,10 +88,10 @@ class RestApiUtilityFactory(object):
         pass
 
     def UpdateJsonPath(self,jsonpath,jsontagsList,jsonValueList):
-        ReportParameters = {}
-        ReportParameters["Api_Name"] = "UpdateJsonPath"
-        ReportParameters["inputs"] = jsonpath
-        ReportParameters["Expected_Code"] = "200"
+        reportParam = ReportParam()
+        reportParam.setApiName("UpdateJsonPath")
+        reportParam.setInputs(jsonpath)
+        reportParam.setExpectedCode("200")
         with open(jsonpath) as f:
             jsonData = json.load(f)
         LOGGER.info(jsonData)
@@ -103,10 +103,10 @@ class RestApiUtilityFactory(object):
             jsonpath_expression.update(jsonData, jsonValueList[i])
         response = json.dumps(jsonData, indent=2)
         LOGGER.info(response)
-        ReportParameters["actual_Code"] = "200"
-        ReportParameters["Response_time"] = ""
-        ReportParameters["Act_Response"] = response
-        ReportParameters["Status"] = "Pass"
-        ReportParameters["Expected_Response"] = ""
-        self.data.append(ReportParameters)
+        reportParam.setActualCode("200")
+        reportParam.setResponseTime("")
+        reportParam.setActualRespone(response)
+        reportParam.setStatus("Pass")
+        reportParam.setExpectedResponse("")
+        self.data.append(reportParam.getReportParameters())
         return response
