@@ -1,9 +1,6 @@
-import json
-import requests
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant
 import logging
-import os
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -25,7 +22,7 @@ class FeatureFactory(object):
             featureDictinary = utility.convertJsontoDictinary(response[0])
             feature_name = featureDictinary["feature"]["nameVersion"]["name"]
             feature_version = featureDictinary["feature"]["nameVersion"]["version"]
-            self.FeatureProperties = [feature_name, feature_version,]
+            self.FeatureProperties = [feature_name, feature_version]
         return self
 
     def getFeatureProperties(self):

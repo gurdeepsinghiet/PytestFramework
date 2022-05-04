@@ -1,8 +1,5 @@
-import json
-import requests
 import  EMSWS.Constant as Constant
 import logging
-import os
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL

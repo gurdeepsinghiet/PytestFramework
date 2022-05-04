@@ -1,7 +1,4 @@
-import json
-import requests
 import logging
-import os
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
