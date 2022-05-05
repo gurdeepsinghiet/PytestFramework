@@ -1,8 +1,5 @@
-import requests
 import json
 import os
-import sys
-import pytest
 from jsonpath_ng.ext import parse
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant

@@ -3,7 +3,7 @@ import os
 import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
 class ReportGenerator():
-
+    testsummaryData=[]
     def __init__(self):
         pass
     def reportGenerator(self):
@@ -45,7 +45,7 @@ class ReportGenerator():
         preExistingTemplete += "<th width='10%'>Response Time</th>"
         preExistingTemplete += "<th width='10%'>Status</th>"
         preExistingTemplete += "<th width='15%'>Comments</th>"
-        preExistingTemplete += "<th width='15%'>User Vars</th>"
+
         preExistingTemplete += "</tr>"
         preExistingTemplete += self.tableGenerator()
         preExistingTemplete += "</tbody>"
@@ -58,7 +58,6 @@ class ReportGenerator():
         openHtmlFile = open(Constant.emsReportPath+running_testcases+".html","w")
         openHtmlFile.write(preExistingTemplete)
         openHtmlFile.close()
-
 
     def tableGenerator(self):
         reportDataDic=self.getReportData()
@@ -78,7 +77,7 @@ class ReportGenerator():
             preExistingTempleteData += "<td>"+str(data["Response_time"])+"</td>"
             preExistingTempleteData += "<td>"+data["Status"]+"</td>"
             preExistingTempleteData += "<td><div><div></div></div></td>"
-            preExistingTempleteData += "<td><div></div></td>"
+
             preExistingTempleteData += "</tr>"
         return preExistingTempleteData
 
@@ -88,4 +87,4 @@ class ReportGenerator():
 
 
     def ConsolidatedReport(self):
-        pass
+        f = open('abc.txt', 'w')

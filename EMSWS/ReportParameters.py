@@ -15,9 +15,6 @@ class ReportParam(object):
     def setActualCode(self,ActualCode):
         self.ReportParameters["actual_Code"] = ActualCode
 
-    def setExpectedCode(self,ExpectedCode):
-        self.ReportParameters["Expected_Code"] = ExpectedCode
-
     def setResponseTime(self, ResponseTime):
         self.ReportParameters["Response_time"] = ResponseTime
 

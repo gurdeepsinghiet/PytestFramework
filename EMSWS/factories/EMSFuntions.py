@@ -1,4 +1,4 @@
-import  EMSWS.Constant as Constant
+import EMSWS.Constant as Constant
 import logging
 import random
 import string

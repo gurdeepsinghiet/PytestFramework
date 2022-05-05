@@ -16,7 +16,7 @@ class ProductFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         product_json = self.UpdateJsonPath(productJsonPath, ['$.product.nameVersion.name','$.product.nameVersion.version','$..namespace.name','$..productFeature[0].feature.nameVersion.name','$..productFeature[0].feature.nameVersion.version'],
-                                           [productNameGenerator + self.RandomString(9),"1.0",nameSpace_name,feature_name,feature_version])
+                                           [productNameGenerator + self.RandomString(9),"1.0",nameSpace_name,"feature_name",feature_version])
         LOGGER.info(product_json)
         response = self.PostRequest(url + '/ems/api/v5/products', product_json, currentApiFuncName(), "201")
         if response[1] == 201 or response[1] == 204 or response[1] == 200:
@@ -29,6 +29,7 @@ class ProductFactory(object):
             feature_version = \
             productDictinary["product"]["productFeatures"]["productFeature"][0]["feature"]["nameVersion"]["version"]
             self.ProductProperties = [product_name, product_version, feature_name, feature_version]
+
         return self
 
 

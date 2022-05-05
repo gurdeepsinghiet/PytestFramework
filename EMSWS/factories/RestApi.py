@@ -14,7 +14,6 @@ class RestApiUtilityFactory(object):
 
     def PostRequest(self, requestUrl, requestBody, ApiName,expectedresCode):
         reportParam = ReportParam()
-
         try:
             reportParam.setApiName(ApiName)
             reportParam.setInputs(requestBody)
