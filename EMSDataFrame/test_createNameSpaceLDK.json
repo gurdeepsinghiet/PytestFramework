@@ -1,5 +1,5 @@
 {
-  "NameSpaceName": "LDKTesting",
+  "nameSpaceName": "LDK",
   "FeatureName"  : "LDKFeature",
   "FeatureVersion" : "1.0",
   "ProductName" : "LDKProductName",

@@ -1,1 +1,8 @@
-{"namespace": {"name": ""}}
+{
+  "namespace": {
+    "name": "TestNamespace",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+}

@@ -1,5 +1,6 @@
 import logging
 import os
+import EMSWS
 import  EMSWS.Constant as Constant
 LOGGER = logging.getLogger(__name__)
 class ReportGenerator():
@@ -32,7 +33,7 @@ class ReportGenerator():
         preExistingTemplete += "</head>"
         preExistingTemplete += "<body>"
         preExistingTemplete += "<div id='Puytest' class='white_content' style='display: block;'>"
-        preExistingTemplete += "<div style='background-color:#3ad32c;text-align:center'><p style='font-size: 34px;'>"+running_testcases+"</p></div>"
+        preExistingTemplete += "<div style='background-color:#3ad32c;text-align:center'><p style='font-size: 34px;' id='testSummaryheader'>"+running_testcases+"</p></div>"
         preExistingTemplete += "<table border='1' cellpadding='8' cellspacing='0'>"
         preExistingTemplete += "<tbody>"
         preExistingTemplete += "<tr>"
@@ -45,19 +46,22 @@ class ReportGenerator():
         preExistingTemplete += "<th width='10%'>Response Time</th>"
         preExistingTemplete += "<th width='10%'>Status</th>"
         preExistingTemplete += "<th width='15%'>Comments</th>"
-
         preExistingTemplete += "</tr>"
         preExistingTemplete += self.tableGenerator()
         preExistingTemplete += "</tbody>"
         preExistingTemplete += "</table>"
         preExistingTemplete += "</div>"
         preExistingTemplete += "</div>"
-        preExistingTemplete += "<script src = '../assets/main.js'> </script>"
+        preExistingTemplete += "<script src = '../../assets/main.js'> </script>"
         preExistingTemplete += "</body>"
         preExistingTemplete += "</html>"
-        openHtmlFile = open(Constant.emsReportPath+running_testcases+".html","w")
+        openHtmlFile = open(self.getModulePath()+Constant.emsReportPath+running_testcases+".html","w")
         openHtmlFile.write(preExistingTemplete)
         openHtmlFile.close()
+
+    def getModulePath(self):
+        path = os.path.dirname(EMSWS.__file__)
+        return path
 
     def tableGenerator(self):
         reportDataDic=self.getReportData()

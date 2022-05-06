@@ -1,7 +1,6 @@
 import EMSWS.Constant as Constant
 import logging
 from EMSWS.Utilities import UtilityClass
-
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -17,7 +16,7 @@ class NameSpacefactory():
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        namceSpace_json = self.UpdateJsonPath(nameSpaceJsonPath, ['$.namespace.name'],[nameSpaceNamegenerator +self.RandomString(9)])
+        namceSpace_json = self.UpdateJsonPath(nameSpaceJsonPath, ['$.namespace.name'], [nameSpaceNamegenerator + self.RandomString(9)])
         LOGGER.info(namceSpace_json)
         # Dictionary object for crearing NameSpace Report
         response = self.PostRequest(url + '/ems/api/v5/namespaces', namceSpace_json, currentApiFuncName(), "201")
@@ -37,7 +36,7 @@ class NameSpacefactory():
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        namceSpace_json=self.UpdateJsonPath(Constant.nameSpaceJsonPath,['$.namespace.name'],[running_testcases[0:8] + self.RandomString(9)])
+        namceSpace_json=self.UpdateJsonPath(Constant.nameSpaceJsonPath, ['$.namespace.name'], [running_testcases[0:8] + self.RandomString(9)])
         LOGGER.info(namceSpace_json)
         response = self.PostRequest(url + '/ems/api/v5/namespaces', namceSpace_json, currentApiFuncName(), "201")
         if response[1] == 201 or response[1] == 204 or response[1] == 200:

@@ -1,1 +1,193 @@
-bbbbbb
+2022-05-06 13:46:17 [    INFO] Comparing emsstring Value with emsstring (EMSAssertion.py:21)
+2022-05-06 13:46:17 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': 'emsstring', 'actual': 'emsstring', 'Status': 'Pass', 'Act_Response': 'emsstring', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:17 [    INFO] Comparing emsstring Value with emsstring (EMSAssertion.py:21)
+2022-05-06 13:46:17 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': 'emsstring', 'actual': 'emsstring', 'Status': 'Pass', 'Act_Response': 'emsstring', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:17 [    INFO] Comparing emsstring Value with emsstring (EMSAssertion.py:21)
+2022-05-06 13:46:17 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': 'emsstring', 'actual': 'emsstring', 'Status': 'Pass', 'Act_Response': 'emsstring', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:17 [    INFO] test_createLeaseProduct (NameSpace.py:15)
+2022-05-06 13:46:17 [    INFO] addNameSpace (NameSpace.py:18)
+2022-05-06 13:46:17 [    INFO] {'namespace': {'name': 'TestNamespace', 'refId1': 'refId1', 'refId2': 'refId2', 'description': 'Namespace description'}} (RestApi.py:110)
+2022-05-06 13:46:17 [    INFO] $.namespace.name (RestApi.py:112)
+2022-05-06 13:46:17 [    INFO] $.namespace.name (RestApi.py:114)
+2022-05-06 13:46:18 [    INFO] {
+  "namespace": {
+    "name": "namespaceeraxxqimh",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (RestApi.py:118)
+2022-05-06 13:46:18 [    INFO] {
+  "namespace": {
+    "name": "namespaceeraxxqimh",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (NameSpace.py:20)
+2022-05-06 13:46:18 [    INFO] <Response [201]> (RestApi.py:22)
+2022-05-06 13:46:18 [    INFO] {'namespace': {'id': 'd3167a9f-5cf3-44b4-a2b1-f8b01a34fd9c', 'creationDate': '2022-05-06 08:16', 'lastModifiedDate': '', 'name': 'namespaceeraxxqimh', 'description': 'Namespace description', 'state': 'DRAFT', 'refId1': 'refId1', 'refId2': 'refId2'}} (RestApi.py:26)
+2022-05-06 13:46:18 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.533222, 'Act_Response': '{"namespace":{"id":"d3167a9f-5cf3-44b4-a2b1-f8b01a34fd9c","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceeraxxqimh","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:52)
+2022-05-06 13:46:18 [    INFO] test_createLeaseProduct (LicenceModel.py:40)
+2022-05-06 13:46:18 [    INFO] searchFlexibleLicenseModel (LicenceModel.py:42)
+2022-05-06 13:46:19 [    INFO] {'enforcements': {'count': 1, 'enforcement': [{'id': '729b8bd4-b961-11ec-81c0-42010a5c0269', 'creationDate': '2022-04-11 06:34', 'lastModifiedDate': '2022-04-11 06:34', 'nameVersion': {'name': 'Sentinel RMS', 'version': '10.0'}, 'description': 'Sentinel RMS 10.0 Enforcement Technology'}]}} (RestApi.py:66)
+2022-05-06 13:46:19 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.533222, 'Act_Response': '{"namespace":{"id":"d3167a9f-5cf3-44b4-a2b1-f8b01a34fd9c","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceeraxxqimh","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.481856, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:91)
+2022-05-06 13:46:19 [   ERROR] {"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}} (RestApi.py:74)
+2022-05-06 13:46:20 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceeraxxqimh",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.533222, 'Act_Response': '{"namespace":{"id":"d3167a9f-5cf3-44b4-a2b1-f8b01a34fd9c","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceeraxxqimh","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.481856, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 404, 'Response_time': 0.440827, 'Act_Response': '{"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}}', 'Status': 'Failed', 'Expected_Response': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:20 [    INFO] test_createNameSpaceLDK (NameSpace.py:35)
+2022-05-06 13:46:20 [    INFO] createNameSpace (NameSpace.py:38)
+2022-05-06 13:46:20 [    INFO] {'namespace': {'name': 'TestNamespace', 'refId1': 'refId1', 'refId2': 'refId2', 'description': 'Namespace description'}} (RestApi.py:110)
+2022-05-06 13:46:20 [    INFO] $.namespace.name (RestApi.py:112)
+2022-05-06 13:46:20 [    INFO] $.namespace.name (RestApi.py:114)
+2022-05-06 13:46:20 [    INFO] {
+  "namespace": {
+    "name": "test_crequeghvdex",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (RestApi.py:118)
+2022-05-06 13:46:20 [    INFO] {
+  "namespace": {
+    "name": "test_crequeghvdex",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (NameSpace.py:40)
+2022-05-06 13:46:20 [    INFO] <Response [201]> (RestApi.py:22)
+2022-05-06 13:46:20 [    INFO] {'namespace': {'id': '2a447c17-7db0-4e2f-bed4-ecaba572ff4d', 'creationDate': '2022-05-06 08:16', 'lastModifiedDate': '', 'name': 'test_crequeghvdex', 'description': 'Namespace description', 'state': 'DRAFT', 'refId1': 'refId1', 'refId2': 'refId2'}} (RestApi.py:26)
+2022-05-06 13:46:20 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'createNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.468069, 'Act_Response': '{"namespace":{"id":"2a447c17-7db0-4e2f-bed4-ecaba572ff4d","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"test_crequeghvdex","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:52)
+2022-05-06 13:46:20 [    INFO] test_createNameSpaceLDK (Contact.py:13)
+2022-05-06 13:46:20 [    INFO] addStandardContact (Contact.py:16)
+2022-05-06 13:46:20 [    INFO] {'contact': {'name': 'emscontactlssulettc', 'password': 'Thales@123', 'state': 'ENABLE', 'contactType': 'Standard', 'emailId': 'bnnn1060129@Thales.com'}} (RestApi.py:110)
+2022-05-06 13:46:20 [    INFO] $.contact.name (RestApi.py:112)
+2022-05-06 13:46:20 [    INFO] $.contact.name (RestApi.py:114)
+2022-05-06 13:46:20 [    INFO] $.contact.password (RestApi.py:112)
+2022-05-06 13:46:20 [    INFO] $.contact.password (RestApi.py:114)
+2022-05-06 13:46:20 [    INFO] $.contact.contactType (RestApi.py:112)
+2022-05-06 13:46:20 [    INFO] $.contact.contactType (RestApi.py:114)
+2022-05-06 13:46:20 [    INFO] $.contact.emailId (RestApi.py:112)
+2022-05-06 13:46:20 [    INFO] $.contact.emailId (RestApi.py:114)
+2022-05-06 13:46:20 [    INFO] {
+  "contact": {
+    "name": "emscontactybwxuxdjx",
+    "password": "Thales@123",
+    "state": "ENABLE",
+    "contactType": "Standard",
+    "emailId": "bnnnpetskcugb@Thales.com"
+  }
+} (RestApi.py:118)
+2022-05-06 13:46:20 [    INFO] {
+  "contact": {
+    "name": "emscontactybwxuxdjx",
+    "password": "Thales@123",
+    "state": "ENABLE",
+    "contactType": "Standard",
+    "emailId": "bnnnpetskcugb@Thales.com"
+  }
+} (Contact.py:22)
+2022-05-06 13:46:21 [    INFO] <Response [201]> (RestApi.py:22)
+2022-05-06 13:46:21 [    INFO] {'contact': {'id': '31dba4a2-a44b-4594-8155-5dc350701d81', 'creationDate': '2022-05-06 08:16', 'lastModifiedDate': '', 'name': 'emscontactybwxuxdjx', 'emailId': 'bnnnpetskcugb@Thales.com', 'phoneNumber': '', 'defaultLocale': 'en', 'localeName': 'English', 'refId1': '', 'refId2': '', 'customer': None, 'state': 'ENABLE', 'marketGroup': {'id': '74fb0f60-b961-11ec-81c0-42010a5c0269', 'name': 'Default'}, 'contactType': 'Standard', 'shippingDetails': None, 'billingDetails': None, 'customAttributes': {'customAttribute': [{'name': 'Address Line 1', 'value': ''}, {'name': 'Address Line 2', 'value': ''}, {'name': 'City', 'value': ''}, {'name': 'Company', 'value': ''}, {'name': 'Company Website', 'value': ''}, {'name': 'Country', 'value': ''}, {'name': 'Fax', 'value': ''}, {'name': 'First Name', 'value': ''}, {'name': 'Last Name', 'value': ''}, {'name': 'Phone', 'value': ''}, {'name': 'State/Province', 'value': ''}, {'name': 'ZIP/Postal', 'value': ''}]}}} (RestApi.py:26)
+2022-05-06 13:46:21 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'createNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.468069, 'Act_Response': '{"namespace":{"id":"2a447c17-7db0-4e2f-bed4-ecaba572ff4d","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"test_crequeghvdex","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/contact.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addStandardContact', 'inputs': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.717811, 'Act_Response': '{"contact":{"id":"31dba4a2-a44b-4594-8155-5dc350701d81","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"emscontactybwxuxdjx","emailId":"bnnnpetskcugb@Thales.com","phoneNumber":"","defaultLocale":"en","localeName":"English","refId1":"","refId2":"","customer":null,"state":"ENABLE","marketGroup":{"id":"74fb0f60-b961-11ec-81c0-42010a5c0269","name":"Default"},"contactType":"Standard","shippingDetails":null,"billingDetails":null,"customAttributes":{"customAttribute":[{"name":"Address Line 1","value":""},{"name":"Address Line 2","value":""},{"name":"City","value":""},{"name":"Company","value":""},{"name":"Company Website","value":""},{"name":"Country","value":""},{"name":"Fax","value":""},{"name":"First Name","value":""},{"name":"Last Name","value":""},{"name":"Phone","value":""},{"name":"State/Province","value":""},{"name":"ZIP/Postal","value":""}]}}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:52)
+2022-05-06 13:46:21 [    INFO] test_createNameSpaceLDK (Customer.py:13)
+2022-05-06 13:46:21 [    INFO] addCustomer (Customer.py:16)
+2022-05-06 13:46:21 [    INFO] {'customer': {'name': 'customerPyTestingTest3815042', 'identifier': 'customerPyTestingTest3815042', 'externalId': '', 'state': 'ENABLE', 'contacts': {'contact': [{'id': '61353fdd-acd0-47aa-8373-ada9c94f849d'}]}}} (RestApi.py:110)
+2022-05-06 13:46:21 [    INFO] $.customer.name (RestApi.py:112)
+2022-05-06 13:46:21 [    INFO] $.customer.name (RestApi.py:114)
+2022-05-06 13:46:21 [    INFO] $.customer.identifier (RestApi.py:112)
+2022-05-06 13:46:21 [    INFO] $.customer.identifier (RestApi.py:114)
+2022-05-06 13:46:21 [    INFO] $..contacts.contact[0].id (RestApi.py:112)
+2022-05-06 13:46:21 [    INFO] $..contacts.contact.[0].id (RestApi.py:114)
+2022-05-06 13:46:21 [    INFO] {
+  "customer": {
+    "name": "bnmujhersynq",
+    "identifier": "bnmujhersynq",
+    "externalId": "",
+    "state": "ENABLE",
+    "contacts": {
+      "contact": [
+        {
+          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"
+        }
+      ]
+    }
+  }
+} (RestApi.py:118)
+2022-05-06 13:46:21 [    INFO] {
+  "customer": {
+    "name": "bnmujhersynq",
+    "identifier": "bnmujhersynq",
+    "externalId": "",
+    "state": "ENABLE",
+    "contacts": {
+      "contact": [
+        {
+          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"
+        }
+      ]
+    }
+  }
+} (Customer.py:20)
+2022-05-06 13:46:22 [    INFO] <Response [201]> (RestApi.py:22)
+2022-05-06 13:46:22 [    INFO] {'customer': {'id': '9759f5e5-0d6c-4c0e-99dd-ccbb5347dd83', 'creationDate': '2022-05-06 08:16', 'lastModifiedDate': '', 'name': 'bnmujhersynq', 'description': '', 'identifier': 'bnmujhersynq', 'externalId': '', 'refId': '', 'crmId': '', 'timeZoneId': 'UTC', 'state': 'ENABLE', 'marketGroup': {'id': '74fb0f60-b961-11ec-81c0-42010a5c0269', 'name': 'Default'}, 'contacts': {'contact': [{'id': '31dba4a2-a44b-4594-8155-5dc350701d81', 'emailId': 'bnnnpetskcugb@Thales.com'}]}, 'customAttributes': None, 'fingerprints': None}} (RestApi.py:26)
+2022-05-06 13:46:22 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'createNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.468069, 'Act_Response': '{"namespace":{"id":"2a447c17-7db0-4e2f-bed4-ecaba572ff4d","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"test_crequeghvdex","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/contact.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addStandardContact', 'inputs': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.717811, 'Act_Response': '{"contact":{"id":"31dba4a2-a44b-4594-8155-5dc350701d81","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"emscontactybwxuxdjx","emailId":"bnnnpetskcugb@Thales.com","phoneNumber":"","defaultLocale":"en","localeName":"English","refId1":"","refId2":"","customer":null,"state":"ENABLE","marketGroup":{"id":"74fb0f60-b961-11ec-81c0-42010a5c0269","name":"Default"},"contactType":"Standard","shippingDetails":null,"billingDetails":null,"customAttributes":{"customAttribute":[{"name":"Address Line 1","value":""},{"name":"Address Line 2","value":""},{"name":"City","value":""},{"name":"Company","value":""},{"name":"Company Website","value":""},{"name":"Country","value":""},{"name":"Fax","value":""},{"name":"First Name","value":""},{"name":"Last Name","value":""},{"name":"Phone","value":""},{"name":"State/Province","value":""},{"name":"ZIP/Postal","value":""}]}}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/customer.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "customer": {\n    "name": "bnmujhersynq",\n    "identifier": "bnmujhersynq",\n    "externalId": "",\n    "state": "ENABLE",\n    "contacts": {\n      "contact": [\n        {\n          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"\n        }\n      ]\n    }\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addCustomer', 'inputs': '{\n  "customer": {\n    "name": "bnmujhersynq",\n    "identifier": "bnmujhersynq",\n    "externalId": "",\n    "state": "ENABLE",\n    "contacts": {\n      "contact": [\n        {\n          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"\n        }\n      ]\n    }\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.626139, 'Act_Response': '{"customer":{"id":"9759f5e5-0d6c-4c0e-99dd-ccbb5347dd83","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"bnmujhersynq","description":"","identifier":"bnmujhersynq","externalId":"","refId":"","crmId":"","timeZoneId":"UTC","state":"ENABLE","marketGroup":{"id":"74fb0f60-b961-11ec-81c0-42010a5c0269","name":"Default"},"contacts":{"contact":[{"id":"31dba4a2-a44b-4594-8155-5dc350701d81","emailId":"bnnnpetskcugb@Thales.com"}]},"customAttributes":null,"fingerprints":null}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:52)
+2022-05-06 13:46:22 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'createNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "test_crequeghvdex",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.468069, 'Act_Response': '{"namespace":{"id":"2a447c17-7db0-4e2f-bed4-ecaba572ff4d","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"test_crequeghvdex","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/contact.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addStandardContact', 'inputs': '{\n  "contact": {\n    "name": "emscontactybwxuxdjx",\n    "password": "Thales@123",\n    "state": "ENABLE",\n    "contactType": "Standard",\n    "emailId": "bnnnpetskcugb@Thales.com"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.717811, 'Act_Response': '{"contact":{"id":"31dba4a2-a44b-4594-8155-5dc350701d81","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"emscontactybwxuxdjx","emailId":"bnnnpetskcugb@Thales.com","phoneNumber":"","defaultLocale":"en","localeName":"English","refId1":"","refId2":"","customer":null,"state":"ENABLE","marketGroup":{"id":"74fb0f60-b961-11ec-81c0-42010a5c0269","name":"Default"},"contactType":"Standard","shippingDetails":null,"billingDetails":null,"customAttributes":{"customAttribute":[{"name":"Address Line 1","value":""},{"name":"Address Line 2","value":""},{"name":"City","value":""},{"name":"Company","value":""},{"name":"Company Website","value":""},{"name":"Country","value":""},{"name":"Fax","value":""},{"name":"First Name","value":""},{"name":"Last Name","value":""},{"name":"Phone","value":""},{"name":"State/Province","value":""},{"name":"ZIP/Postal","value":""}]}}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/customer.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "customer": {\n    "name": "bnmujhersynq",\n    "identifier": "bnmujhersynq",\n    "externalId": "",\n    "state": "ENABLE",\n    "contacts": {\n      "contact": [\n        {\n          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"\n        }\n      ]\n    }\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addCustomer', 'inputs': '{\n  "customer": {\n    "name": "bnmujhersynq",\n    "identifier": "bnmujhersynq",\n    "externalId": "",\n    "state": "ENABLE",\n    "contacts": {\n      "contact": [\n        {\n          "id": "31dba4a2-a44b-4594-8155-5dc350701d81"\n        }\n      ]\n    }\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.626139, 'Act_Response': '{"customer":{"id":"9759f5e5-0d6c-4c0e-99dd-ccbb5347dd83","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"bnmujhersynq","description":"","identifier":"bnmujhersynq","externalId":"","refId":"","crmId":"","timeZoneId":"UTC","state":"ENABLE","marketGroup":{"id":"74fb0f60-b961-11ec-81c0-42010a5c0269","name":"Default"},"contacts":{"contact":[{"id":"31dba4a2-a44b-4594-8155-5dc350701d81","emailId":"bnnnpetskcugb@Thales.com"}]},"customAttributes":null,"fingerprints":null}}', 'Status': 'Pass', 'Expected_Response': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:22 [    INFO] test_createNameSpaceHighend (LicenceModel.py:40)
+2022-05-06 13:46:22 [    INFO] searchFlexibleLicenseModel (LicenceModel.py:42)
+2022-05-06 13:46:22 [    INFO] {'enforcements': {'count': 1, 'enforcement': [{'id': '729b8bd4-b961-11ec-81c0-42010a5c0269', 'creationDate': '2022-04-11 06:34', 'lastModifiedDate': '2022-04-11 06:34', 'nameVersion': {'name': 'Sentinel RMS', 'version': '10.0'}, 'description': 'Sentinel RMS 10.0 Enforcement Technology'}]}} (RestApi.py:66)
+2022-05-06 13:46:22 [    INFO] [{'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.40868, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:91)
+2022-05-06 13:46:23 [   ERROR] {"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}} (RestApi.py:74)
+2022-05-06 13:46:23 [    INFO] [{'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.40868, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 404, 'Response_time': 0.57159, 'Act_Response': '{"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}}', 'Status': 'Failed', 'Expected_Response': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:23 [    INFO] test_createLeaseProduct_new (NameSpace.py:15)
+2022-05-06 13:46:23 [    INFO] addNameSpace (NameSpace.py:18)
+2022-05-06 13:46:23 [    INFO] {'namespace': {'name': 'TestNamespace', 'refId1': 'refId1', 'refId2': 'refId2', 'description': 'Namespace description'}} (RestApi.py:110)
+2022-05-06 13:46:23 [    INFO] $.namespace.name (RestApi.py:112)
+2022-05-06 13:46:23 [    INFO] $.namespace.name (RestApi.py:114)
+2022-05-06 13:46:23 [    INFO] {
+  "namespace": {
+    "name": "namespaceibravbsxj",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (RestApi.py:118)
+2022-05-06 13:46:23 [    INFO] {
+  "namespace": {
+    "name": "namespaceibravbsxj",
+    "refId1": "refId1",
+    "refId2": "refId2",
+    "description": "Namespace description"
+  }
+} (NameSpace.py:20)
+2022-05-06 13:46:23 [    INFO] <Response [201]> (RestApi.py:22)
+2022-05-06 13:46:23 [    INFO] {'namespace': {'id': 'a01713d5-1534-41df-b38d-b7c2ecf1c5ab', 'creationDate': '2022-05-06 08:16', 'lastModifiedDate': '', 'name': 'namespaceibravbsxj', 'description': 'Namespace description', 'state': 'DRAFT', 'refId1': 'refId1', 'refId2': 'refId2'}} (RestApi.py:26)
+2022-05-06 13:46:23 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.481034, 'Act_Response': '{"namespace":{"id":"a01713d5-1534-41df-b38d-b7c2ecf1c5ab","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceibravbsxj","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:52)
+2022-05-06 13:46:23 [    INFO] test_createLeaseProduct_new (LicenceModel.py:40)
+2022-05-06 13:46:23 [    INFO] searchFlexibleLicenseModel (LicenceModel.py:42)
+2022-05-06 13:46:24 [    INFO] {'enforcements': {'count': 1, 'enforcement': [{'id': '729b8bd4-b961-11ec-81c0-42010a5c0269', 'creationDate': '2022-04-11 06:34', 'lastModifiedDate': '2022-04-11 06:34', 'nameVersion': {'name': 'Sentinel RMS', 'version': '10.0'}, 'description': 'Sentinel RMS 10.0 Enforcement Technology'}]}} (RestApi.py:66)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.481034, 'Act_Response': '{"namespace":{"id":"a01713d5-1534-41df-b38d-b7c2ecf1c5ab","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceibravbsxj","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.443625, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}] (RestApi.py:91)
+2022-05-06 13:46:24 [   ERROR] {"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}} (RestApi.py:74)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'UpdateJsonPath', 'inputs': '../jsonFiles/nameSpace.json', 'Expected_Code': '200', 'actual_Code': '200', 'Response_time': '', 'Act_Response': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'addNameSpace', 'inputs': '{\n  "namespace": {\n    "name": "namespaceibravbsxj",\n    "refId1": "refId1",\n    "refId2": "refId2",\n    "description": "Namespace description"\n  }\n}', 'Expected_Code': '201', 'actual_Code': 201, 'Response_time': 0.481034, 'Act_Response': '{"namespace":{"id":"a01713d5-1534-41df-b38d-b7c2ecf1c5ab","creationDate":"2022-05-06 08:16","lastModifiedDate":"","name":"namespaceibravbsxj","description":"Namespace description","state":"DRAFT","refId1":"refId1","refId2":"refId2"}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 200, 'Response_time': 0.443625, 'Act_Response': '{"enforcements":{"count":1,"enforcement":[{"id":"729b8bd4-b961-11ec-81c0-42010a5c0269","creationDate":"2022-04-11 06:34","lastModifiedDate":"2022-04-11 06:34","nameVersion":{"name":"Sentinel RMS","version":"10.0"},"description":"Sentinel RMS 10.0 Enforcement Technology"}]}}', 'Status': 'Pass', 'Expected_Response': ''}, {'Api_Name': 'searchFlexibleLicenseModel', 'inputs': '', 'Expected_Code': '200', 'actual_Code': 404, 'Response_time': 0.436331, 'Act_Response': '{"errorResponse":{"errorCode":125,"description":"The requested resource is not found.","developerMessage":"com.sfnt.ems.util.EMSException: The requested resource is not found."}}', 'Status': 'Failed', 'Expected_Response': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 22 Value with 22 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '22', 'actual': '22', 'Status': 'Pass', 'Act_Response': '22', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 22 Value with 22 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '22', 'actual': '22', 'Status': 'Pass', 'Act_Response': '22', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 22 Value with 22 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '22', 'actual': '22', 'Status': 'Pass', 'Act_Response': '22', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 11 Value with 11 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '11', 'actual': '11', 'Status': 'Pass', 'Act_Response': '11', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 22 Value with 22 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '22', 'actual': '22', 'Status': 'Pass', 'Act_Response': '22', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 33 Value with 35 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '33', 'actual': '35', 'Status': 'Failed', 'Act_Response': '35', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 44 Value with 44 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '44', 'actual': '44', 'Status': 'Pass', 'Act_Response': '44', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 11 Value with 11 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '11', 'actual': '11', 'Status': 'Pass', 'Act_Response': '11', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 22 Value with 22 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '22', 'actual': '22', 'Status': 'Pass', 'Act_Response': '22', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 33 Value with 35 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '33', 'actual': '35', 'Status': 'Failed', 'Act_Response': '35', 'Response_time': ''}] (ReportEngine.py:89)
+2022-05-06 13:46:24 [    INFO] Comparing 44 Value with 44 (EMSAssertion.py:21)
+2022-05-06 13:46:24 [    INFO] [{'Api_Name': 'getAssertions', 'inputs': '', 'Expected_Code': '', 'actual_Code': '', 'Expected_Response': '44', 'actual': '44', 'Status': 'Pass', 'Act_Response': '44', 'Response_time': ''}] (ReportEngine.py:89)

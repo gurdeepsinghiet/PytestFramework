@@ -1,10 +1,10 @@
 {
-  "NameSpaceName": "LDKTesting",
-  "FeatureName"  : "LDKFeature",
-  "FeatureVersion" : "1.0",
-  "ProductName" : "LDKProductName",
-  "ProductVersion" : "1.0",
-  "CustomerName" : "LDKCust",
-  "ContactEmail" : "LDKThales@ems.com",
-  "Password"   : "Thales@123"
+  "nameSpaceName": "LDKTesting",
+  "featureName"  : "LDKFeature",
+  "featureVersion" : "1.0",
+  "productName" : "LDKProductName",
+  "productVersion" : "1.0",
+  "customerName" : "LDKCust",
+  "emailId" : "LDKThales@ems.com",
+  "password"   : "Thales@123"
 }

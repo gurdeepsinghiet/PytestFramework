@@ -11,7 +11,7 @@ password = Constant.EMSPassword
 
 class LicenseModelfactory(object):
 
-    def updateLicencezModelAttribute(LM_ATTR_Name, value, response_LM_json):
+    def updateLicencezModelAttribute(LM_ATTR_Name , value, response_LM_json):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
         for match in jsonpath_expression.find(response_LM_json):
@@ -22,7 +22,6 @@ class LicenseModelfactory(object):
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
-        # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         response = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),"201")
@@ -31,7 +30,6 @@ class LicenseModelfactory(object):
             enforcementId = response_Enforcement["enforcement"]["id"]
             self.enforcementProps = [enforcementId]
         return self
-
 
     def getEnforcementId(self) ->list:
         return self.enforcementProps
@@ -54,10 +52,7 @@ class LicenseModelfactory(object):
                 self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
 
-
-
-
-    def addFlexibleLicenceModelStandalone(self,LMNameGenerator, response_LM_json):
+    def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_json):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
@@ -79,7 +74,7 @@ class LicenseModelfactory(object):
             self.LMStandaloneProperties = [LM_name, lmId]
         return self
 
-    def updateLicencezModelAttribute(self,LM_ATTR_Name, value, response_LM_json):
+    def updateLicencezModelAttribute(self, LM_ATTR_Name, value, response_LM_json):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
         for match in jsonpath_expression.find(response_LM_json):
@@ -110,7 +105,6 @@ class LicenseModelfactory(object):
 
     def getLMStandProperties(self):
         return self.LMStandaloneProperties
-
 
     def getLMNetworkProperties(self):
         return self.LMNeworksProperties
