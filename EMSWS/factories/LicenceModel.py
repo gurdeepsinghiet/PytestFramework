@@ -40,13 +40,13 @@ class LicenseModelfactory(object):
         LOGGER.info(running_testcases)
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS', "", currentApiFuncName(), "200")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS', "", currentApiFuncName(), 200)
+        if response[1] == 200:
             enforcementJson = utility.convertJsontoDictinary(response[0])
             enforcementId = enforcementJson["enforcements"]["enforcement"][0]["id"]
             self.enforcementProps = [enforcementId]
-            responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),"200")
-            if responseFlexibleLicenseModel[1] == 201 or responseFlexibleLicenseModel[1] == 204 or responseFlexibleLicenseModel[1] == 200:
+            responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
+            if responseFlexibleLicenseModel[1] == 200:
                 flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
                 LOGGER.info(flexibleLicenseModelJson)
                 self.FlexibleLicenseModelJson = flexibleLicenseModelJson
@@ -66,8 +66,8 @@ class LicenseModelfactory(object):
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
         response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                    response_LM_json1, currentApiFuncName(), "201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+                                    response_LM_json1, currentApiFuncName(), 201)
+        if response[1] == 201:
             lmNetworkJson = utility.convertJsontoDictinary(response[0])
             LM_name = lmNetworkJson["licenseModel"]["name"]
             lmId = lmNetworkJson["licenseModel"]["id"]
@@ -75,15 +75,14 @@ class LicenseModelfactory(object):
         return self
 
     def updateLicencezModelAttribute(self, LM_ATTR_Name, value, response_LM_json):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+
         jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
         for match in jsonpath_expression.find(response_LM_json):
             if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
                 match.value["value"] = value
         return self
 
-    def addFlexibleLicenceModelNetwork(self,LMNameGenerator, response_LM_json):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
@@ -95,8 +94,8 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
-        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), "201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), 201)
+        if response[1] == 201:
             lmNetworkJson = utility.convertJsontoDictinary(response[0])
             LM_name = lmNetworkJson["licenseModel"]["name"]
             lmId = lmNetworkJson["licenseModel"]["id"]

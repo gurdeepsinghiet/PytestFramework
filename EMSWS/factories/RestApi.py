@@ -4,6 +4,7 @@ import EMSWS.Constant as Constant
 from EMSWS.ReportParameters import ReportParam
 import pytest
 import json
+from EMSWS.Utilities import UtilityClass
 from jsonpath_ng.ext import parse
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -21,7 +22,7 @@ class RestApiUtilityFactory(object):
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
             LOGGER.info(postapiResponse)
             # Collectin data for Report
-            if postapiResponse.status_code == 201 or postapiResponse.status_code == 204 or postapiResponse.status_code == 200:
+            if postapiResponse.status_code == expectedresCode:
                 response_dictionary = json.loads(postapiResponse.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
@@ -38,7 +39,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setExpectedResponse("")
                 self.data.append(reportParam.getReportParameters())
                 LOGGER.error(postapiResponse.text)
-                pytest.fail("Problem with creating Entity")
+                pytest.fail("response code not matched")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
             reportParam.setActualCode("500")
@@ -47,6 +48,7 @@ class RestApiUtilityFactory(object):
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
             self.data.append(reportParam.getReportParameters())
+            pytest.fail("Connection error with server")
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
@@ -61,7 +63,7 @@ class RestApiUtilityFactory(object):
             reportParam.setExpectedCode(expectedresCode)
             getapiResponse = requests.get(requestUrl, requestBody, auth=(username, password))
             # Collectin data for Report
-            if getapiResponse.status_code == 201 or getapiResponse.status_code == 204 or getapiResponse.status_code == 200:
+            if getapiResponse.status_code == expectedresCode:
                 response_dictionary = json.loads(getapiResponse.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
@@ -101,25 +103,47 @@ class RestApiUtilityFactory(object):
         pass
 
     def UpdateJsonPath(self,jsonpath,jsontagsList,jsonValueList):
+        utilityClass=UtilityClass()
         reportParam = ReportParam()
         reportParam.setApiName("UpdateJsonPath")
         reportParam.setInputs(jsonpath)
         reportParam.setExpectedCode("200")
         with open(jsonpath) as f:
-            jsonData = json.load(f)
-        LOGGER.info(jsonData)
-        for i, jsonxpath in enumerate(jsontagsList):
-            LOGGER.info(jsonxpath)
-            jsonpath_expression = parse(jsonxpath)
-            LOGGER.info(jsonpath_expression)
-            jsonpath_expression.find(jsonData)
-            jsonpath_expression.update(jsonData, jsonValueList[i])
-        response = json.dumps(jsonData, indent=2)
-        LOGGER.info(response)
-        reportParam.setActualCode("200")
-        reportParam.setResponseTime("")
-        reportParam.setActualRespone(response)
-        reportParam.setStatus("Pass")
-        reportParam.setExpectedResponse("")
-        self.data.append(reportParam.getReportParameters())
+            try:
+                jsonData = json.load(f)
+                LOGGER.info(jsonData)
+                for i, jsonxpath in enumerate(jsontagsList):
+                    LOGGER.info(jsonxpath)
+                    jsonpath_expression = parse(jsonxpath)
+                    LOGGER.info(jsonpath_expression)
+                    jsonpath_expression.find(jsonData)
+                    jsonpath_expression.update(jsonData, jsonValueList[i])
+                try:
+                    response = json.dumps(jsonData, indent=2)
+                    LOGGER.info(response)
+                    reportParam.setActualCode("200")
+                    reportParam.setResponseTime("")
+                    reportParam.setActualRespone(response)
+                    reportParam.setStatus("Pass")
+                    reportParam.setExpectedResponse("")
+                    self.data.append(reportParam.getReportParameters())
+                except TypeError as e:
+                    reportParam.setActualCode("404")
+                    reportParam.setResponseTime("")
+                    reportParam.setActualRespone(e)
+                    reportParam.setStatus("Failed")
+                    reportParam.setExpectedResponse("")
+                    self.data.append(reportParam.getReportParameters())
+                    LOGGER.error(e)
+                    pytest.fail("problem with json decoding")
+
+            except json.decoder.JSONDecodeError as e:
+                reportParam.setActualCode("404")
+                reportParam.setResponseTime("")
+                reportParam.setActualRespone(e)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                LOGGER.error(e)
+                pytest.fail("problem with json decoding")
         return response

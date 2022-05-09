@@ -42,3 +42,13 @@ class UtilityClass(object):
 
     def currentApiName(self):
         return lambda n=0: sys._getframe(n + 1).f_code.co_name
+
+
+    def decodeJsonFile(self,jsonFilePath):
+        try:
+            with open(jsonFilePath) as file_object:
+                data = json.load(file_object)
+                return data
+        except ValueError:
+            LOGGER.error("Error parsing json data")
+

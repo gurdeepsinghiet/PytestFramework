@@ -81,7 +81,6 @@ class ReportGenerator():
             preExistingTempleteData += "<td>"+str(data["Response_time"])+"</td>"
             preExistingTempleteData += "<td>"+data["Status"]+"</td>"
             preExistingTempleteData += "<td><div><div></div></div></td>"
-
             preExistingTempleteData += "</tr>"
         return preExistingTempleteData
 

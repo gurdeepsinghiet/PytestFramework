@@ -20,8 +20,8 @@ class ContactFactory:
                                                                      '$.contact.contactType','$.contact.emailId'],
                                                   [contactname,"Thales@123", "Standard",emailStr])
         LOGGER.info(contactUpdated_json)
-        response = self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), "201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), 201)
+        if response[1] == 201:
             customerJson = utility.convertJsontoDictinary(response[0])
             contact_name = customerJson["contact"]["name"]
             conatct_id = customerJson["contact"]["id"]

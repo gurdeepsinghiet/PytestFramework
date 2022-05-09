@@ -1,4 +1,5 @@
 import EMSWS.Constant as Constant
+import pytest
 from EMSWS.factories.EMSFuntions import EMSFactory
 def test_createLeaseProduct(emsObjectFixture,request):
     testname = request.node.name
@@ -40,3 +41,10 @@ def test_createLeaseProduct_new(emsObjectFixture,request):
     .getAssertions(ems.getProductProperties()[2], ems.getFeatureProperties()[0])\
     .getAssertions(ems.getProductProperties()[3], ems.getFeatureProperties()[1])\
     .getAssertions(testname,"test_createLeaseProduct")
+
+@pytest.mark.parametrize("num, output",[("Ftrpytestwpwzezego","1.0"),("Ftrpytestwpwzezego","1.0")])
+def test_getFeatureApi(emsObjectFixture,num,output):
+    #ems = EMSFactory()
+    ems = emsObjectFixture['ems']
+    ems\
+    .getFeature(nameVersion=num+":"+output)

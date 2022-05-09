@@ -19,8 +19,8 @@ class NameSpacefactory():
         namceSpace_json = self.UpdateJsonPath(nameSpaceJsonPath, ['$.namespace.name'], [nameSpaceNamegenerator + self.RandomString(9)])
         LOGGER.info(namceSpace_json)
         # Dictionary object for crearing NameSpace Report
-        response = self.PostRequest(url + '/ems/api/v5/namespaces', namceSpace_json, currentApiFuncName(), "201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.PostRequest(url + '/ems/api/v5/namespaces', namceSpace_json, currentApiFuncName(), 201)
+        if response[1] == 201:
             nameSpaceJson=utility.convertJsontoDictinary(response[0])
             nameSpace_name = nameSpaceJson["namespace"]["name"]
             nameSpace_id = nameSpaceJson["namespace"]["id"]

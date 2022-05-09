@@ -18,8 +18,8 @@ class CustomerFactory:
         customerUpdate_json = self.UpdateJsonPath(customerJsonPath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
                                                   [customername,customername,contact_id])
         LOGGER.info(customerUpdate_json)
-        response = self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), "201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), 201)
+        if response[1] == 201:
             customerJson = utility.convertJsontoDictinary(response[0])
             customer_name = customerJson["customer"]["name"]
             customer_id = customerJson["customer"]["id"]
