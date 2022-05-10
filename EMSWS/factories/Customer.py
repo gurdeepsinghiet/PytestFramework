@@ -9,9 +9,6 @@ class CustomerFactory:
 
     def addCustomer(self, customerJsonPath, customerNameGenerator, contact_id):
         utility = UtilityClass()
-        running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
-        # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         customername=customerNameGenerator + self.RandomString(9)
@@ -27,5 +24,5 @@ class CustomerFactory:
         return self
 
 
-    def getContactProperties(self):
+    def getCustomerProperties(self):
         return self.customerProperties

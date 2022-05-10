@@ -17,7 +17,6 @@ def getReportPytestHook(emsObjectFixture):
     yield v
     v.reportGenerator()
 
-
 def pytest_sessionstart(session):
     session.results = dict()
 
@@ -27,8 +26,6 @@ def pytest_runtest_makereport(item, call):
     result = outcome.get_result()
     if result.when == 'call':
         item.session.results[item] = result
-
-
 def pytest_sessionfinish(session, exitstatus):
     print('run status code:', exitstatus)
     nm=[result for result in session.results.values()]

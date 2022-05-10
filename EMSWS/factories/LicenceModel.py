@@ -20,14 +20,23 @@ class LicenseModelfactory(object):
 
     def getEnforcement(self):
         utility = UtilityClass()
-        running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),"201")
-        if response[1] == 201 or response[1] == 204 or response[1] == 200:
+        response = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),200)
+        if response[1] == 200:
             response_Enforcement = utility.convertJsontoDictinary(response[0])
             enforcementId = response_Enforcement["enforcement"]["id"]
+            self.enforcementProps = [enforcementId]
+        return self
+
+    def searchEnforcement(self):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS',"",currentApiFuncName(),200)
+        if response[1] == 200:
+            response_Enforcement = utility.convertJsontoDictinary(response[0])
+            enforcementId = response_Enforcement["enforcements"]["enforcement"][0]["id"]
             self.enforcementProps = [enforcementId]
         return self
 
@@ -36,20 +45,15 @@ class LicenseModelfactory(object):
 
     def searchFlexibleLicenseModel(self):
         utility = UtilityClass()
-        running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS', "", currentApiFuncName(), 200)
-        if response[1] == 200:
-            enforcementJson = utility.convertJsontoDictinary(response[0])
-            enforcementId = enforcementJson["enforcements"]["enforcement"][0]["id"]
-            self.enforcementProps = [enforcementId]
-            responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
-            if responseFlexibleLicenseModel[1] == 200:
-                flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
-                LOGGER.info(flexibleLicenseModelJson)
-                self.FlexibleLicenseModelJson = flexibleLicenseModelJson
+        self.searchEnforcement();
+        enforcementId=self.getEnforcementId()[0];
+        responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
+        if responseFlexibleLicenseModel[1] == 200:
+            flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
+            LOGGER.info(flexibleLicenseModelJson)
+            self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
 
     def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_json):
@@ -87,9 +91,6 @@ class LicenseModelfactory(object):
         self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
         utility = UtilityClass()
-        running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
-        # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)

@@ -1,4 +1,4 @@
-import  EMSWS.Constant as Constant
+import EMSWS.Constant as Constant
 import logging
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
@@ -9,9 +9,6 @@ password = Constant.EMSPassword
 class ContactFactory:
     def addStandardContact(self, contactJsonPath, contactNameGenerator, emailString):
         utility = UtilityClass()
-        running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
-        # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         contactname=contactNameGenerator + self.RandomString(9)

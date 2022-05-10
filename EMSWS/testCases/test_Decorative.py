@@ -10,6 +10,9 @@ def test_createLeaseProduct(emsObjectFixture,request):
     .addFlexibleLicenceModelStandalone("LMnamepytest",ems.FlexibleLicenseModelJson)\
     .addFeature("Ftrpytest",Constant.featureJsonPath,ems.getLMStandProperties()[0],ems.getNamespaceProps()[0])\
     .addProductNonLVH(Constant.productJsonPath,"pytestprod",ems.getNamespaceProps()[0],ems.getFeatureProperties()[0],ems.getFeatureProperties()[1])\
+    .addStandardContact(Constant.contactJsonPath,"pytestcontact","thalesmail")\
+    .addCustomer(Constant.customerJsonPath,"pytestcustomer",ems.getContactProperties()[1])\
+    .createEntitlementNONLVH(ems.getProductProperties()[0],ems.getProductProperties()[1],ems.getCustomerProperties()[0],Constant.entitlementJsonPath)\
     .getAssertions(ems.getProductProperties()[2], ems.getFeatureProperties()[0])\
     .getAssertions(ems.getProductProperties()[3], ems.getFeatureProperties()[0])\
     .getAssertions(testname,"test_createLeaseProduct")

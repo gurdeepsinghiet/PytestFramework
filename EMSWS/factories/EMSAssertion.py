@@ -10,7 +10,6 @@ class EMSAssertionFactory:
     def __init__(self):
         pass
     def getAssertions(self,expected,actual):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
         AssertionsReport={}
         AssertionsReport["Api_Name"] = currentFuncName()

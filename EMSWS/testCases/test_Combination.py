@@ -7,5 +7,5 @@ def test_createLeaseProduct_new(emsObjectFixture,request):
     ems=emsObjectFixture['ems']
     #ems=EMSFactory()
     ems\
-    .addNameSpace(Constant.nameSpaceJsonPath,"namespace")
+    .searchFeature(name="SM-71440_WAubM4152WAubM",id="5330")
 

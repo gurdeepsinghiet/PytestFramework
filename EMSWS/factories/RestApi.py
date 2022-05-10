@@ -62,16 +62,27 @@ class RestApiUtilityFactory(object):
             reportParam.setInputs(requestBody)
             reportParam.setExpectedCode(expectedresCode)
             getapiResponse = requests.get(requestUrl, requestBody, auth=(username, password))
+            LOGGER.info(getapiResponse.status_code)
             # Collectin data for Report
             if getapiResponse.status_code == expectedresCode:
-                response_dictionary = json.loads(getapiResponse.text)
-                LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
-                reportParam.setActualCode(getapiResponse.status_code)
-                reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(getapiResponse.text)
-                reportParam.setStatus("Pass")
-                reportParam.setExpectedResponse("")
+                try:
+                    response_dictionary = json.loads(getapiResponse.text)
+                    LOGGER.info(response_dictionary)
+                    # Collecting data for Report Status if Test step Pass
+                    reportParam.setActualCode(getapiResponse.status_code)
+                    reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
+                    reportParam.setActualRespone(getapiResponse.text)
+                    reportParam.setStatus("Pass")
+                    reportParam.setExpectedResponse("")
+                except json.decoder.JSONDecodeError as e:
+                    reportParam.setActualCode(getapiResponse.status_code)
+                    reportParam.setResponseTime("")
+                    reportParam.setActualRespone("response json decode error")
+                    reportParam.setStatus("Failed")
+                    reportParam.setExpectedResponse("")
+                    self.data.append(reportParam.getReportParameters())
+                    LOGGER.error(e)
+                    pytest.fail("problem with json decoding")
             else:
                 LOGGER.error(getapiResponse.text)
                 reportParam.setActualCode(getapiResponse.status_code)
