@@ -11,12 +11,27 @@ password = Constant.EMSPassword
 
 class LicenseModelfactory(object):
 
-    def updateLicencezModelAttribute(LM_ATTR_Name , value, response_LM_json):
+    def updateLicencezModelAttribute(self,LM_ATTR_Name , value, response_LM_json):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
         for match in jsonpath_expression.find(response_LM_json):
             if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
                 match.value["value"] = value
+        self.Updated_LM_Json=response_LM_json
+        LOGGER.info(response_LM_json)
+        return self
+
+    def updateLicencezModelAttributes(self,LM_ATTR_NameList , valueList, response_LM_json):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
+        for i,attr in enumerate(LM_ATTR_NameList):
+            for match in jsonpath_expression.find(response_LM_json):
+                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
+                    LOGGER.info(attr[i])
+                    LOGGER.info(valueList[i])
+                    match.value["value"] = valueList[i]
+        self.Updated_LM_Json = response_LM_json
+        return self
 
     def getEnforcement(self):
         utility = UtilityClass()
@@ -56,7 +71,23 @@ class LicenseModelfactory(object):
             self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
 
-    def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_json):
+    def searchCloudConnectedLicenceModel(self):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        self.searchEnforcement();
+        enforcementId = self.getEnforcementId()[0];
+        responseFlexibleLicenseModel = self.getRequest(
+            url + '/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Connected License Model', "",
+            currentApiFuncName(), 200)
+        if responseFlexibleLicenseModel[1] == 200:
+            cloudConnectedLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
+            LOGGER.info(cloudConnectedLicenseModelJson)
+            self.CloudConnectedLicenseModelJson = cloudConnectedLicenseModelJson
+        return self
+
+
+    def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
@@ -69,24 +100,19 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
-        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                    response_LM_json1, currentApiFuncName(), 201)
-        if response[1] == 201:
-            lmNetworkJson = utility.convertJsontoDictinary(response[0])
-            LM_name = lmNetworkJson["licenseModel"]["name"]
-            lmId = lmNetworkJson["licenseModel"]["id"]
-            self.LMStandaloneProperties = [LM_name, lmId]
-        return self
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             ['$.licenseModel.name', '$.licenseModel.id'])
+            LOGGER.info(self.emsVariableList["LM_name"])
+            LOGGER.info(self.emsVariableList["lmId"])
+        elif (expectedCode != None and expectedCode != None and xPathList != None):
+            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
 
-    def updateLicencezModelAttribute(self, LM_ATTR_Name, value, response_LM_json):
 
-        jsonpath_expression = parse('$.licenseModel.licenseModelAttributes.licenseModelAttribute[*]')
-        for match in jsonpath_expression.find(response_LM_json):
-            if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
-                match.value["value"] = value
-        return self
 
-    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json):
+    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
@@ -95,12 +121,31 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
         response_LM_json1 = json.dumps(response_LM_json)
-        response = self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), 201)
-        if response[1] == 201:
-            lmNetworkJson = utility.convertJsontoDictinary(response[0])
-            LM_name = lmNetworkJson["licenseModel"]["name"]
-            lmId = lmNetworkJson["licenseModel"]["id"]
-            self.LMNeworksProperties = [LM_name, lmId]
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             ['$.licenseModel.name', '$.licenseModel.id'])
+            LOGGER.info(self.emsVariableList["LM_name"])
+            LOGGER.info(self.emsVariableList["lmId"])
+        elif (expectedCode != None and expectedCode != None and xPathList != None):
+            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
+        return self
+
+    def addcloudConnectedLicenceModel(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        response_LM_json["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_json)
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                                        response_LM_json1, currentApiFuncName(), expectedCode,["LM_name","lmId"],['$.licenseModel.name','$.licenseModel.id'])
+            LOGGER.info(self.emsVariableList["LM_name"])
+            LOGGER.info(self.emsVariableList["lmId"])
+        elif(expectedCode != None and expectedCode !=None and xPathList !=None):
+            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode, variableList, xPathList)
+
         return self
 
     def getLMStandProperties(self):
@@ -108,3 +153,6 @@ class LicenseModelfactory(object):
 
     def getLMNetworkProperties(self):
         return self.LMNeworksProperties
+
+    def getLMCloudConnectedProperties(self):
+        return self.LMCloudConnectedProperties

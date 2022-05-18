@@ -9,7 +9,7 @@ class EMSAssertionFactory:
 
     def __init__(self):
         pass
-    def getAssertions(self,expected,actual):
+    def verifyAssertions(self,expected,actual,verificationComments=None):
         currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
         AssertionsReport={}
         AssertionsReport["Api_Name"] = currentFuncName()
@@ -37,3 +37,15 @@ class EMSAssertionFactory:
 
         self.data.append(AssertionsReport)
         return self
+
+
+    def verifyJsonXpathxValues(self,json,jsonXpathList,tagjsonvaluesList,expectedValueList):
+        pass
+
+
+
+    def verifyJsonxpathValue(self,json,jsonXpathtag,tagvalue,expectedValue):
+        pass
+
+
+

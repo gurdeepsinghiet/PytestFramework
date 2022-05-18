@@ -26,6 +26,7 @@ def pytest_runtest_makereport(item, call):
     result = outcome.get_result()
     if result.when == 'call':
         item.session.results[item] = result
+
 def pytest_sessionfinish(session, exitstatus):
     print('run status code:', exitstatus)
     nm=[result for result in session.results.values()]
@@ -99,20 +100,26 @@ def summaryreportGenerator(summaryData,passed,fail,total):
     preExistingTemplete += "<div class='row'>"
     preExistingTemplete += "<div class='col-md-12'>"
     preExistingTemplete += "<div class='main_features'>"
+    preExistingTemplete += "<svg id='pie1' class='chart'>"
+    preExistingTemplete += "</svg>"
+    preExistingTemplete += "</div>"
+    preExistingTemplete += "</div>"
+    preExistingTemplete += "<div class='col-md-12'>"
+    preExistingTemplete += "<div class='main_features'>"
     preExistingTemplete += "<ul>"
     preExistingTemplete += "<li class='bg-success'>"
     preExistingTemplete += "<img src='../../assets/img/pass-test.png' />"
-    preExistingTemplete += "<h6>"+str(passed)+"</h6>"
+    preExistingTemplete += "<h6 id='pass'>"+str(passed)+"</h6>"
     preExistingTemplete += "<p>Passed Test Cases</p>"
     preExistingTemplete += "</li>"
     preExistingTemplete += "<li class='bg-danger'>"
     preExistingTemplete += "<img src='../../assets/img/fail.png' />"
-    preExistingTemplete += "<h6>"+str(fail)+"</h6>"
+    preExistingTemplete += "<h6 id='fail'>"+str(fail)+"</h6>"
     preExistingTemplete += "<p>Failed Test Cases</p>"
     preExistingTemplete += "</li>"
     preExistingTemplete += "<li class='bg-primary'>"
     preExistingTemplete += "<img src='../../assets/img/test.png' />"
-    preExistingTemplete += "<h6>"+str(total)+"</h6>"
+    preExistingTemplete += "<h6 id='total'>"+str(total)+"</h6>"
     preExistingTemplete += "<p>Total Test Cases</p>"
     preExistingTemplete += "</li>"
     preExistingTemplete += "</ul>"

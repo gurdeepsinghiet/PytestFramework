@@ -7,22 +7,39 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class FeatureFactory(object):
-    def addFeature(self, FeatureNameGenerator, featureJsonPath, LM_name, nameSpace_name):
+    def addFeature(self,featureFilePath,featureNameGen,featureVersion,nameSpaceName,LM_name,expectedCode,variableList=None,xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        feature_json = self.UpdateJsonPath(featureJsonPath, ['$.feature.nameVersion.name','$.feature.nameVersion.version','$..namespace.name','$..featureLicenseModel[0].licenseModel.name'],
-                                           [FeatureNameGenerator + self.RandomString(9),"1.0",nameSpace_name,LM_name])
-        LOGGER.info(feature_json)
-        response = self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(), 201)
-        if response[1] == 201:
-            featureDictinary = utility.convertJsontoDictinary(response[0])
-            feature_name = featureDictinary["feature"]["nameVersion"]["name"]
-            feature_version = featureDictinary["feature"]["nameVersion"]["version"]
-            self.FeatureProperties = [feature_name, feature_version]
+        self.UpdateJsonFile(featureFilePath, ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$..namespace.name',
+                        '$..featureLicenseModel[0].licenseModel.name'], [featureNameGen, featureVersion, nameSpaceName, LM_name], ["featureRes"], ['$'])
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/features', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["feature_name", "feature_version", "featureRes"],['$.feature.nameVersion.name','$.feature.nameVersion.version','$'])
+            LOGGER.info(self.emsVariableList["feature_name"])
+            LOGGER.info(self.emsVariableList["feature_version"])
+            LOGGER.info(self.emsVariableList["featureRes"])
+        elif(expectedCode != None and variableList !=None and xPathList !=None):
+            self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(),expectedCode, variableList,xPathList)
         return self
 
-    def getFeature(self,featureId=None,nameVersion =None,identifierNamespace=None,identifier =None,externalId =None,id=None):
+    def createFeature(self, feature_json, expectedCode, variableList=None, xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(), expectedCode,
+                             ["feature_name", "feature_version", "featureRes"],
+                             ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$'])
+            LOGGER.info(self.emsVariableList["feature_name"])
+            LOGGER.info(self.emsVariableList["feature_version"])
+            LOGGER.info(self.emsVariableList["featureRes"])
+        elif (expectedCode != None and expectedCode != None and xPathList != None):
+            self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
+
+        return self
+
+    def getFeature(self,featureId=None,nameVersion =None,identifierNamespace=None,identifier =None,externalId =None,id=None,variableList=None,xPathList=None,expectedCode=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -46,13 +63,28 @@ class FeatureFactory(object):
             LOGGER.info(featureJson)
         return self
 
-    def searchFeature(self):
+    def partialUpdateFeature(self, feature_json, expectedCode,id=None,nameVersion=None,identifierNamespace =None,identifier =None,externalId =None,variableList=None, xPathList=None):
+        # getting the name of Current Running Test cases
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
-        LOGGER.info(running_testcases)
-        # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
-
+        LOGGER.info(currentApiFuncName())
+        if id !=None:
+            response = self.patchRequest(url + '/ems/api/v5/features/'+id, feature_json, currentApiFuncName(), 200,["featureUpdatedJson"],["$"])
+        elif nameVersion !=None:
+            response = self.patchRequest(url + '/ems/api/v5/features/nameVersion='+nameVersion, feature_json, currentApiFuncName(), 200,["featureUpdatedJson"],["$"])
+        elif identifier != None:
+            response = self.patchRequest(url + '/ems/api/v5/features/identifier=' + identifier, feature_json,
+                                             currentApiFuncName(), 200, ["featureUpdatedJson"], ["$"])
+        elif externalId != None:
+            response = self.patchRequest(url + '/ems/api/v5/features/externalId=' + externalId, feature_json,
+                                             currentApiFuncName(), 200, ["featureUpdatedJson"], ["$"])
+        elif identifierNamespace != None:
+            response = self.patchRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace, feature_json,
+                                             currentApiFuncName(), 200, ["featureUpdatedJson"], ["$"])
+        if response[1] == expectedCode:
+            LOGGER.info(self.emsVariableList["featureUpdatedJson"])
+        return self
 
     def getFeatureProperties(self):
         return self.FeatureProperties
@@ -62,7 +94,7 @@ class FeatureFactory(object):
 
     def searchFeature(self, id=None, identifier=None, licenseModelName=None, licenseModelId=None, namespaceId=None,
                       namespaceName=None, name=None, description=None, version=None, externalId=None, refId1=None,
-                      refId2=None):
+                      refId2=None,variableList=None,xPathList=None,expectedCode=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -100,6 +132,10 @@ class FeatureFactory(object):
                 self.getWsFeatureProperties = [feature_name, feature_version, response[0]]
                 LOGGER.info(featureJson)
         return self
+
+
+
+
 
 
 

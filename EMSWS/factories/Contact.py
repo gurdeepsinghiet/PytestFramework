@@ -7,27 +7,34 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class ContactFactory:
-    def addStandardContact(self, contactJsonPath, contactNameGenerator, emailString):
+    def addStandardContact(self,conatctJsonFilepath,ContactName,ContactEmailId,expectedCode,variableList=None,xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        contactname=contactNameGenerator + self.RandomString(9)
-        emailStr=emailString + self.RandomString(9) + "@Thales.com"
-        contactUpdated_json = self.UpdateJsonPath(contactJsonPath, ['$.contact.name', '$.contact.password',
-                                                                     '$.contact.contactType','$.contact.emailId'],
-                                                  [contactname,"Thales@123", "Standard",emailStr])
-        LOGGER.info(contactUpdated_json)
-        response = self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), 201)
-        if response[1] == 201:
-            customerJson = utility.convertJsontoDictinary(response[0])
-            contact_name = customerJson["contact"]["name"]
-            conatct_id = customerJson["contact"]["id"]
-            contact_emailId = customerJson["contact"]["emailId"]
-        self.contactStandardProperties = [contact_name, conatct_id, contact_emailId]
+        self.UpdateJsonFile(Constant.contactJsonPath, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],[ContactName,"Thales@123", "Standard",ContactEmailId])
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, currentApiFuncName(), 201,["contact_name","contact_id" ,"contact_emailId","contactRes"],['$.contact.name','$.contact.id','contact.emailId','$'])
+            LOGGER.info(self.emsVariableList["contact_name"])
+            LOGGER.info(self.emsVariableList["contact_id"])
+            LOGGER.info(self.emsVariableList["contact_emailId"])
+            LOGGER.info(self.emsVariableList["contactRes"])
+        elif expectedCode != None and variableList != None and xPathList != None:
+            self.PostRequest(url + '/ems/api/v5/namespaces', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
         return self
 
-    def getContactProperties(self):
-        return self.contactStandardProperties
+    def createStandardContact(self,contactUpdated_json,expectedCode,variableList=None,xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), 201,["contact_name","contact_id" ,"contact_emailId","contactRes"],['$.contact.name','$.contact.id','contact.emailId','$'])
+            LOGGER.info(self.emsVariableList["contact_name"])
+            LOGGER.info(self.emsVariableList["contact_id"])
+            LOGGER.info(self.emsVariableList["contact_emailId"])
+            LOGGER.info(self.emsVariableList["contactRes"])
+        elif expectedCode != None and variableList != None and xPathList != None:
+            self.PostRequest(url + '/ems/api/v5/namespaces', contactUpdated_json, currentApiFuncName(), expectedCode,variableList, xPathList)
+        return self
 
 
 

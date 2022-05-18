@@ -11,23 +11,76 @@ password = Constant.EMSPassword
 
 class Entitlementfacory(object):
 
-    def createEntitlementNONLVH(self,productName, productVersion, customerName, entitlementJsonPath):
+    def addEntitlementNONLVHEAWON(self,entitlement_json,product_name,product_version,customerName,expectedCode,variableList=None,xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        self.UpdateJsonFile(Constant.entitlementJsonPath, ['$..customer.name', '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
+                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version','$.entitlement.entitlementAsWhole'], [customerName, product_name, product_version,True], ["entitlementRes"],
+                        ['$'])
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["eid","entitelementid","entRes","pkId"],['$.entitlement.eId','$.entitlement.id','$','$.entitlement.productKeys.productKey[0].pkId'])
+            LOGGER.info(self.emsVariableList["eid"])
+            LOGGER.info(self.emsVariableList["entitelementid"])
+            LOGGER.info(self.emsVariableList["entRes"])
+            LOGGER.info(self.emsVariableList["pkId"])
+        if expectedCode != None and variableList !=None and xPathList !=None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
+        return self
+
+    def createEntitlementNONLVHEAWON(self, entitlement_json, expectedCode, variableList=None, xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,["eid", "entitelementid", "entRes", "pkId"], ['$.entitlement.eId', '$.entitlement.id', '$',
+                                                                           '$.entitlement.productKeys.productKey[0].pkId'])
+            LOGGER.info(self.emsVariableList["eid"])
+            LOGGER.info(self.emsVariableList["entitelementid"])
+            LOGGER.info(self.emsVariableList["entRes"])
+            LOGGER.info(self.emsVariableList["pkId"])
+        if expectedCode != None and variableList != None and xPathList != None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
+        return self
+
+    def addEntitlementNONLVHEAWOFF(self, entitlement_json, expectedCode,
+                                     variableList=None, xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        entitlement_json = self.UpdateJsonPath(entitlementJsonPath,
-                                           ['$..customer.name', '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
-                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version'],
-                                           [customerName, productName, productVersion])
-        responseEntitlement = self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), 201)
-        if responseEntitlement[1] == 201:
-            entitlementDictinary = utility.convertJsontoDictinary(responseEntitlement[0])
-            eid = entitlementDictinary["entitlement"]["eId"]
-            id = entitlementDictinary["entitlement"]["id"]
-            self.entitlementProperties = [id, eid,responseEntitlement[0]]
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+                             ["eid", "entitelementid", "entRes", "pkId"],
+                             ['$.entitlement.eId', '$.entitlement.id', 'S', '$.entitlement',
+                              '$.entitlement.productKeys.productKey[0].pkId'])
+            LOGGER.info(self.emsVariableList["eid"])
+            LOGGER.info(self.emsVariableList["entitelementid"])
+            LOGGER.info(self.emsVariableList["entRes"])
+        if expectedCode != None and variableList != None and xPathList != None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
+        return
+
+    def createEntitlementNONLVHEAWOFF(self, entitlement_json, expectedCode,
+                                      variableList=None, xPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if expectedCode == 201 and variableList == None and xPathList == None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+                             ["eid", "entitelementid", "entRes", "pkId"],
+                             ['$.entitlement.eId', '$.entitlement.id', 'S', '$.entitlement',
+                              '$.entitlement.productKeys.productKey[0].pkId'])
+            LOGGER.info(self.emsVariableList["eid"])
+            LOGGER.info(self.emsVariableList["entitelementid"])
+            LOGGER.info(self.emsVariableList["entRes"])
+        if expectedCode != None and variableList != None and xPathList != None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+                             variableList, xPathList)
         return self
 
-    def addProductKeyEntitlment(productName, productVersion, eId, productKeyJsonPath):
+    def addProductKeyEntitlment(productName, productVersion, eId, productKeyJsonPath,variableList=None,xPathList=None,expectedCode=None):
         productKeyFile = open(productKeyJsonPath, 'r')
         productKeyFileData = productKeyFile.read()
         productKey_json_object = json.loads(productKeyFileData)
