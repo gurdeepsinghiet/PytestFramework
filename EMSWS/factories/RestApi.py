@@ -20,11 +20,11 @@ class RestApiUtilityFactory(object):
             reportParam.setInputs(requestBody)
             reportParam.setExpectedCode(expectedresCode)
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
-            LOGGER.info(postapiResponse)
+            #LOGGER.info(postapiResponse)
             # Collectin data for Report
             if postapiResponse.status_code == expectedresCode:
                 response_dictionary = json.loads(postapiResponse.text)
-                LOGGER.info(response_dictionary)
+                #LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
@@ -121,31 +121,31 @@ class RestApiUtilityFactory(object):
             reportParam.setApiName(ApiName)
             reportParam.setInputs(requestBody)
             reportParam.setExpectedCode(expectedresCode)
-            postapiResponse = requests.patch(requestUrl, requestBody, auth=(username, password))
-            LOGGER.info(postapiResponse)
+            patchapiResponse = requests.patch(requestUrl, requestBody, auth=(username, password))
+            LOGGER.info(patchapiResponse)
             # Collectin data for Report
-            if postapiResponse.status_code == expectedresCode:
-                response_dictionary = json.loads(postapiResponse.text)
+            if patchapiResponse.status_code == expectedresCode:
+                response_dictionary = json.loads(patchapiResponse.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
-                reportParam.setActualCode(postapiResponse.status_code)
-                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(postapiResponse.text)
+                reportParam.setActualCode(patchapiResponse.status_code)
+                reportParam.setResponseTime(patchapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(patchapiResponse.text)
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
                 if (variableList != None and xPathList != None):
                     for i, jsonxpath in enumerate(xPathList):
                         LOGGER.info(xPathList[i])
                         LOGGER.info(variableList[i])
-                        self.getJsonXpathValue(postapiResponse.text, variableList[i], xPathList[i])
+                        self.getJsonXpathValue(patchapiResponse.text, variableList[i], xPathList[i])
             else:
-                reportParam.setActualCode(postapiResponse.status_code)
-                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(postapiResponse.text)
+                reportParam.setActualCode(patchapiResponse.status_code)
+                reportParam.setResponseTime(patchapiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(patchapiResponse.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
                 self.data.append(reportParam.getReportParameters())
-                LOGGER.error(postapiResponse.text)
+                LOGGER.error(patchapiResponse.text)
                 pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
@@ -159,7 +159,7 @@ class RestApiUtilityFactory(object):
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
-        return [postapiResponse.text, postapiResponse.status_code, reportParam.getReportParameters()]
+        return [patchapiResponse.text, patchapiResponse.status_code, reportParam.getReportParameters()]
 
     def putRequest(self):
         pass
@@ -214,20 +214,21 @@ class RestApiUtilityFactory(object):
                 pytest.fail("problem with json decoding")
         return self
 
-    def UpdateJson(self,jsonString,jsontagsList,jsonValueList,resVarList=None,resJpathList=None):
+    def UpdateJson(self,jsonDictionary,jsontagsList,jsonValueList,resVarList=None,resJpathList=None):
         utilityClass=UtilityClass()
         reportParam = ReportParam()
         reportParam.setApiName("UpdateJsonPath")
-        reportParam.setInputs(jsonString)
+        reportParam.setInputs(utilityClass.convertDictinarytoJson(jsonDictionary))
         reportParam.setExpectedCode("200")
         for i,jsonxpath in enumerate(jsontagsList):
             LOGGER.info(jsonxpath)
             jsonpath_expression = parse(jsonxpath)
             LOGGER.info(jsonpath_expression)
-            jsonpath_expression.find(jsonString)
-            jsonpath_expression.update(jsonString, jsonValueList[i])
+            jsonpath_expression.find(jsonDictionary)
+            jsonpath_expression.update(jsonDictionary, jsonValueList[i])
+            LOGGER.info(jsonDictionary)
             try:
-                response = json.dumps(jsonString, indent=2)
+                response = json.dumps(jsonDictionary, indent=2)
                 LOGGER.info(response)
                 reportParam.setActualCode("200")
                 reportParam.setResponseTime("")
@@ -269,7 +270,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(postapiResponse.text)
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
-                if(variableList != None and xPathList !=None):
+                if(resVarList != None and resJpathList !=None):
                     for i, jsonxpath in enumerate(resVarList):
                         self.getJsonXpathValue(postapiResponse.text,resVarList[i],resJpathList[i])
             else:

@@ -36,5 +36,70 @@ class ContactFactory:
             self.PostRequest(url + '/ems/api/v5/namespaces', contactUpdated_json, currentApiFuncName(), expectedCode,variableList, xPathList)
         return self
 
+    def getContact(self, expectedCode, resvariableList, resxPathList, id=None, emailId=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.getRequest(url + '/ems/api/v5/contacts/' + id, "", currentApiFuncName(), expectedCode,
+                                       resvariableList, resxPathList)
+        elif emailId != None:
+            response = self.getRequest(url + '/ems/api/v5/contacts/emailId=' + emailId, "", currentApiFuncName(),
+                                       expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+
+    def partialUpdateContact(self, contact_json, expectedCode, resvariableList, resxPathList, id=None, emailId=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.patchRequest(url + '/ems/api/v5/contacts/' + id, contact_json, currentApiFuncName(),
+                                         expectedCode, resxPathList)
+        elif emailId != None:
+            response = self.patchRequest(url + '/ems/api/v5/contacts/emailId=' + emailId, contact_json,
+                                         currentApiFuncName(), expectedCode, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def deleteContact(self, feature_json, expectedCode, resvariableList, resxPathList, id=None, emailId=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.deleteRequest(url + '/ems/api/v5/contacts/' + id, feature_json, currentApiFuncName(),
+                                          expectedCode, resxPathList)
+        elif emailId != None:
+            response = self.deleteRequest(url + '/ems/api/v5/contacts/emailId=' + emailId, feature_json,
+                                          currentApiFuncName(), expectedCode, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def replaceContact(self, contact_json, expectedCode, resvariableList, resxPathList, id=None, emailId=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.putRequest(url + '/ems/api/v5/contacts/' + id, contact_json, currentApiFuncName(),
+                                       expectedCode, resxPathList)
+        elif emailId != None:
+            response = self.putRequest(url + '/ems/api/v5/contacts/emailId=' + emailId, contact_json,
+                                       currentApiFuncName(), expectedCode, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
 
 

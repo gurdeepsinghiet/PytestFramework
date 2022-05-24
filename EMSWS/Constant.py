@@ -1,4 +1,3 @@
-#EMSURL=""
 EMSURL=""
 EMSUserName=""
 EMSPassword=""
@@ -10,5 +9,6 @@ customerJsonPath='../jsonFiles/customer.json'
 entitlementJsonPath='../jsonFiles/entitlement.json'
 productKeyJsonPath='../jsonFiles/productKey.json'
 activationJsonPath='../jsonFiles/activation.json'
+partialEntitlementJsonPath='../jsonFiles/partialEntitlement.json'
 emsDataFramePath='../EMSDataFrame/'
 emsReportPath='\\output\\'

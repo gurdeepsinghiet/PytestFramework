@@ -43,20 +43,92 @@ class NameSpacefactory():
 
         return self
 
-    def partialUpdateNameSpace(self, namceSpace_json, expectedCode,id=None,name=None,variableList=None, xPathList=None):
+    def partialUpdateNameSpace(self,namceSpace_json,expectedCode,resvariableList, resxPathList,id=None,name=None):
         # getting the name of Current Running Test cases
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id !=None:
-            response = self.patchRequest(url + '/ems/api/v5/namespaces/'+id, namceSpace_json, currentApiFuncName(), 200,["nameSpaceUpdatedJson"],["$"])
+            response = self.patchRequest(url + '/ems/api/v5/namespaces/'+id, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         if name !=None:
-            response = self.patchRequest(url + '/ems/api/v5/namespaces/name='+name, namceSpace_json, currentApiFuncName(), 200,["nameSpaceUpdatedJson"],["$"])
+            response = self.patchRequest(url + '/ems/api/v5/namespaces/name='+name, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         if response[1] == expectedCode:
-            LOGGER.info(self.emsVariableList["nameSpaceUpdatedJson"])
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def getNameSpace(self,expectedCode,resvariableList,resxPathList,id=None,name=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id !=None:
+            response = self.getRequest(url + '/ems/api/v5/namespaces/' + id, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
+        elif name !=None:
+            response = self.getRequest(url + '/ems/api/v5/namespaces/name=' + name, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
 
-    def getNamespaceProps(self) -> list:
-        return self.nameSpaceProperties
+    def searchNameSpace(self,expectedCode,resvariableList,resxPathList,id=None, name=None, refId1=None, refId2=None, description=None,
+                      state=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        responeurl=""
+        if (id != None):
+            responeurl +="id="+id+"&"
+        if (name != None):
+            responeurl +="name="+name+"&"
+        if (refId1 != None):
+            responeurl += "licenseModelName=" + refId1 + "&"
+        if (refId2 != None):
+            responeurl += "licenseModelId=" + refId2 + "&"
+
+        if (description != None):
+            responeurl += "description=" + description + "&"
+        if (state != None):
+            responeurl += "version=" + state + "&"
+        LOGGER.info(url +"/ems/api/v5/namespaces?"+ responeurl[0:-1])
+        response = self.getRequest(url +"/ems/api/v5/namespaces?"+ responeurl[0:-1], "", currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if response[1] == expectedCode:
+            for i,resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def deleteNameSpace(self, feature_json, expectedCode, resvariableList, resxPathList, id=None, name=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.deleteRequest(url + '/ems/api/v5/namespaces/' + id, feature_json, currentApiFuncName(),
+                                          expectedCode, resxPathList)
+        elif name != None:
+            response = self.deleteRequest(url + '/ems/api/v5/namespaces/emailId=' + name, feature_json,
+                                          currentApiFuncName(), expectedCode, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def replaceNameSpace(self, nameSpace_json, expectedCode, resvariableList, resxPathList, id=None, name=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.putRequest(url + '/ems/api/v5/namespaces/' + id, nameSpace_json, currentApiFuncName(),
+                                       expectedCode, resxPathList)
+        elif name != None:
+            response = self.putRequest(url + '/ems/api/v5/namespaces/name=' + name, nameSpace_json,
+                                       currentApiFuncName(), expectedCode, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self

@@ -40,7 +40,6 @@ class ProductFactory(object):
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-
         if expectedCode == 201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/products', product_json, currentApiFuncName(), expectedCode,
                              ["product_name", "product_version", "productRes","product_feature_name","product_feature_version","productRes"],
@@ -57,8 +56,51 @@ class ProductFactory(object):
 
         return self
 
+    def partialUpdateProduct(self, product_json,expectedCode,resvariableList, resxPathList,id=None,nameVersion=None,identifierNamespace =None,identifier =None,externalId =None):
+        # getting the name of Current Running Test cases
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id !=None:
+            response = self.patchRequest(url + '/ems/api/v5/products/'+id, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif nameVersion !=None:
+            response = self.patchRequest(url + '/ems/api/v5/products/nameVersion='+nameVersion, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif identifier != None:
+            response = self.patchRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
+                                             currentApiFuncName(), expectedCode, resvariableList,resxPathList)
+        elif externalId != None:
+            response = self.patchRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
+                                             currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if response[1] == expectedCode:
+            for i,resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def getProduct(self, resvariableList, resxPathList, expectedCode, productId=None, nameVersion=None, identifier=None, externalId=None, id=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if productId != None:
+            response = self.getRequest(url + '/ems/api/v5/products/productId=' + productId, "", currentApiFuncName(),
+                                       expectedCode, resvariableList, resxPathList)
+        elif id != None:
+            response = self.getRequest(url + '/ems/api/v5/products/' + id, "", currentApiFuncName(), expectedCode,
+                                       resvariableList, resxPathList)
+        elif nameVersion != None:
+            response = self.getRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, "",
+                                       currentApiFuncName(), expectedCode, resvariableList, resxPathList)
+        elif identifier != None:
+            response = self.getRequest(url + '/ems/api/v5/products/identifier=' + identifier, "", currentApiFuncName(),
+                                       expectedCode, resvariableList, resxPathList)
+        elif externalId != None:
+            response = self.getRequest(url + '/ems/api/v5/products/externalId=' + externalId, "", currentApiFuncName(),
+                                       expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
 
 
 
-    def getProductProperties(self) -> list:
-        return self.ProductProperties

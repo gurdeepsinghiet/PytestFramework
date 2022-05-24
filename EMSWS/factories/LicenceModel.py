@@ -67,7 +67,7 @@ class LicenseModelfactory(object):
         responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
         if responseFlexibleLicenseModel[1] == 200:
             flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
-            LOGGER.info(flexibleLicenseModelJson)
+            #LOGGER.info(flexibleLicenseModelJson)
             self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
 
@@ -98,61 +98,127 @@ class LicenseModelfactory(object):
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
+        response_LM_json["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_json)
         if expectedCode == 201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
-                             ['$.licenseModel.name', '$.licenseModel.id'])
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId","LMRES"],
+                             ['$.licenseModel.name', '$.licenseModel.id','$'])
             LOGGER.info(self.emsVariableList["LM_name"])
             LOGGER.info(self.emsVariableList["lmId"])
-        elif (expectedCode != None and expectedCode != None and xPathList != None):
-            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode,
+            LOGGER.info(self.emsVariableList["LMRES"])
+        elif (variableList != None and xPathList != None):
+            LOGGER.info("========================================")
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
                              variableList, xPathList)
+        return self
 
 
-
-    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
+    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
         self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
         self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
         self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator + self.RandomString(9)
+        response_LM_json["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_json)
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == 201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
             LOGGER.info(self.emsVariableList["LM_name"])
             LOGGER.info(self.emsVariableList["lmId"])
-        elif (expectedCode != None and expectedCode != None and xPathList != None):
-            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode,
-                             variableList, xPathList)
+        elif (resvariableList != None and resxPathList != None):
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
+                             resvariableList, resxPathList)
         return self
 
-    def addcloudConnectedLicenceModel(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
+
+    def addOnPremiseLMNetwork(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
+        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
+        self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
+        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "0", response_LM_json)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         response_LM_json["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_json)
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             ['$.licenseModel.name', '$.licenseModel.id'])
+            LOGGER.info(self.emsVariableList["LM_name_onPrem_Net"])
+            LOGGER.info(self.emsVariableList["lmId_onPrem_net"])
+        elif (expectedCode != None and expectedCode != None and resxPathList != None):
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
+                             resvariableList, resxPathList)
+        return self
+
+    def addOnPremiseLMStandalone(self, LMNameGenerator, response_LM_json, expectedCode, resvariableList=None,
+                              resxPathList=None):
+        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
+        self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
+        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "0", response_LM_json)
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        response_LM_json["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_json)
+        if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             ['$.licenseModel.name', '$.licenseModel.id'])
+            LOGGER.info(self.emsVariableList["LM_name_OnpremStand"])
+            LOGGER.info(self.emsVariableList["lmId_OnpremStand"])
+        elif (expectedCode != None and expectedCode != None and resxPathList != None):
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
+                             resvariableList, resxPathList)
+        return self
+
+    def addcloudConnectedLicenceModel(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        response_LM_json["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_json)
+        if expectedCode == 201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                                         response_LM_json1, currentApiFuncName(), expectedCode,["LM_name","lmId"],['$.licenseModel.name','$.licenseModel.id'])
             LOGGER.info(self.emsVariableList["LM_name"])
             LOGGER.info(self.emsVariableList["lmId"])
-        elif(expectedCode != None and expectedCode !=None and xPathList !=None):
-            self.PostRequest(url + '/ems/api/v5/namespaces', response_LM_json1, currentApiFuncName(), expectedCode, variableList, xPathList)
-
+        elif(expectedCode != None and expectedCode !=None and resxPathList !=None):
+            self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode, resvariableList, resxPathList)
         return self
 
-    def getLMStandProperties(self):
-        return self.LMStandaloneProperties
 
-    def getLMNetworkProperties(self):
-        return self.LMNeworksProperties
-
-    def getLMCloudConnectedProperties(self):
-        return self.LMCloudConnectedProperties
+    def partialUpdateLM(self, LM_json, expectedCode,resvariableList, resxPathList,enforcementId=None,enforcementnameVersion=None,licenseModelId=None,lmid=None,LMname=None):
+        # getting the name of Current Running Test cases
+        utility = UtilityClass()
+        running_testcases = utility.runningPytestCaseName()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if lmid !=None and enforcementId !=None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif lmid !=None and enforcementnameVersion !=None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif licenseModelId != None and enforcementnameVersion != None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/' + licenseModelId, LM_json,
+                                             currentApiFuncName(), expectedCode, resvariableList,resxPathList)
+        if licenseModelId != None and enforcementId != None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/' + licenseModelId, LM_json,
+                                             currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif licenseModelId != None and enforcementnameVersion != None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+licenseModelId, LM_json,
+                                             currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif LMname != None and enforcementId != None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/name='+LMname, LM_json,
+                                             currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif LMname != None and enforcementnameVersion != None:
+            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/name='+LMname, LM_json,
+                                             currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
