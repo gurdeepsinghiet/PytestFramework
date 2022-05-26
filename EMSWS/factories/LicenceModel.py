@@ -11,26 +11,50 @@ password = Constant.EMSPassword
 
 class LicenseModelfactory(object):
 
-    def updateLicencezModelAttribute(self,LM_ATTR_Name , value, response_LM_json):
+
+
+    def updateLicencezModelAttributeWithTag(self,LM_ATTR_Name ,tag,value, response_LM_dictionary):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for match in jsonpath_expression.find(response_LM_json):
+        for match in jsonpath_expression.find(response_LM_dictionary):
             if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
-                match.value["value"] = value
-        self.Updated_LM_Json=response_LM_json
-        LOGGER.info(response_LM_json)
+                match.value[tag] = value
+        self.Updated_LM_Json=response_LM_dictionary
+        LOGGER.info(response_LM_dictionary)
         return self
 
-    def updateLicencezModelAttributes(self,LM_ATTR_NameList , valueList, response_LM_json):
+    def getLicenceModelAttributeTagValue(self, LM_ATTR_Name, tag, getvalue, response_LM_dictionary):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for i,attr in enumerate(LM_ATTR_NameList):
-            for match in jsonpath_expression.find(response_LM_json):
+        for match in jsonpath_expression.find(response_LM_dictionary):
+            if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
+                self.emsVariableList[getvalue]=match.value[tag]
+
+        LOGGER.info(response_LM_dictionary)
+        return self
+
+
+    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LM_dictionry):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
+        for i, attr in enumerate(LM_ATTR_NameList):
+            for match in jsonpath_expression.find(response_LM_dictionry):
                 if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
                     LOGGER.info(attr[i])
                     LOGGER.info(valueList[i])
-                    match.value["value"] = valueList[i]
-        self.Updated_LM_Json = response_LM_json
+                    match.value[tagsList[i]] = valueList[i]
+        self.Updated_LM_Json = response_LM_dictionry
+        return self
+
+    def getLicenceModelAttributesTagsValues(self, LM_ATTR_NameList, tagsList,getvalueList, response_LM_dictionry):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
+        for i, attr in enumerate(LM_ATTR_NameList):
+            for match in jsonpath_expression.find(response_LM_dictionry):
+                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
+                    LOGGER.info(attr[i])
+                    LOGGER.info(getvalueList[i])
+                    self.emsVariableList[getvalueList[i]]=match.value[tagsList[i]]
         return self
 
     def getEnforcement(self):
@@ -87,19 +111,19 @@ class LicenseModelfactory(object):
         return self
 
 
-    def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_json,expectedCode,variableList=None,xPathList=None):
+    def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_dict,expectedCode,variableList=None,xPathList=None):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
-        self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
-        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
+        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE","value" ,"1", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE","value", "1", response_LM_dict)
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
         # getting the name of Current exectuting Function
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator
-        response_LM_json1 = json.dumps(response_LM_json)
+        response_LM_dict["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_dict)
         if expectedCode == 201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId","LMRES"],
@@ -114,39 +138,39 @@ class LicenseModelfactory(object):
         return self
 
 
-    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
-        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
-        self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
-        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "1", response_LM_json)
+    def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_dict,expectedCode,resvariableList=None,resxPathList=None):
+        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value","0", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE", "value","1", response_LM_dict)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator
-        response_LM_json1 = json.dumps(response_LM_json)
+        response_LM_dict["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_dict)
         if expectedCode == 201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_onpremNetwork", "lmId_onprem_network"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
-            LOGGER.info(self.emsVariableList["LM_name"])
-            LOGGER.info(self.emsVariableList["lmId"])
+            LOGGER.info(self.emsVariableList["LM_name_onpremNetwork"])
+            LOGGER.info(self.emsVariableList["lmId_onprem_network"])
         elif (resvariableList != None and resxPathList != None):
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
                              resvariableList, resxPathList)
         return self
 
 
-    def addOnPremiseLMNetwork(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
-        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
-        self.updateLicencezModelAttribute("LICENSE_TYPE", "0", response_LM_json)
-        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "0", response_LM_json)
+    def addOnPremiseLMNetwork(self, LMNameGenerator, response_LM_dic,expectedCode,resvariableList=None,resxPathList=None):
+        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dic)
+        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value","0", response_LM_dic)
+        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE","value", "0", response_LM_dic)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator
-        response_LM_json1 = json.dumps(response_LM_json)
+        response_LM_dic["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_dic)
         if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_onPrem_Net", "lmId_onPrem_net"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
             LOGGER.info(self.emsVariableList["LM_name_onPrem_Net"])
             LOGGER.info(self.emsVariableList["lmId_onPrem_net"])
@@ -155,19 +179,19 @@ class LicenseModelfactory(object):
                              resvariableList, resxPathList)
         return self
 
-    def addOnPremiseLMStandalone(self, LMNameGenerator, response_LM_json, expectedCode, resvariableList=None,
+    def addOnPremiseLMStandalone(self, LMNameGenerator, response_LM_dict, expectedCode, resvariableList=None,
                               resxPathList=None):
-        self.updateLicencezModelAttribute("ENFORCE_CLOCK_TAMPERED", "FALSE", response_LM_json)
-        self.updateLicencezModelAttribute("LICENSE_TYPE", "1", response_LM_json)
-        self.updateLicencezModelAttribute("DEPLOYMENT_TYPE", "0", response_LM_json)
+        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value", "1", response_LM_dict)
+        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE", "value", "0", response_LM_dict)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator
-        response_LM_json1 = json.dumps(response_LM_json)
+        response_LM_dict["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_dict)
         if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId"],
+                             response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_OnpremStand", "lmId_OnpremStand"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
             LOGGER.info(self.emsVariableList["LM_name_OnpremStand"])
             LOGGER.info(self.emsVariableList["lmId_OnpremStand"])
@@ -176,12 +200,12 @@ class LicenseModelfactory(object):
                              resvariableList, resxPathList)
         return self
 
-    def addcloudConnectedLicenceModel(self, LMNameGenerator, response_LM_json,expectedCode,resvariableList=None,resxPathList=None):
+    def addcloudConnectedLicenceModel(self, LMNameGenerator, response_LM_dict,expectedCode,resvariableList=None,resxPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response_LM_json["licenseModel"]["name"] = LMNameGenerator
-        response_LM_json1 = json.dumps(response_LM_json)
+        response_LM_dict["licenseModel"]["name"] = LMNameGenerator
+        response_LM_json1 = json.dumps(response_LM_dict)
         if expectedCode == 201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                                         response_LM_json1, currentApiFuncName(), expectedCode,["LM_name","lmId"],['$.licenseModel.name','$.licenseModel.id'])

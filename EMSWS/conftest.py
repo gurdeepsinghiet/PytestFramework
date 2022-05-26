@@ -1,6 +1,5 @@
 import  pytest
 import logging
-from pathlib import Path
 import os
 from EMSWS import EMSWS
 import EMSWS.Constant as Constant
@@ -62,6 +61,10 @@ def testSummaryData(summaryData):
         return preExistingTempleteData
 
 def summaryreportGenerator(summaryData,passed,fail,total):
+    passedPercentage=(passed/(total))*100
+    failedPercenatge=(fail/(total))*100
+    passedPercentage=round(passedPercentage,2)
+    failedPercenatge = round(failedPercenatge, 2)
     summaryreportData=testSummaryData(summaryData)
     preExistingTemplete = "<html>"
     preExistingTemplete += "<head>"
@@ -106,7 +109,7 @@ def summaryreportGenerator(summaryData,passed,fail,total):
     preExistingTemplete +="<g column-id='Failed - 1'>"
     preExistingTemplete += "<rect x='382' y='58' width='136' height='14' stroke='none' stroke-width='0' fill-opacity='0' fill='#ffffff'></rect>"
     preExistingTemplete += "<g>"
-    preExistingTemplete += "<text text-anchor='start' x='401' y='69.9' font-family='Arial' font-size='14' stroke='none' stroke-width='0' fill='#222222'>Failed - "+str(fail)+"</text>"
+    preExistingTemplete += "<text text-anchor='start' x='401' y='69.9' font-family='Arial' font-size='14' stroke='none' stroke-width='0' fill='#222222'>Failed - "+str(failedPercenatge)+"% Failed</text>"
     preExistingTemplete += "</g>"
     preExistingTemplete += "</g>"
     preExistingTemplete += "<circle cx='389' cy='65' r='7' stroke='none' stroke-width='0' fill='#ff0000'></circle>"
@@ -114,9 +117,9 @@ def summaryreportGenerator(summaryData,passed,fail,total):
     preExistingTemplete += "<g column-id='Skipped - 3'>"
     preExistingTemplete += "<rect x='382' y='81' width='136' height='14' stroke='none' stroke-width='0' fill-opacity='0' fill='#ffffff'></rect>"
     preExistingTemplete += "<g>"
-    preExistingTemplete += "<text text-anchor='start' x='401' y='92.9' font-family='Arial' font-size='14' stroke='none' stroke-width='0' fill='#222222'>Passed -"+str(passed)+"</text>"
+    preExistingTemplete += "<text text-anchor='start' x='401' y='92.9' font-family='Arial' font-size='14' stroke='none' stroke-width='0' fill='#222222'>Passed -"+str(passedPercentage)+"% Passed</text>"
     preExistingTemplete += "</g>"
-    preExistingTemplete += "<circle cx='389' cy='88' r='7' stroke='none' stroke-width='0' fill='#ff5f00'></circle>"
+    preExistingTemplete += "<circle cx='389' cy='88' r='7' stroke='none' stroke-width='0' fill='green'></circle>"
     preExistingTemplete += "</g>"
     preExistingTemplete += "</g>"
     preExistingTemplete += "</svg>"
@@ -165,6 +168,7 @@ def summaryreportGenerator(summaryData,passed,fail,total):
 
     openHtmlFile = open(getModulePath()+Constant.emsReportPath+"Testsummary.html", "w")
     openHtmlFile.write(preExistingTemplete)
+
 def getModulePath():
     path = os.path.dirname(EMSWS.__file__)
     return path

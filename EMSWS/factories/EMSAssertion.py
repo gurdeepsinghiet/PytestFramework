@@ -1,5 +1,7 @@
 import logging
+import json
 import os
+from jsonpath_ng.ext import parse
 import sys
 import pytest
 
@@ -20,13 +22,11 @@ class EMSAssertionFactory:
             LOGGER.info("Comparing "+str(expected)+" Value with "+str(actual))
             assert expected == actual
             AssertionsReport["Expected_Response"] = str(expected)
-            AssertionsReport["actual"] = str(actual)
             AssertionsReport["Status"] = "Pass"
             AssertionsReport["Act_Response"] = str(actual)
             AssertionsReport["Response_time"] = ""
         except AssertionError:
             AssertionsReport["Expected_Response"] = str(expected)
-            AssertionsReport["actual"] = str(actual)
             AssertionsReport["Status"] = "Pass"
             AssertionsReport["Act_Response"] = str(actual)
             AssertionsReport["Response_time"] = ""
@@ -39,13 +39,21 @@ class EMSAssertionFactory:
         return self
 
 
-    def verifyJsonXpathxValues(self,json,jsonXpathList,tagjsonvaluesList,expectedValueList):
-        pass
+    def verifyJsonXpathxValues(self,jsonDictionary,tagjsonvaluesList,expectedValueList):
+        for i, jsonxpath in enumerate(tagjsonvaluesList):
+            jsonpath_expression = parse(jsonxpath)
+            match = jsonpath_expression.find(jsonDictionary)
+            self.verifyAssertions(match[0].value,expectedValueList[i])
+        self
 
 
+    def verifyJsonxpathValue(self,jsonDictionary,tagvalue,expectedValue):
+        jsonpath_expression = parse(tagvalue)
+        match = jsonpath_expression.find(jsonDictionary)
+        LOGGER.info(match[0].value)
+        self.verifyAssertions(expectedValue,match[0].value)
 
-    def verifyJsonxpathValue(self,json,jsonXpathtag,tagvalue,expectedValue):
-        pass
+        self
 
 
 

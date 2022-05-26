@@ -105,4 +105,44 @@ class CustomerFactory:
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
+    def searchCustomer(self, expectedCode, resvariableList, resxPathList, id=None, name=None, identifier=None,
+                       externalId=None, refId=None, crmId=None, description=None, marketGroupId=None,
+                       marketGroupName=None, state=None, contactEmailId=None, contactId=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        responseurl = ""
+        if (id != None):
+            responseurl += "id=" + id + "&"
+        if (name != None):
+            responseurl += "name=" + name + "&"
+        if identifier != None:
+            responseurl += "identifier=" + identifier + "&"
+        if (externalId != None):
+            responseurl += "externalId=" + externalId + "&"
+        if refId != None:
+            responseurl += "refId=" + refId + "&"
+        if (crmId != None):
+            responseurl += "crmId=" + crmId + "&"
+        if description != None:
+            responseurl += "description=" + description + "&"
+        if (marketGroupId != None):
+            responseurl += "marketGroupId=" + marketGroupId + "&"
+        if (marketGroupName) != None:
+            responseurl += "marketGroupName=" + marketGroupName + "&"
+        if (state != None):
+            responseurl += "state=" + state + "&"
+        if (contactEmailId) != None:
+            responseurl += "contactEmailId=" + contactEmailId + "&"
+        if (contactId != None):
+            responseurl += "contactId=" + contactId + "&"
+        LOGGER.info(url + "/ems/api/v5/customers?" + responseurl[0:-1])
+        response = self.getRequest(url + "/ems/api/v5/customers?" + responseurl[0:-1], "", currentApiFuncName(),
+                                   expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
 

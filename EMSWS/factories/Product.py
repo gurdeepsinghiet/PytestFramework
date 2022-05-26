@@ -102,5 +102,75 @@ class ProductFactory(object):
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
+    def searchProduct(self, expectedCode, resvariableList, resxPathList, id=None, identifier=None, version=None,
+                      namespaceId=None,
+                      namespaceName=None, name=None, description=None, externalId=None, productType=None, refId1=None,
+                      refId2=None, licenseModelName=None, licenseModelId=None, featureId=None, featureName=None,
+                      state=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        responseurl = ""
+        if id != None:
+            responseurl = "id=" + id + "&"
+        if (identifier != None):
+            responseurl = "identifier=" + identifier + "&"
+        if (licenseModelName != None):
+            responseurl = "licenseModelName=" + licenseModelName + "&"
+        if (licenseModelId != None):
+            responseurl = "licenseModelId=" + licenseModelId + "&"
+        if (namespaceId != None):
+            responseurl = "namespaceId=" + namespaceId + "&"
+        if (namespaceName != None):
+            responseurl = "namespaceName=" + namespaceName + "&"
+        if (name != None):
+            responseurl = "name=" + name + "&"
+        if (description != None):
+            responseurl = "description=" + description + "&"
+        if (version != None):
+            responseurl = "version=" + version + "&"
+        if (externalId != None):
+            responseurl = "externalId=" + externalId + "&"
+        if (productType != None):
+            responseurl = "productType=" + productType + "&"
+        if (refId1 != None):
+            responseurl = "refId1=" + refId1 + "&"
+        if (refId2 != None):
+            responseurl = "refId2=" + refId2 + "&"
+        if (featureName != None):
+            responseurl = "featureName=" + featureName + "&"
+        if (featureId != None):
+            responseurl = "featureId" + featureId + "&"
+        if (state != None):
+            responseurl = "state=" + state + "&"
+        LOGGER.info(url + "/ems/api/v5/products?" + responseurl[0:-1])
+        response = self.getRequest(url + "/ems/api/v5/products?" + responseurl[0:-1], "", currentApiFuncName(),
+                                   expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
 
-
+    def replaceProduct(self, product_json, expectedCode, resvariableList, resxPathList, id=None, nameVersion=None,
+                       externalId=None, identifier=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            response = self.putRequest(url + '/ems/api/v5/products/' + id, product_json, currentApiFuncName(),
+                                       expectedCode, resxPathList)
+        elif externalId != None:
+            response = self.putRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
+                                       currentApiFuncName(), expectedCode, resxPathList)
+        elif nameVersion != None:
+            response = self.putRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, product_json,
+                                       currentApiFuncName(), expectedCode, resxPathList)
+        elif identifier != None:
+            response = self.putRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
+                                       currentApiFuncName(), expectedCode, resxPathList)
+            if response[1] == expectedCode:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self

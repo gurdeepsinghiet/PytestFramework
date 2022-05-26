@@ -11,7 +11,7 @@ class ContactFactory:
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(Constant.contactJsonPath, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],[ContactName,"Thales@123", "Standard",ContactEmailId])
+        self.UpdateJsonFile(conatctJsonFilepath, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],[ContactName,"Thales@123", "Standard",ContactEmailId])
         if expectedCode == 201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, currentApiFuncName(), 201,["contact_name","contact_id" ,"contact_emailId","contactRes"],['$.contact.name','$.contact.id','contact.emailId','$'])
             LOGGER.info(self.emsVariableList["contact_name"])
@@ -101,5 +101,41 @@ class ContactFactory:
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
-
+    def searchContact(self, expectedCode, resvariableList, resxPathList, id=None, name=None, refId1=None, refId2=None,
+                      emailId=None, phoneNumber=None, state=None, customerName=None, customerId=None,
+                      marketGroupId=None, marketGroupName=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        responseurl = ""
+        if (id != None):
+            responseurl += "id=" + id + "&"
+        if (name != None):
+            responseurl += "name=" + name + "&"
+        if (refId1 != None):
+            responseurl += "refId1=" + refId1 + "&"
+        if (refId2 != None):
+            responseurl += "refId2=" + refId2 + "&"
+        if (emailId != None):
+            responseurl += "emailId=" + emailId + "&"
+        if (phoneNumber != None):
+            responseurl += "phoneNumber" + phoneNumber + "&"
+        if (state != None):
+            responseurl += "state" + state + "&"
+        if (customerId != None):
+            responseurl += "customerId" + customerId + "&"
+        if (customerName != None):
+            responseurl += "customerName" + customerName + "&"
+        if (marketGroupId != None):
+            responseurl += "marketGroupId" + marketGroupId + "&"
+        if (marketGroupName != None):
+            responseurl += "marketGroupName" + marketGroupName + "&"
+        LOGGER.info(url + "/ems/api/v5/contacts?" + responseurl[0:-1])
+        response = self.getRequest(url + "/ems/api/v5/contacts?" + responseurl[0:-1], "", currentApiFuncName(),
+                                   expectedCode, resvariableList, resxPathList)
+        if response[1] == expectedCode:
+            for i, resvar in enumerate(resvariableList):
+                LOGGER.info(resvariableList[i])
+                LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
 

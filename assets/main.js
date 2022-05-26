@@ -8,7 +8,6 @@ getFailedTd.forEach((item)=>{
    }
 })
 
-
 var summaryReportHeader=document.querySelectorAll("table tr>td:nth-child(2)")
 summaryReportHeader.forEach((item)=>{
    if(item.innerText == 'Failed'){
@@ -45,7 +44,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     example.persegments.push(peritem);
    }
    console.log(example)
+
    pie(example);
+
 });
 
 
@@ -63,11 +64,11 @@ function pie(data){
   // generate proportional pie for all segments
   var startAngle=0, endAngle=0;
   for(var i=0; i<data.segments.length; i++){
+
     var element=data.segments[i];
-    var angle=element.value * 2 * Math.PI / sum;
+     var angle=element.value * 2 * Math.PI / sum;
     endAngle+=angle;
-
-
+    if(element.value != 0 && element.value != sum){
 
     var pathStr=
         "M "+(radius)+","+(radius)+" "+
@@ -79,16 +80,37 @@ function pie(data){
              (Math.sin(endAngle)*radius+radius)+" "+
         "Z";
 
-        console.log(pathStr)
+    console.log(pathStr)
     var svgPath=makeSVG('path',{d: pathStr, fill: element.color});
     b.append(svgPath);
     startAngle+=angle;
 
+  }else{
+
+  if(element.value == sum && data.persegments[i].status == "Passed"){
+         console.log(element.value);
+          console.log(data.persegments[i].status);
+          var svgPath1=makeSVG('circle',{cx: 150,cy:150,r:150, fill: element.color});
+
+
+        b.append(svgPath1);
+  }else if(element.value == sum  && data.persegments[i].status == "Failed"){
+          console.log(element.value);
+          console.log(data.persegments[i].status);
+          var svgPath1=makeSVG('circle',{cx: 150,cy:150,r:150, fill: element.color});
+
+
+        b.append(svgPath1);
+
   }
 
+  }
+}
   var startAngle=0, endAngle=0;
   for(var i=0; i<data.persegments.length; i++){
     var element=data.persegments[i];
+    var element1=data.segments[i];
+    if(element1.value != 0 && element1.value != sum){
     var angle=element.value * 2 * Math.PI / 100;
     var el= document.createElementNS('http://www.w3.org/2000/svg', 'text');
     console.log(Math.sin(startAngle)*radius+radius)
@@ -102,11 +124,37 @@ function pie(data){
      b.append(el);
      startAngle+=angle;
 
+     }else{
+
+     if(element1.value == sum && data.persegments[i].status == "Passed"){
+
+     var el= document.createElementNS('http://www.w3.org/2000/svg', 'text');
+     el.setAttribute("x", 150)
+     el.setAttribute("y", 150)
+     el.setAttribute("stroke","none")
+     el.setAttribute("fill","#fff")
+     el.setAttribute("text-anchor","start")
+     const textNode = document.createTextNode(element.value+"%");
+     el.appendChild(textNode);
+     b.append(el);
+
+     }else if(element1.value == sum  && data.persegments[i].status == "Failed"){
+
+     var el= document.createElementNS('http://www.w3.org/2000/svg', 'text');
+     el.setAttribute("x", 150)
+     el.setAttribute("y", 150)
+     el.setAttribute("stroke","none")
+     el.setAttribute("fill","#fff")
+     el.setAttribute("text-anchor","start")
+     const textNode = document.createTextNode(element.value+"%");
+     el.appendChild(textNode);
+     b.append(el);
+     }
+
   }
+  }
+
 };
-
-
-
 
 // SVG Maker - to draw SVG by script
 function makeSVG(tag, attrs) {
