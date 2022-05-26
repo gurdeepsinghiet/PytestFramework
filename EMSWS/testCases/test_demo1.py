@@ -17,7 +17,7 @@ def test_updateEntStand(emsObjectFixture,nameSpaceName,LM_name,featureName,featu
     .addNameSpace(Constant.nameSpaceJsonPath,nameSpaceName,201)\
     .searchFlexibleLicenseModel() \
     .addFlexibleLicenceModelStandalone(LM_name, ems.FlexibleLicenseModelJson, 201) \
-    .updateLicencezModelAttributes(["RENEW_FREQUENCY", "GRACE_LIMIT"], ["34", "5"], ems.emsVariableList["LMRES"]) \
+    .updateLicencezModelAttributesbyTags(["RENEW_FREQUENCY", "GRACE_LIMIT"], ["value","value"],["34", "5"], ems.emsVariableList["LMRES"]) \
     .partialUpdateLM(u.convertDictinarytoJson(ems.Updated_LM_Json), 200, ["parupdteRes"], ["$"],lmid=ems.emsVariableList["lmId"], enforcementId=ems.getEnforcementId()[0]) \
     .addFeature(Constant.featureJsonPath,featureName, featureVersion, ems.emsVariableList["nsName"], LM_name, 201) \
     .addProductNonLVH(Constant.productJsonPath, ProductName, ProductVersion, nameSpaceName, featureName,featureVersion, 201) \

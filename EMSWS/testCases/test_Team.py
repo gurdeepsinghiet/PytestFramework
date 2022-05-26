@@ -6,14 +6,27 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 #Standalone Licence Model  Entilement partial activation
-@pytest.mark.parametrize("nameSpaceName, LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId",
-[("pytest" + EMSFactory.RandomString(9),"OnPremPytest" + EMSFactory.RandomString(9),"pytestftr" + EMSFactory.RandomString(9),"1.0",
-"pytestptr" + EMSFactory.RandomString(9),"1.0","Standardcust"+EMSFactory.RandomString(9),"pytestContact"+EMSFactory.RandomString(9),EMSFactory.RandomString(9) + "@Thales.com")])
-def test_nameSpace(emsObjectFixture,nameSpaceName,LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId):
+@pytest.mark.parametrize("nameSpaceName, LM_name",
+[("pytest" + EMSFactory.RandomString(9),"OnPremPytest" + EMSFactory.RandomString(9))])
+def test_nameSpace(emsObjectFixture,nameSpaceName,LM_name):
     ems = EMSFactory()
-    ems.addNameSpace(Constant.nameSpaceJsonPath,nameSpaceName,201,["GsNS","GSNSRes","GSNSId","nsState"],["$..name","$","$..id","$..state"])\
-    .searchFlexibleLicenseModel()\
-    .addOnPremiseLMNetwork(LM_name, ems.FlexibleLicenseModelJson, 201,["LMIDGS1"],["$.licenseModel.id"])\
-    .addOnPremiseLMNetwork("pppp"+ems.RandomString(9), ems.FlexibleLicenseModelJson, 201,["LMIDGS2"],["$.licenseModel.id"])\
-
+    ems = emsObjectFixture['ems']
+    u=UtilityClass()
+    ems \
+        .addNameSpace(Constant.nameSpaceJsonPath, nameSpaceName, 201) \
+        .searchFlexibleLicenseModel() \
+        .addFlexibleLicenceModelStandalone(LM_name, ems.FlexibleLicenseModelJson, 201) \
+        .updateLicencezModelAttributeWithTag("RENEW_FREQUENCY", "overwriteAllowed", "false",
+                                             ems.emsVariableList["LMRES"]) \
+        .partialUpdateLM(u.convertDictinarytoJson(ems.Updated_LM_Json), 200, ["partialUpdateResponse"], ["$"],
+                         enforcementId=ems.getEnforcementId()[0], enforcementnameVersion=None,
+                         licenseModelId=ems.emsVariableList["lmId"], lmid=None, LMname=None) \
+        .updateLicencezModelAttributeWithTag("DURATION", "value", "2380", ems.emsVariableList["partialUpdateResponse"]) \
+        .partialUpdateLM(u.convertDictinarytoJson(ems.emsVariableList["partialUpdateResponse"]), 200,
+                         ["partialUpdateResponse_updated"], ["$"],
+                         enforcementId=ems.getEnforcementId()[0], enforcementnameVersion=None,
+                         licenseModelId=ems.emsVariableList["lmId"], lmid=None, LMname=None) \
+        .getLicenceModelAttributesTagsValues(["RENEW_FREQUENCY"],["overwriteAllowed"],["tagsValueList"],ems.emsVariableList["partialUpdateResponse"])\
+        .verifyAssertions(ems.emsVariableList["tagsValueList"],
+                              False)
 

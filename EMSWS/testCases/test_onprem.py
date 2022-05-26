@@ -8,7 +8,7 @@ from EMSWS.Utilities import UtilityClass
 [("pytest" + EMSFactory.RandomString(9),"pytest" + EMSFactory.RandomString(9),"pytestftr" + EMSFactory.RandomString(9),"1.0",
 "pytestptr" + EMSFactory.RandomString(9),"1.0","Standardcust"+EMSFactory.RandomString(9),"pytestContact"+EMSFactory.RandomString(9),EMSFactory.RandomString(9) + "@Thales.com")])
 def test_onpremLM(emsObjectFixture,nameSpaceName,LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId):
-    #ems = emsObjectFixture['ems']
+    ems = emsObjectFixture['ems']
     u = UtilityClass()
     ems = EMSFactory()
     ems\

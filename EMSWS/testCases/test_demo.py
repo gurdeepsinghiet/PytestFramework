@@ -9,7 +9,7 @@ def test_ChangingCustomerAttrEndDateStartDate(emsObjectFixture):
     ems = emsObjectFixture['ems']
     LM_name = "pytestLMDate" + ems.RandomString(9)
     ems.searchCloudConnectedLicenceModel() \
-    .updateLicencezModelAttributes(["START_DATE", "END_DATE"], ["2022-05-05 00:00", "2023-05-05 00:00"],ems.CloudConnectedLicenseModelJson) \
+    .updateLicencezModelAttributesbyTags(["START_DATE", "END_DATE"],["value","value"] ,["2022-05-05 00:00", "2023-05-05 00:00"],ems.CloudConnectedLicenseModelJson) \
     .addcloudConnectedLicenceModel(LM_name, ems.Updated_LM_Json, 201)
 
 @pytest.mark.parametrize("nameSpaceName, LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId",
@@ -22,7 +22,7 @@ def test_Entitlement(emsObjectFixture,nameSpaceName,LM_name,featureName,featureV
     ems\
     .searchFlexibleLicenseModel() \
     .addFlexibleLicenceModelStandalone(LM_name,ems.FlexibleLicenseModelJson,201)\
-    .updateLicencezModelAttributes(["RENEW_FREQUENCY", "GRACE_LIMIT"], ["34", "5"],ems.emsVariableList["LMRES"])\
+    .updateLicencezModelAttributesbyTags(["RENEW_FREQUENCY", "GRACE_LIMIT","RENEW_FREQUENCY"], ["value","value","overwriteAllowed"],["34", "5",True],ems.emsVariableList["LMRES"])\
     .partialUpdateLM(u.convertDictinarytoJson(ems.Updated_LM_Json),200,["parupdteRes"],["$"],lmid=ems.emsVariableList["lmId"],enforcementId=ems.getEnforcementId()[0])
 
 #Changing LM AttriButes Cloud conncted
@@ -31,7 +31,7 @@ def test_ChangingLMATTR(emsObjectFixture):
     ems = emsObjectFixture['ems']
     LM_name = "pytestLMGrace" + ems.RandomString(9)
     ems.searchCloudConnectedLicenceModel() \
-        .updateLicencezModelAttributes(["USAGE_LIMIT", "GRACE_LIMIT"], ["120", "5"], ems.CloudConnectedLicenseModelJson) \
+        .updateLicencezModelAttributesbyTags(["USAGE_LIMIT", "GRACE_LIMIT"],["value","value"], ["120", "5"], ems.CloudConnectedLicenseModelJson) \
         .addcloudConnectedLicenceModel(LM_name, ems.Updated_LM_Json, 201)
 
 
@@ -40,7 +40,7 @@ def test_ChangingLMATTR(emsObjectFixture):
 @pytest.mark.parametrize("nameSpaceName, LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId",
 [("pytest" + EMSFactory.RandomString(9),"pytest" + EMSFactory.RandomString(9),"pytestftr" + EMSFactory.RandomString(9),"1.0",
 "pytestptr" + EMSFactory.RandomString(9),"1.0","Standardcust"+EMSFactory.RandomString(9),"pytestContact"+EMSFactory.RandomString(9),EMSFactory.RandomString(9) + "@Thales.com")])
-def test_toverifyCloudConnected(emsObjectFixture,nameSpaceName,LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId):
+def test_toverifyCloud(emsObjectFixture,nameSpaceName,LM_name,featureName,featureVersion,ProductName,ProductVersion,CustomerName,ContactName,ContactEmailId):
 
     ems = emsObjectFixture['ems']
     ContactName="pytestContact"+ems.RandomString(9)
