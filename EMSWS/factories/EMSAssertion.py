@@ -1,6 +1,4 @@
 import logging
-import json
-import os
 from jsonpath_ng.ext import parse
 import sys
 import pytest
@@ -27,10 +25,10 @@ class EMSAssertionFactory:
             AssertionsReport["Response_time"] = ""
         except AssertionError:
             AssertionsReport["Expected_Response"] = str(expected)
-            AssertionsReport["Status"] = "Pass"
+            AssertionsReport["Status"] = "Failed"
             AssertionsReport["Act_Response"] = str(actual)
             AssertionsReport["Response_time"] = ""
-            AssertionsReport["Status"] = "Failed"
+
             self.data.append(AssertionsReport)
             pytest.fail("Test case is  Failed as expected value is not matched with actual value")
             LOGGER.error("expected value " + str(expected) + " is not matched with "+str(actual))

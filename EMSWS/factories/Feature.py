@@ -86,8 +86,6 @@ class FeatureFactory(object):
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
-
-
     def searchFeature(self,resvariableList,resxPathList,expectedCode,id=None, identifier=None, licenseModelName=None, licenseModelId=None, namespaceId=None,
                       namespaceName=None, name=None, description=None, version=None, externalId=None, refId1=None,
                       refId2=None):

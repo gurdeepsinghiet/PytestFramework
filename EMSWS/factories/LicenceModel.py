@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from jsonpath_ng.ext import parse
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant
@@ -10,51 +11,126 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class LicenseModelfactory(object):
-
-
-
-    def updateLicencezModelAttributeWithTag(self,LM_ATTR_Name ,tag,value, response_LM_dictionary):
+    def updateLicencezModelAttributeWithTag(self,LM_ATTR_Name,tag,value, response_LM_dictionary):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for match in jsonpath_expression.find(response_LM_dictionary):
-            if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
-                match.value[tag] = value
-        self.Updated_LM_Json=response_LM_dictionary
-        LOGGER.info(response_LM_dictionary)
+        currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
+        u=UtilityClass()
+        AssertionsReport = {}
+        AssertionsReport["Api_Name"] = currentFuncName()
+        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LM_dictionary)
+        AssertionsReport["Expected_Code"] = "200"
+        try:
+            jsonpath_expression = parse('$..licenseModelAttribute[*]')
+            for match in jsonpath_expression.find(response_LM_dictionary):
+                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
+                    match.value[tag] = value
+                    self.Updated_LM_Json=response_LM_dictionary
+            AssertionsReport["actual_Code"] = "200"
+            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Status"] = "Pass"
+            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Response_time"] = ""
+        except TypeError as error:
+            AssertionsReport["actual_Code"] = "404"
+            AssertionsReport["Expected_Response"] = ""
+            AssertionsReport["Status"] = "Failed"
+            AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
+            AssertionsReport["Response_time"] = ""
+        self.data.append(AssertionsReport)
         return self
 
-    def getLicenceModelAttributeTagValue(self, LM_ATTR_Name, tag, getvalue, response_LM_dictionary):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for match in jsonpath_expression.find(response_LM_dictionary):
-            if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
-                self.emsVariableList[getvalue]=match.value[tag]
 
-        LOGGER.info(response_LM_dictionary)
+    def getLicenceModelAttributeTagValue(self, LM_ATTR_Name, tag, variable ,response_LM_dictionary):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+        currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
+        u = UtilityClass()
+        AssertionsReport = {}
+        AssertionsReport["Api_Name"] = currentFuncName()
+        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LM_dictionary)
+        AssertionsReport["Expected_Code"] = "200"
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
+        try:
+            for match in jsonpath_expression.find(response_LM_dictionary):
+                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
+                    self.emsVariableList[variable]=match.value[tag]
+            LOGGER.info(self.emsVariableList[variable])
+            AssertionsReport["actual_Code"] = "200"
+            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Status"] = "Pass"
+            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Response_time"] = ""
+        except TypeError as error:
+            AssertionsReport["actual_Code"] = "404"
+            AssertionsReport["Expected_Response"] = ""
+            AssertionsReport["Status"] = "Failed"
+            AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
+            AssertionsReport["Response_time"] = ""
+        self.data.append(AssertionsReport)
+
         return self
 
-
-    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LM_dictionry):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+    #this method update the multiple License Attributes of LM Dictionary object
+    #LM_ATTR_NameList : List of Attributed need to be update
+    #tagsList: tags names of LM Attributes List
+    #valueList : correspondes value of Tags nned to be updated
+    #response_LM_dictionry : Dictionary object of LM Json
+    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LM_dictionary):
+        currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
+        u = UtilityClass()
+        AssertionsReport = {}
+        AssertionsReport["Api_Name"] = currentFuncName()
+        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LM_dictionary)
+        AssertionsReport["Expected_Code"] = "200"
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for i, attr in enumerate(LM_ATTR_NameList):
-            for match in jsonpath_expression.find(response_LM_dictionry):
-                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
-                    LOGGER.info(attr[i])
-                    LOGGER.info(valueList[i])
-                    match.value[tagsList[i]] = valueList[i]
-        self.Updated_LM_Json = response_LM_dictionry
+        try:
+            for i, attr in enumerate(LM_ATTR_NameList):
+                for match in jsonpath_expression.find(response_LM_dictionary):
+                    if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
+                        LOGGER.info(attr[i])
+                        LOGGER.info(valueList[i])
+                        match.value[tagsList[i]] = valueList[i]
+                        self.Updated_LM_Json = response_LM_dictionary
+            AssertionsReport["actual_Code"] = "200"
+            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Status"] = "Pass"
+            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Response_time"] = ""
+        except TypeError as error:
+            AssertionsReport["actual_Code"] = "404"
+            AssertionsReport["Expected_Response"] = ""
+            AssertionsReport["Status"] = "Failed"
+            AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
+            AssertionsReport["Response_time"] = ""
+        self.data.append(AssertionsReport)
         return self
 
-    def getLicenceModelAttributesTagsValues(self, LM_ATTR_NameList, tagsList,getvalueList, response_LM_dictionry):
-        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+    def getLicenceModelAttributesTagsValues(self, LM_ATTR_NameList, tagsList,variableList, response_LM_dictionary):
+        currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
+        u = UtilityClass()
+        AssertionsReport = {}
+        AssertionsReport["Api_Name"] = currentFuncName()
+        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LM_dictionary)
+        AssertionsReport["Expected_Code"] = "200"
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
-        for i, attr in enumerate(LM_ATTR_NameList):
-            for match in jsonpath_expression.find(response_LM_dictionry):
-                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
-                    LOGGER.info(attr[i])
-                    LOGGER.info(getvalueList[i])
-                    self.emsVariableList[getvalueList[i]]=match.value[tagsList[i]]
+        try:
+            for i, attr in enumerate(LM_ATTR_NameList):
+                for match in jsonpath_expression.find(response_LM_dictionry):
+                    if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
+                        LOGGER.info(attr[i])
+                        LOGGER.info(variableList[i])
+                    self.emsVariableList[variableList[i]]=match.value[tagsList[i]]
+            AssertionsReport["actual_Code"] = "200"
+            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Status"] = "Pass"
+            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Response_time"] = ""
+        except TypeError as error:
+            AssertionsReport["actual_Code"] = "404"
+            AssertionsReport["Expected_Response"] = ""
+            AssertionsReport["Status"] = "Failed"
+            AssertionsReport["Act_Response"] = "Type Error occurred during updating of LM json"
+            AssertionsReport["Response_time"] = ""
+
         return self
 
     def getEnforcement(self):

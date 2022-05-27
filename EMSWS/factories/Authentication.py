@@ -1,2 +1,2 @@
-class Authenticationfactories:
+class Authenticationfactory:
     pass

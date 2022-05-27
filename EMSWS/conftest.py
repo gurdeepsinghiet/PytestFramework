@@ -75,7 +75,7 @@ def summaryreportGenerator(summaryData,passed,fail,total):
     preExistingTemplete += "th {vertical-align: top;background: #3ad32c;color: black;}"
     preExistingTemplete += ".topcorner{position:absolute;top:0;right:0;width: 3%;cursor:pointer;z-index: +1;}"
     preExistingTemplete += ".black_overlay{display: none;position: fixed;top: 0%;left: 0%;width: 100%;height: 100%;background-color: grey;z-index:1001;-moz-opacity: 0.8;opacity:.80;filter: alpha(opacity=80);}"
-    preExistingTemplete += " .white_content {display: none;position: fixed;top: 10%;left:20px;width: 85%;height: 100%;padding: 16px;border: 2px solid ged;background-color: white;z-index:1002;overflow: auto;}"
+    preExistingTemplete += " .white_content {display: none;top: 10%;left:20px;width: 85%;height: 100%;padding: 16px;border: 2px solid ged;background-color: white;z-index:1002;overflow: auto;}"
     preExistingTemplete += "table td > div > table{width:100%;table-layout:fixed;}"
     preExistingTemplete += "table td > div > table td > div{overflow-y:auto; min-height: 10px; max-height: 200px;}"
     preExistingTemplete += "pre {box-sizing: border-box;width: 100%;padding: 0;margin: 0;overflow: auto;overflow-y: hidden;font-size: 14px;line-height: 20px;background: #efefef;border: 1px solid #777;padding: 10px;color: #333;}"

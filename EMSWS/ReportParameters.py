@@ -24,6 +24,9 @@ class ReportParam(object):
     def setStatus(self, Status):
         self.ReportParameters["Status"] = Status
 
+    def setStatus(self, Comments):
+        self.ReportParameters["Comments"] = Comments
+
     def setExpectedResponse(self, ExpectedResponse):
         self.ReportParameters["Expected_Response"] = ExpectedResponse
 
