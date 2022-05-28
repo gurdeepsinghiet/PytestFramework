@@ -106,13 +106,13 @@ class Entitlementfacory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.patchRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(), expectedCode,
+            self.patchRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(), expectedCode,
                                          resvariableList, resxPathList)
         elif eId != None:
-            response = self.patchRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
+            self.patchRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
         elif externalId != None:
-            response = self.patchRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId , entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
-        if response[1] == expectedCode:
+            self.patchRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId , entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
+        if self.patchApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -123,17 +123,17 @@ class Entitlementfacory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if entitlementId != None:
-            response = self.getRequest(url + '/ems/api/v5/entitlements/' + entitlementId, "",
+            self.getRequest(url + '/ems/api/v5/entitlements/' + entitlementId, "",
                                            currentApiFuncName(), 200, resvariableList, resxPathList)
         elif id != None:
-                response = self.getRequest(url + '/ems/api/v5/entitlements/' + id, "",
+            self.getRequest(url + '/ems/api/v5/entitlements/' + id, "",
                                            currentApiFuncName(), 200, resvariableList, resxPathList)
         elif eId != None:
-            response = self.getRequest(url + '/ems/api/v5/entitlements/eId=' + eId, "",
+            self.getApiresponse = self.getRequest(url + '/ems/api/v5/entitlements/eId=' + eId, "",
                                            currentApiFuncName(), 200, resvariableList, resxPathList)
         elif externalId != None:
-            response = self.getRequest(url + '/ems/api/v5/entitlements/externalId=' + externalId, "",currentApiFuncName(),200,resvariableList,resxPathList)
-        if response[1] == expectedCode:
+            self.getRequest(url + '/ems/api/v5/entitlements/externalId=' + externalId, "",currentApiFuncName(),200,resvariableList,resxPathList)
+        if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

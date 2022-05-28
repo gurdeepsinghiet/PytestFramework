@@ -50,10 +50,10 @@ class NameSpacefactory():
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id !=None:
-            response = self.patchRequest(url + '/ems/api/v5/namespaces/'+id, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+            self.patchRequest(url + '/ems/api/v5/namespaces/'+id, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         if name !=None:
-            response = self.patchRequest(url + '/ems/api/v5/namespaces/name='+name, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if response[1] == expectedCode:
+            self.patchRequest(url + '/ems/api/v5/namespaces/name='+name, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if self.patchApiresponse[1] == expectedCode:
                 for i, resvar in enumerate(resvariableList):
                     LOGGER.info(resvariableList[i])
                     LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -64,10 +64,10 @@ class NameSpacefactory():
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id !=None:
-            response = self.getRequest(url + '/ems/api/v5/namespaces/' + id, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
+            self.getRequest(url + '/ems/api/v5/namespaces/' + id, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
         elif name !=None:
-            response = self.getRequest(url + '/ems/api/v5/namespaces/name=' + name, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
-        if response[1] == expectedCode:
+            self.getRequest(url + '/ems/api/v5/namespaces/name=' + name, "", currentApiFuncName(), expectedCode, resvariableList, resxPathList)
+        if self.getApiresponse[1] == expectedCode:
                 for i, resvar in enumerate(resvariableList):
                     LOGGER.info(resvariableList[i])
                     LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -94,8 +94,8 @@ class NameSpacefactory():
         if (state != None):
             responeurl += "version=" + state + "&"
         LOGGER.info(url +"/ems/api/v5/namespaces?"+ responeurl[0:-1])
-        response = self.getRequest(url +"/ems/api/v5/namespaces?"+ responeurl[0:-1], "", currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if response[1] == expectedCode:
+        self.getRequest(url +"/ems/api/v5/namespaces?"+ responeurl[0:-1], "", currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if self.getApiresponse[1] == expectedCode:
             for i,resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

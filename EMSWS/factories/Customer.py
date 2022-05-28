@@ -42,18 +42,18 @@ class CustomerFactory:
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.patchRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
+            self.patchRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
                                          expectedCode, resxPathList)
         elif emailId != None:
-            response = self.patchRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
+            self.patchRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
                                          currentApiFuncName(), expectedCode, resxPathList)
         elif identifier != None:
-            response = self.patchRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
+            self.patchRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
                                          currentApiFuncName(), expectedCode, resxPathList)
         elif externalId != None:
-            response = self.patchRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
+            self.patchRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
                                          currentApiFuncName(), expectedCode, resxPathList)
-        if response[1] == expectedCode:
+        if self.patchApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -137,9 +137,9 @@ class CustomerFactory:
         if (contactId != None):
             responseurl += "contactId=" + contactId + "&"
         LOGGER.info(url + "/ems/api/v5/customers?" + responseurl[0:-1])
-        response = self.getRequest(url + "/ems/api/v5/customers?" + responseurl[0:-1], "", currentApiFuncName(),
+        self.getRequest(url + "/ems/api/v5/customers?" + responseurl[0:-1], "", currentApiFuncName(),
                                    expectedCode, resvariableList, resxPathList)
-        if response[1] == expectedCode:
+        if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

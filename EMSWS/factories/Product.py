@@ -62,16 +62,16 @@ class ProductFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id !=None:
-            response = self.patchRequest(url + '/ems/api/v5/products/'+id, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+            self.patchRequest(url + '/ems/api/v5/products/'+id, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif nameVersion !=None:
-            response = self.patchRequest(url + '/ems/api/v5/products/nameVersion='+nameVersion, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+            self.patchRequest(url + '/ems/api/v5/products/nameVersion='+nameVersion, product_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif identifier != None:
-            response = self.patchRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
+            self.patchRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
                                              currentApiFuncName(), expectedCode, resvariableList,resxPathList)
         elif externalId != None:
-            response = self.patchRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
+            self.patchRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if response[1] == expectedCode:
+        if self.patchApiresponse[1] == expectedCode:
             for i,resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -82,21 +82,21 @@ class ProductFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if productId != None:
-            response = self.getRequest(url + '/ems/api/v5/products/productId=' + productId, "", currentApiFuncName(),
+            self.getRequest(url + '/ems/api/v5/products/productId=' + productId, "", currentApiFuncName(),
                                        expectedCode, resvariableList, resxPathList)
         elif id != None:
-            response = self.getRequest(url + '/ems/api/v5/products/' + id, "", currentApiFuncName(), expectedCode,
+            self.getRequest(url + '/ems/api/v5/products/' + id, "", currentApiFuncName(), expectedCode,
                                        resvariableList, resxPathList)
         elif nameVersion != None:
-            response = self.getRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, "",
+            self.getRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, "",
                                        currentApiFuncName(), expectedCode, resvariableList, resxPathList)
         elif identifier != None:
-            response = self.getRequest(url + '/ems/api/v5/products/identifier=' + identifier, "", currentApiFuncName(),
+            self.getRequest(url + '/ems/api/v5/products/identifier=' + identifier, "", currentApiFuncName(),
                                        expectedCode, resvariableList, resxPathList)
         elif externalId != None:
-            response = self.getRequest(url + '/ems/api/v5/products/externalId=' + externalId, "", currentApiFuncName(),
+            self.getRequest(url + '/ems/api/v5/products/externalId=' + externalId, "", currentApiFuncName(),
                                        expectedCode, resvariableList, resxPathList)
-        if response[1] == expectedCode:
+        if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -144,9 +144,9 @@ class ProductFactory(object):
         if (state != None):
             responseurl = "state=" + state + "&"
         LOGGER.info(url + "/ems/api/v5/products?" + responseurl[0:-1])
-        response = self.getRequest(url + "/ems/api/v5/products?" + responseurl[0:-1], "", currentApiFuncName(),
+        self.getRequest(url + "/ems/api/v5/products?" + responseurl[0:-1], "", currentApiFuncName(),
                                    expectedCode, resvariableList, resxPathList)
-        if response[1] == expectedCode:
+        if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

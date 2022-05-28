@@ -114,11 +114,11 @@ class LicenseModelfactory(object):
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
         try:
             for i, attr in enumerate(LM_ATTR_NameList):
-                for match in jsonpath_expression.find(response_LM_dictionry):
+                for match in jsonpath_expression.find(response_LM_dictionary):
                     if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
                         LOGGER.info(attr[i])
                         LOGGER.info(variableList[i])
-                    self.emsVariableList[variableList[i]]=match.value[tagsList[i]]
+                        self.emsVariableList[variableList[i]]=match.value[tagsList[i]]
             AssertionsReport["actual_Code"] = "200"
             AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
             AssertionsReport["Status"] = "Pass"
@@ -133,13 +133,23 @@ class LicenseModelfactory(object):
 
         return self
 
+    def getLicenceModelAttributesTagsValues(self, LM_ATTR_NameList, tagsList, getvalueList, response_LM_dictionry):
+        run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
+        jsonpath_expression = parse('$..licenseModelAttribute[*]')
+        for i, attr in enumerate(LM_ATTR_NameList):
+            for match in jsonpath_expression.find(response_LM_dictionry):
+                if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
+                    LOGGER.info(attr[i])
+                    LOGGER.info(getvalueList[i])
+                    self.emsVariableList[getvalueList[i]] = match.value[tagsList[i]]
+        return self
     def getEnforcement(self):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),200)
-        if response[1] == 200:
-            response_Enforcement = utility.convertJsontoDictinary(response[0])
+        self.getApiresponse = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),200)
+        if self.getApiresponse[1] == 200:
+            response_Enforcement = utility.convertJsontoDictinary(self.getApiresponse[0])
             enforcementId = response_Enforcement["enforcement"]["id"]
             self.enforcementProps = [enforcementId]
         return self
@@ -148,9 +158,9 @@ class LicenseModelfactory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        response = self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS',"",currentApiFuncName(),200)
-        if response[1] == 200:
-            response_Enforcement = utility.convertJsontoDictinary(response[0])
+        self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS',"",currentApiFuncName(),200)
+        if self.getApiresponse[1] == 200:
+            response_Enforcement = utility.convertJsontoDictinary(self.getApiresponse[0])
             enforcementId = response_Enforcement["enforcements"]["enforcement"][0]["id"]
             self.enforcementProps = [enforcementId]
         return self
@@ -164,9 +174,9 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         self.searchEnforcement();
         enforcementId=self.getEnforcementId()[0];
-        responseFlexibleLicenseModel = self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
-        if responseFlexibleLicenseModel[1] == 200:
-            flexibleLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
+        self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
+        if self.getApiresponse[1] == 200:
+            flexibleLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
             #LOGGER.info(flexibleLicenseModelJson)
             self.FlexibleLicenseModelJson = flexibleLicenseModelJson
         return self
@@ -177,11 +187,11 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         self.searchEnforcement();
         enforcementId = self.getEnforcementId()[0];
-        responseFlexibleLicenseModel = self.getRequest(
+        self.getRequest(
             url + '/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Connected License Model', "",
             currentApiFuncName(), 200)
-        if responseFlexibleLicenseModel[1] == 200:
-            cloudConnectedLicenseModelJson = utility.convertJsontoDictinary(responseFlexibleLicenseModel[0])
+        if self.getApiresponse[1] == 200:
+            cloudConnectedLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
             LOGGER.info(cloudConnectedLicenseModelJson)
             self.CloudConnectedLicenseModelJson = cloudConnectedLicenseModelJson
         return self
@@ -299,25 +309,25 @@ class LicenseModelfactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if lmid !=None and enforcementId !=None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+            self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif lmid !=None and enforcementnameVersion !=None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+            self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+lmid, LM_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif licenseModelId != None and enforcementnameVersion != None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/' + licenseModelId, LM_json,
+            self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/' + licenseModelId, LM_json,
                                              currentApiFuncName(), expectedCode, resvariableList,resxPathList)
         if licenseModelId != None and enforcementId != None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/' + licenseModelId, LM_json,
+            self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/' + licenseModelId, LM_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif licenseModelId != None and enforcementnameVersion != None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+licenseModelId, LM_json,
+            self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/'+licenseModelId, LM_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif LMname != None and enforcementId != None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/name='+LMname, LM_json,
+            self.patchRequest(url + '/ems/api/v5/enforcements/'+enforcementId+'/licenseModels/name='+LMname, LM_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         elif LMname != None and enforcementnameVersion != None:
-            response = self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/name='+LMname, LM_json,
+            self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/name='+LMname, LM_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if response[1] == expectedCode:
+        if self.patchApiresponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
