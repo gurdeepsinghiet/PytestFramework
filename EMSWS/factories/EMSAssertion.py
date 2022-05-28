@@ -1,7 +1,8 @@
 import logging
 from jsonpath_ng.ext import parse
-import sys
+from EMSWS.Utilities import UtilityClass
 import pytest
+from EMSWS.ReportParameters import ReportParam
 
 LOGGER = logging.getLogger(__name__)
 
@@ -10,30 +11,29 @@ class EMSAssertionFactory:
     def __init__(self):
         pass
     def verifyAssertions(self,expected,actual,verificationComments=None):
-        currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
-        AssertionsReport={}
-        AssertionsReport["Api_Name"] = currentFuncName()
-        AssertionsReport["inputs"] = ""
-        AssertionsReport["Expected_Code"] = ""
-        AssertionsReport["actual_Code"] = ""
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        reportParam = ReportParam()
+        reportParam.setApiName(currentApiFuncName())
+        reportParam.setInputs("")
+        reportParam.setExpectedCode("")
+        reportParam.setActualCode("")
         try:
             LOGGER.info("Comparing "+str(expected)+" Value with "+str(actual))
             assert expected == actual
-            AssertionsReport["Expected_Response"] = str(expected)
-            AssertionsReport["Status"] = "Pass"
-            AssertionsReport["Act_Response"] = str(actual)
-            AssertionsReport["Response_time"] = ""
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(str(actual))
+            reportParam.setStatus("Pass")
+            reportParam.setExpectedResponse(str(expected))
         except AssertionError:
-            AssertionsReport["Expected_Response"] = str(expected)
-            AssertionsReport["Status"] = "Failed"
-            AssertionsReport["Act_Response"] = str(actual)
-            AssertionsReport["Response_time"] = ""
-
-            self.data.append(AssertionsReport)
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(str(actual))
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse(str(expected))
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error("expected value " + str(expected) + " is not matched with " + str(actual))
             pytest.fail("Test case is  Failed as expected value is not matched with actual value")
-            LOGGER.error("expected value " + str(expected) + " is not matched with "+str(actual))
-
-        self.data.append(AssertionsReport)
+        self.data.append(reportParam.getReportParameters())
         return self
 
 
@@ -50,7 +50,6 @@ class EMSAssertionFactory:
         match = jsonpath_expression.find(jsonDictionary)
         LOGGER.info(match[0].value)
         self.verifyAssertions(expectedValue,match[0].value)
-
         self
 
 
