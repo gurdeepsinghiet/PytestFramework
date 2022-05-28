@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+import pytest
 from jsonpath_ng.ext import parse
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.Constant as Constant
@@ -36,6 +37,9 @@ class LicenseModelfactory(object):
             AssertionsReport["Status"] = "Failed"
             AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
             AssertionsReport["Response_time"] = ""
+            LOGGER.error("Type Error occured during updation of LM json")
+            self.data.append(AssertionsReport)
+            pytest.fail("Type Error occured during updation of LM json")
         self.data.append(AssertionsReport)
         return self
 
@@ -65,8 +69,10 @@ class LicenseModelfactory(object):
             AssertionsReport["Status"] = "Failed"
             AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
             AssertionsReport["Response_time"] = ""
+            LOGGER.error("Type Error occured during updation of LM json")
+            self.data.append(AssertionsReport)
+            pytest.fail("Type Error occured during updation of LM json")
         self.data.append(AssertionsReport)
-
         return self
 
     #this method update the multiple License Attributes of LM Dictionary object
@@ -101,6 +107,9 @@ class LicenseModelfactory(object):
             AssertionsReport["Status"] = "Failed"
             AssertionsReport["Act_Response"] = "Type Error occured during updation of LM json"
             AssertionsReport["Response_time"] = ""
+            LOGGER.error("Type Error occured during updation of LM json")
+            self.data.append(AssertionsReport)
+            pytest.fail("Type Error occured during updation of LM json")
         self.data.append(AssertionsReport)
         return self
 
@@ -130,10 +139,13 @@ class LicenseModelfactory(object):
             AssertionsReport["Status"] = "Failed"
             AssertionsReport["Act_Response"] = "Type Error occurred during updating of LM json"
             AssertionsReport["Response_time"] = ""
-
+            LOGGER.error("Type Error occured during updation of LM json")
+            self.data.append(AssertionsReport)
+            pytest.fail("Type Error occured during updation of LM json")
+        self.data.append(AssertionsReport)
         return self
 
-    def getLicenceModelAttributesTagsValues(self, LM_ATTR_NameList, tagsList, getvalueList, response_LM_dictionry):
+    def getLicenceModelAttributesTagsValues1(self, LM_ATTR_NameList, tagsList, getvalueList, response_LM_dictionry):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         jsonpath_expression = parse('$..licenseModelAttribute[*]')
         for i, attr in enumerate(LM_ATTR_NameList):
