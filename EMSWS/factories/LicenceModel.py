@@ -78,28 +78,31 @@ class LicenseModelfactory(object):
     #this method update the multiple License Attributes of LM Dictionary object
     #LM_ATTR_NameList : List of Attributed need to be update
     #tagsList: tags names of LM Attributes List
-    #valueList : correspondes value of Tags nned to be updated
+    #valueList : correspondes value of Tags need to be updated
     #response_LM_dictionry : Dictionary object of LM Json
-    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LM_dictionary):
+    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LMJson_dictionary):
+
         currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
         u = UtilityClass()
         AssertionsReport = {}
         AssertionsReport["Api_Name"] = currentFuncName()
-        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LM_dictionary)
+        AssertionsReport["inputs"] = u.convertDictinarytoJson(response_LMJson_dictionary)
         AssertionsReport["Expected_Code"] = "200"
-        jsonpath_expression = parse('$..licenseModelAttribute[*]')
         try:
+            jsonpath_expression = parse('$..licenseModelAttribute[*]')
             for i, attr in enumerate(LM_ATTR_NameList):
-                for match in jsonpath_expression.find(response_LM_dictionary):
+                jsonpath_expression.find(response_LMJson_dictionary)
+                for match in jsonpath_expression.find(response_LMJson_dictionary):
                     if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
                         LOGGER.info(attr[i])
                         LOGGER.info(valueList[i])
                         match.value[tagsList[i]] = valueList[i]
-                        self.Updated_LM_Json = response_LM_dictionary
+                        self.Updated_LM_Json = response_LMJson_dictionary
+
             AssertionsReport["actual_Code"] = "200"
-            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LMJson_dictionary)
             AssertionsReport["Status"] = "Pass"
-            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
+            AssertionsReport["Act_Response"] = u.convertDictinarytoJson(response_LMJson_dictionary)
             AssertionsReport["Response_time"] = ""
         except TypeError as error:
             AssertionsReport["actual_Code"] = "404"
@@ -110,6 +113,7 @@ class LicenseModelfactory(object):
             LOGGER.error("Type Error occured during updation of LM json")
             self.data.append(AssertionsReport)
             pytest.fail("Type Error occured during updation of LM json")
+
         self.data.append(AssertionsReport)
         return self
 

@@ -28,7 +28,7 @@ class ProductFactory(object):
             LOGGER.info(self.emsVariableList["product_feature_version"])
             LOGGER.info(self.emsVariableList["productRes"])
         elif (expectedCode != None and expectedCode != None and xPathList != None):
-            self.PostRequest(url + '/ems/api/v5/features',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
+            self.PostRequest(url + '/ems/api/v5/products',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
                              variableList, xPathList)
 
         return self
@@ -51,7 +51,7 @@ class ProductFactory(object):
             LOGGER.info(self.emsVariableList["product_feature_version"])
             LOGGER.info(self.emsVariableList["productRes"])
         elif (expectedCode != None and expectedCode != None and xPathList != None):
-            self.PostRequest(url + '/ems/api/v5/features', product_json, currentApiFuncName(), expectedCode,
+            self.PostRequest(url + '/ems/api/v5/products', product_json, currentApiFuncName(), expectedCode,
                              variableList, xPathList)
 
         return self

@@ -19,7 +19,7 @@ class ContactFactory:
             LOGGER.info(self.emsVariableList["contact_emailId"])
             LOGGER.info(self.emsVariableList["contactRes"])
         elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/namespaces', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
+            self.PostRequest(url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
         return self
 
     def createStandardContact(self,contactUpdated_json,expectedCode,variableList=None,xPathList=None):
@@ -33,7 +33,7 @@ class ContactFactory:
             LOGGER.info(self.emsVariableList["contact_emailId"])
             LOGGER.info(self.emsVariableList["contactRes"])
         elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/namespaces', contactUpdated_json, currentApiFuncName(), expectedCode,variableList, xPathList)
+            self.PostRequest(url + '/ems/api/v5/contacts', contactUpdated_json, currentApiFuncName(), expectedCode,variableList, xPathList)
         return self
 
     def getContact(self, expectedCode, resvariableList, resxPathList, id=None, emailId=None):

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<registrationToken>
+	<id></id>
+	<customer>
+		<id></id>
+		<name></name>
+		<identifier></identifier>
+		<externalId></externalId>
+	</customer>
+    <identifier></identifier>
+	<token></token>
+    <count></count>
+    <usedCount></usedCount>
+    <refId1></refId1>
+    <refId2></refId2>
+    <isEnabled></isEnabled>
+	<expirationDate></expirationDate>
+</registrationToken>

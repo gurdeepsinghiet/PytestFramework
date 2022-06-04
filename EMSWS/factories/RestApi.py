@@ -6,6 +6,8 @@ import pytest
 import json
 from EMSWS.Utilities import UtilityClass
 from jsonpath_ng.ext import parse
+import xml.etree.ElementTree as ET
+import xml.etree.ElementTree
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -13,7 +15,7 @@ password = Constant.EMSPassword
 
 class RestApiUtilityFactory(object):
 
-    def PostRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None):
+    def PostRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
         reportParam = ReportParam()
         try:
             reportParam.setApiName(ApiName)
@@ -60,7 +62,7 @@ class RestApiUtilityFactory(object):
         #return [postapiResponse.text,postapiResponse.status_code,reportParam.getReportParameters()]
         return self
 
-    def getRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None):
+    def getRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
 
         reportParam = ReportParam()
         try:
@@ -82,7 +84,10 @@ class RestApiUtilityFactory(object):
                     reportParam.setExpectedResponse("")
                     if (variableList != None and xPathList != None):
                         for i, jsonxpath in enumerate(xPathList):
+                            LOGGER.info(xPathList[i])
+                            LOGGER.info(variableList[i])
                             self.getJsonXpathValue(getapiRes.text, variableList[i], xPathList[i])
+
                 except json.decoder.JSONDecodeError as e:
                     reportParam.setActualCode(getapiRes.status_code)
                     reportParam.setResponseTime("")
@@ -117,7 +122,7 @@ class RestApiUtilityFactory(object):
     def deleteRequest(self):
         pass
 
-    def patchRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None):
+    def patchRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
         reportParam = ReportParam()
         try:
             reportParam.setApiName(ApiName)
@@ -251,104 +256,23 @@ class RestApiUtilityFactory(object):
                     self.data.append(reportParam.getReportParameters())
                     LOGGER.error(e)
                     pytest.fail("problem with json decoding")
-
         return self
 
 
-    def PostRequestSelf(self, requestUrl, requestBody, ApiName,expectedresCode,resVarList=None,resJpathList=None):
-        reportParam = ReportParam()
-        try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
-            LOGGER.info(postapiResponse)
-            # Collectin data for Report
-            if postapiResponse.status_code == expectedresCode:
-                response_dictionary = json.loads(postapiResponse.text)
-                LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
-                reportParam.setActualCode(postapiResponse.status_code)
-                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(postapiResponse.text)
-                reportParam.setStatus("Pass")
-                reportParam.setExpectedResponse("")
-                if(resVarList != None and resJpathList !=None):
-                    for i, jsonxpath in enumerate(resVarList):
-                        self.getJsonXpathValue(postapiResponse.text,resVarList[i],resJpathList[i])
-            else:
-                reportParam.setActualCode(postapiResponse.status_code)
-                reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(postapiResponse.text)
-                reportParam.setStatus("Failed")
-                reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
-                LOGGER.error(postapiResponse.text)
-                pytest.fail("Response code not matched")
-        except requests.exceptions.RequestException as e:
-            LOGGER.error(e)
-            reportParam.setActualCode("500")
-            reportParam.setResponseTime("")
-            reportParam.setActualRespone(e)
-            reportParam.setStatus("Failed")
-            reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
-            pytest.fail("Connection error with server")
-            LOGGER.error(e)
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+    def updateXMLFile(self,xmlFilePath,xpathList,xpathValueList,resVarList=None,resXpathList=None):
+        xmlTree=ET.parse(xmlFilePath)
+        myRoot=xmlTree.getroot()
+        for i, xpath in enumerate(xpathList):
+            new_tag=myRoot.find(xpath)
+            new_tag.text = xpathValueList[i]
+        self.xmlstroutput = ET.tostring(myRoot, encoding='unicode', method='xml')
+        LOGGER.info(self.xmlstroutput)
+        if (resVarList != None and resXpathList != None):
+            for i,xpath in enumerate(resXpathList):
+                selected_Tag = myRoot.find(xpath)
+                self.emsVariableList[resVarList[i]] = selected_Tag.text
         return self
 
 
-    def getRequestself(self, requestUrl, requestBody, ApiName,expectedresCode,resVarList=None,resJpathList=None):
-
-        reportParam = ReportParam()
-        try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            getapiResponse = requests.get(requestUrl, requestBody, auth=(username, password))
-            LOGGER.info(getapiResponse.status_code)
-            # Collectin data for Report
-            if getapiResponse.status_code == expectedresCode:
-                try:
-                    response_dictionary = json.loads(getapiResponse.text)
-                    LOGGER.info(response_dictionary)
-                    # Collecting data for Report Status if Test step Pass
-                    reportParam.setActualCode(getapiResponse.status_code)
-                    reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
-                    reportParam.setActualRespone(getapiResponse.text)
-                    reportParam.setStatus("Pass")
-                    reportParam.setExpectedResponse("")
-                    if (resVarList != None and resJpathList != None):
-                        for i, jsonxpath in enumerate(resJpathList):
-                            self.getJsonXpathValue(getapiResponse.text, resVarList[i], resJpathList[i])
-                except json.decoder.JSONDecodeError as e:
-                    reportParam.setActualCode(getapiResponse.status_code)
-                    reportParam.setResponseTime("")
-                    reportParam.setActualRespone("response json decode error")
-                    reportParam.setStatus("Failed")
-                    reportParam.setExpectedResponse("")
-                    self.data.append(reportParam.getReportParameters())
-                    LOGGER.error(e)
-                    pytest.fail("problem with json decoding")
-            else:
-                LOGGER.error(getapiResponse.text)
-                reportParam.setActualCode(getapiResponse.status_code)
-                reportParam.setResponseTime(getapiResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(getapiResponse.text)
-                reportParam.setStatus("Failed")
-                reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
-                pytest.fail("Problem with getting Entity")
-        except requests.exceptions.RequestException as e:
-            LOGGER.error(e)
-            reportParam.setActualCode("500")
-            reportParam.setResponseTime("")
-            reportParam.setActualRespone(e)
-            reportParam.setStatus("Failed")
-            reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
-        return self
+    def updateXML(self,xmlData,xpathList,xpathValueList,resVarList=None,resJpathList=None):
+        pass

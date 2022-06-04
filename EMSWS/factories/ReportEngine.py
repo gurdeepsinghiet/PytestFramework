@@ -76,7 +76,7 @@ class ReportGenerator():
             preExistingTempleteData += "<td>"+str(data["actual_Code"])+"</td>"
             preExistingTempleteData += "<td width='150px'><div>"+str(data["Expected_Response"])+"<div></div></div></td>"
             preExistingTempleteData += "<td width='150px'>"
-            preExistingTempleteData += "<div><div>"+str(data["Act_Response"])+"</div></div>"
+            preExistingTempleteData += "<div>"+str(data["Act_Response"])+"</div>"
             preExistingTempleteData += "</td>"
             preExistingTempleteData += "<td>"+str(data["Response_time"])+"</td>"
             preExistingTempleteData += "<td>"+data["Status"]+"</td>"

@@ -37,16 +37,16 @@ class EMSAssertionFactory:
         return self
 
 
-    def verifyJsonXpathxValues(self,jsonDictionary,tagjsonvaluesList,expectedValueList):
-        for i, jsonxpath in enumerate(tagjsonvaluesList):
+    def verifyJsonXpathValues(self,jsonDictionary,jsontagList,expectedValueList):
+        for i, jsonxpath in enumerate(jsontagList):
             jsonpath_expression = parse(jsonxpath)
             match = jsonpath_expression.find(jsonDictionary)
             self.verifyAssertions(match[0].value,expectedValueList[i])
         self
 
 
-    def verifyJsonxpathValue(self,jsonDictionary,tagvalue,expectedValue):
-        jsonpath_expression = parse(tagvalue)
+    def verifyJsonxpathValue(self,jsonDictionary,jsontag,expectedValue):
+        jsonpath_expression = parse(jsontag)
         match = jsonpath_expression.find(jsonDictionary)
         LOGGER.info(match[0].value)
         self.verifyAssertions(expectedValue,match[0].value)

@@ -18,7 +18,7 @@ class CustomerFactory:
             LOGGER.info(self.emsVariableList["custGUID"])
             LOGGER.info(self.emsVariableList["customerRes"])
         elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/namespaces', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
+            self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
         return self
 
     def createCustomer(self, customerUpdate_json, expectedCode, variableList=None, xPathList=None):
@@ -32,7 +32,7 @@ class CustomerFactory:
             LOGGER.info(self.emsVariableList["custGUID"])
             LOGGER.info(self.emsVariableList["customerRes"])
         elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/namespaces', customerUpdate_json, currentApiFuncName(), expectedCode,
+            self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), expectedCode,
                              variableList, xPathList)
         return self
 

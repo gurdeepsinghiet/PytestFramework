@@ -15,6 +15,9 @@ from EMSWS.factories.ReportEngine import ReportGenerator
 from EMSWS.factories.RestApi import RestApiUtilityFactory
 from EMSWS.factories.Customer import CustomerFactory
 from EMSWS.factories.Activation import ActivationFactory
+from EMSWS.factories.Authentication.AuthRestApi import RestApiAuthFactory
+from EMSWS.factories.Authentication.Authentication import AuthenticationFactory
+
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -22,7 +25,7 @@ password = Constant.EMSPassword
 
 class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
                  ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
-                 RestApiUtilityFactory,ActivationFactory):
+                 RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory):
 
     def __init__(self):
         self.data=[]
