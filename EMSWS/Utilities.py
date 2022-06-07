@@ -33,7 +33,9 @@ class UtilityClass(object):
             json_object = json.dumps(dictionaryData)
             return json_object
         except TypeError as error:
-            LOGGER.error(error)
+            LOGGER.error("Type error with Dictionay object")
+        except KeyError as error:
+            LOGGER.error("Key error with Dictionay object")
 
 
     def runningPytestCaseName(self):

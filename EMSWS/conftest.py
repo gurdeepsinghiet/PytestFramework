@@ -1,7 +1,6 @@
 import  pytest
 import logging
 import os
-from EMSWS import EMSWS
 import EMSWS.Constant as Constant
 from EMSWS.factories.EMSFuntions import EMSFactory
 LOGGER = logging.getLogger(__name__)
@@ -170,6 +169,6 @@ def summaryreportGenerator(summaryData,passed,fail,total):
     openHtmlFile.write(preExistingTemplete)
 
 def getModulePath():
-    path = os.path.dirname(EMSWS.__file__)
+    path = os.path.dirname(__file__)
     return path
 
