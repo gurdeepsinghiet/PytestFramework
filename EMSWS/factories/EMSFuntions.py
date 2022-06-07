@@ -17,6 +17,7 @@ from EMSWS.factories.Customer import CustomerFactory
 from EMSWS.factories.Activation import ActivationFactory
 from EMSWS.factories.Authentication.AuthRestApi import RestApiAuthFactory
 from EMSWS.factories.Authentication.Authentication import AuthenticationFactory
+import xml.etree.ElementTree as ET
 
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -51,7 +52,38 @@ class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFact
                 self.getJsonXpathValue(jsonString, jsonVaribleList[i], jsonXpathList[i])
         return self
 
+    def isJson(self,jsonString):
+        try:
+            json.loads(jsonString)
+        except ValueError as e:
+            return False
+        return True
+
+    def isXml(self,xmlString):
+        try:
+            ET.fromstring(xmlString)
+        except ET.ParseError:
+            return False
+        return True
 
 
+    def isJsonFile(self,jsonFilePath):
+        with open(jsonFilePath, 'r') as f:
+            data = f.read()
+            try:
+                json.loads(data)
+            except ValueError as e:
+                return False
+            return True
+
+
+    def isXmlFile(self, xmlFilePath):
+        with open(xmlFilePath, 'r') as f:
+            data = f.read()
+            try:
+                ET.fromstring(data)
+            except ET.ParseError:
+                return False
+            return True
 
 

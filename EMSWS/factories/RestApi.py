@@ -7,7 +7,6 @@ import json
 from EMSWS.Utilities import UtilityClass
 from jsonpath_ng.ext import parse
 import xml.etree.ElementTree as ET
-import xml.etree.ElementTree
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
