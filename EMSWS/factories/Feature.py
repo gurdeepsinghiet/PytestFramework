@@ -13,7 +13,7 @@ class FeatureFactory(object):
         LOGGER.info(currentApiFuncName())
         self.UpdateJsonFile(featureFilePath, ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$..namespace.name',
                         '$..featureLicenseModel[0].licenseModel.name'], [featureNameGen, featureVersion, nameSpaceName, LM_name], ["featureRes"], ['$'])
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/features', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["feature_name", "feature_version", "featureRes"],['$.feature.nameVersion.name','$.feature.nameVersion.version','$'])
             LOGGER.info(self.emsVariableList["feature_name"])
             LOGGER.info(self.emsVariableList["feature_version"])
@@ -26,7 +26,7 @@ class FeatureFactory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/features', feature_json, currentApiFuncName(), expectedCode,
                              ["feature_name", "feature_version", "featureRes"],
                              ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$'])
@@ -80,7 +80,7 @@ class FeatureFactory(object):
         elif identifierNamespace != None:
             self.patchRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace, feature_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if self.patchApiresponse[1] == expectedCode:
+        if self.patchApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -125,30 +125,32 @@ class FeatureFactory(object):
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
-    def deleteFeature(self, expectedCode, resvariableList, resxPathList, id=None, nameVersion=None,
+    def deleteFeature(self, expectedCode,resvariableList=None, resxPathList=None, id=None, nameVersion=None,
                       identifierNamespace=None, identifier=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.deleteRequest(url + '/ems/api/v5/features/' + id, currentApiFuncName(), expectedCode,
-                                          resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/features/' + id,"", currentApiFuncName(), expectedCode,resvariableList, resxPathList)
         elif nameVersion != None:
-            response = self.deleteRequest(url + '/ems/api/v5/features/nameVersion=' + nameVersion, currentApiFuncName(),
-                                          expectedCode, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/features/nameVersion=' + nameVersion, "",currentApiFuncName(),
+                                          expectedCode,resvariableList, resxPathList)
         elif identifierNamespace != None:
-            response = self.deleteRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace,
-                                          currentApiFuncName(), expectedCode, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace,"",
+                                          currentApiFuncName(), expectedCode,resvariableList, resxPathList)
         elif identifier != None:
-            response = self.deleteRequest(url + '/ems/api/v5/features/identifier=' + identifier, currentApiFuncName(),
-                                          expectedCode, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/features/identifier=' + identifier, "",currentApiFuncName(),
+                                          expectedCode,resvariableList, resxPathList)
         elif externalId != None:
-            response = self.deleteRequest(url + '/ems/api/v5/features/externalId=' + externalId, currentApiFuncName(),
-                                          expectedCode, resxPathList)
-        if response[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            self.deleteRequest(url + '/ems/api/v5/features/externalId=' + externalId, "",currentApiFuncName(),
+                                          expectedCode,resvariableList, resxPathList)
+        if self.deleteApiresponse[0] == expectedCode:
+            if (self.deleteApiresponse[0] == Constant.HTTP204):
+                LOGGER.info("Contact deleted successfully")
+            else:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
     def replaceFeature(self, feature_json, expectedCode, resvariableList, resxPathList, id=None, nameVersion=None,
@@ -157,21 +159,21 @@ class FeatureFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.putRequest(url + '/ems/api/v5/features/' + id, feature_json, currentApiFuncName(),
+            self.putRequest(url + '/ems/api/v5/features/' + id, feature_json, currentApiFuncName(),
                                        expectedCode, resxPathList)
         elif nameVersion != None:
-            response = self.putRequest(url + '/ems/api/v5/features/nameVersion=' + nameVersion, feature_json,
+            self.putRequest(url + '/ems/api/v5/features/nameVersion=' + nameVersion, feature_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif identifier != None:
-            response = self.putRequest(url + '/ems/api/v5/features/identifier=' + identifier, feature_json,
+            self.putRequest(url + '/ems/api/v5/features/identifier=' + identifier, feature_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif externalId != None:
-            response = self.putRequest(url + '/ems/api/v5/features/externalId=' + externalId, feature_json,
+            self.putRequest(url + '/ems/api/v5/features/externalId=' + externalId, feature_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif identifierNamespace != None:
-            response = self.putRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace,
+            self.putRequest(url + '/ems/api/v5/features/identifierNamespace=' + identifierNamespace,
                                        feature_json, currentApiFuncName(), expectedCode, resxPathList)
-        if response[1] == expectedCode:
+        if self.putApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

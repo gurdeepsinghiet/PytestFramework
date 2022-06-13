@@ -116,10 +116,53 @@ class RestApiUtilityFactory(object):
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
         self.getApiresponse=[getapiRes.text, getapiRes.status_code, reportParam.getReportParameters()]
-        #return [getapiResponse.text, getapiResponse.status_code, reportParam.getReportParameters()]
+
         return self
-    def deleteRequest(self):
-        pass
+
+    def deleteRequest(self, requestUrl, requestBody, ApiName, expectedresCode,variableList=None,xPathList=None):
+        reportParam = ReportParam()
+        try:
+            reportParam.setApiName(ApiName)
+            reportParam.setInputs(requestBody)
+            reportParam.setExpectedCode(expectedresCode)
+            deleteApiresponse = requests.delete(requestUrl, data=requestBody, auth=(username, password))
+            LOGGER.info(deleteApiresponse)
+            # Collectin data for Report
+            if deleteApiresponse.status_code == expectedresCode:
+                # Collecting data for Report Status if Test step Pass
+                reportParam.setActualCode(deleteApiresponse.status_code)
+                reportParam.setResponseTime(deleteApiresponse.elapsed.total_seconds())
+                reportParam.setActualRespone("Entity deleted successfully")
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+                if (variableList != None and xPathList != None and deleteApiresponse.text !=None):
+                    for i, jsonxpath in enumerate(xPathList):
+                         LOGGER.info(xPathList[i])
+                         LOGGER.info(variableList[i])
+                         self.getJsonXpathValue(deleteApiresponse.text, variableList[i], xPathList[i])
+            else:
+                reportParam.setActualCode(deleteApiresponse.status_code)
+                reportParam.setResponseTime(deleteApiresponse.elapsed.total_seconds())
+                reportParam.setActualRespone(deleteApiresponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                LOGGER.error(deleteApiresponse.text)
+                pytest.fail("Response code not matched")
+        except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            pytest.fail("Connection error with server")
+            LOGGER.error(e)
+        self.data.append(reportParam.getReportParameters())
+        LOGGER.info(self.data)
+        self.deleteApiresponse = [deleteApiresponse.status_code, reportParam.getReportParameters()]
+        return self
 
     def patchRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
         reportParam = ReportParam()
@@ -165,11 +208,55 @@ class RestApiUtilityFactory(object):
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
-        self.patchApiresponse = [patchapiRes.text, patchapiRes.status_code, reportParam.getReportParameters()]
+        self.patchApiResponse = [patchapiRes.text, patchapiRes.status_code, reportParam.getReportParameters()]
         return self
 
-    def putRequest(self):
-        pass
+    def putRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None):
+        reportParam = ReportParam()
+        try:
+            reportParam.setApiName(ApiName)
+            reportParam.setInputs(requestBody)
+            reportParam.setExpectedCode(expectedresCode)
+            putApiResponse = requests.patch(requestUrl, requestBody, auth=(username, password))
+            LOGGER.info(putApiResponse)
+            # Collectin data for Report
+            if putApiResponse.status_code == expectedresCode:
+                response_dictionary = json.loads(putApiResponse.text)
+                LOGGER.info(response_dictionary)
+                # Collecting data for Report Status if Test step Pass
+                reportParam.setActualCode(putApiResponse.status_code)
+                reportParam.setResponseTime(putApiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(putApiResponse.text)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+                if (variableList != None and xPathList != None):
+                    for i, jsonxpath in enumerate(xPathList):
+                        LOGGER.info(xPathList[i])
+                        LOGGER.info(variableList[i])
+                        self.getJsonXpathValue(putApiResponse.text, variableList[i], xPathList[i])
+            else:
+                reportParam.setActualCode(putApiResponse.status_code)
+                reportParam.setResponseTime(putApiResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(putApiResponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                LOGGER.error(putApiResponse.text)
+                pytest.fail("Response code not matched")
+        except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            pytest.fail("Connection error with server")
+            LOGGER.error(e)
+        self.data.append(reportParam.getReportParameters())
+        LOGGER.info(self.data)
+        self.putApiResponse = [putApiResponse.text, putApiResponse.status_code, reportParam.getReportParameters()]
+        return self
 
     def UpdateJsonFile(self,jsonpath,jsontagsList,jsonValueList,variableList=None,xPathList=None):
         utilityClass=UtilityClass()

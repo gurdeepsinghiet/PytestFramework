@@ -17,7 +17,7 @@ class NameSpacefactory():
         self.UpdateJsonFile(nameSpaceJsonFilePath, ['$.namespace.name'],[nameSpaceName])
         LOGGER.info(self.UpdateJsonFileResponse)
         # Dictionary object for crearing NameSpace Report
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/namespaces', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["nsName","nsID","nameSpaceRes"],['$.namespace.name','$.namespace.id','$'])
             LOGGER.info(self.emsVariableList["nsName"])
             LOGGER.info(self.emsVariableList["nsID"])
@@ -32,7 +32,7 @@ class NameSpacefactory():
         running_testcases = utility.runningPytestCaseName()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/namespaces', namceSpace_json, currentApiFuncName(), expectedCode,
                              ["nsName", "nsID", "nameSpaceRes"], ['$.namespace.name', '$.namespace.id', '$'])
             LOGGER.info(self.emsVariableList["nsName"])
@@ -53,7 +53,7 @@ class NameSpacefactory():
             self.patchRequest(url + '/ems/api/v5/namespaces/'+id, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
         if name !=None:
             self.patchRequest(url + '/ems/api/v5/namespaces/name='+name, namceSpace_json, currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if self.patchApiresponse[1] == expectedCode:
+        if self.patchApiResponse[1] == expectedCode:
                 for i, resvar in enumerate(resvariableList):
                     LOGGER.info(resvariableList[i])
                     LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -101,20 +101,23 @@ class NameSpacefactory():
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
-    def deleteNameSpace(self, feature_json, expectedCode, resvariableList, resxPathList, id=None, name=None):
+    def deleteNameSpace(self, expectedCode,resvariableList=None, resxPathList=None, id=None, name=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.deleteRequest(url + '/ems/api/v5/namespaces/' + id, feature_json, currentApiFuncName(),
-                                          expectedCode, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/namespaces/' + id, "", currentApiFuncName(),
+                                          expectedCode,resvariableList,resxPathList)
         elif name != None:
-            response = self.deleteRequest(url + '/ems/api/v5/namespaces/emailId=' + name, feature_json,
-                                          currentApiFuncName(), expectedCode, resxPathList)
-        if response[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            self.deleteRequest(url + '/ems/api/v5/namespaces/emailId=' + name, "",
+                                          currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if self.deleteApiresponse[0] == expectedCode:
+            if (self.deleteApiresponse[0] == Constant.HTTP204):
+                LOGGER.info("Contact deleted successfully")
+            else:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
     def replaceNameSpace(self, nameSpace_json, expectedCode, resvariableList, resxPathList, id=None, name=None):
@@ -122,12 +125,12 @@ class NameSpacefactory():
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.putRequest(url + '/ems/api/v5/namespaces/' + id, nameSpace_json, currentApiFuncName(),
+            self.putRequest(url + '/ems/api/v5/namespaces/' + id, nameSpace_json, currentApiFuncName(),
                                        expectedCode, resxPathList)
         elif name != None:
-            response = self.putRequest(url + '/ems/api/v5/namespaces/name=' + name, nameSpace_json,
+            self.putRequest(url + '/ems/api/v5/namespaces/name=' + name, nameSpace_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
-        if response[1] == expectedCode:
+        if self.putApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

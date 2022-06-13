@@ -17,6 +17,8 @@ from EMSWS.factories.Customer import CustomerFactory
 from EMSWS.factories.Activation import ActivationFactory
 from EMSWS.factories.Authentication.AuthRestApi import RestApiAuthFactory
 from EMSWS.factories.Authentication.Authentication import AuthenticationFactory
+from EMSWS.factories.UserManagement import UserManagementFactory
+from EMSWS.factories.RoleManagement import RoleManagementFactory
 import xml.etree.ElementTree as ET
 
 LOGGER = logging.getLogger(__name__)
@@ -26,7 +28,7 @@ password = Constant.EMSPassword
 
 class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
                  ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
-                 RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory):
+                 RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,UserManagementFactory,RoleManagementFactory):
 
     def __init__(self):
         self.data=[]

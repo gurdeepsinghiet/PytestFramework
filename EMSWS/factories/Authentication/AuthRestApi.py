@@ -40,6 +40,7 @@ class RestApiAuthFactory(object):
                         LOGGER.info(variableList[i])
                         self.getJsonXpathValue(postapiAuthResponse.text, variableList[i], xPathList[i])
             elif postapiAuthResponse.status_code == expectedresCode and  self.isXml(postapiAuthResponse.text):
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 requestBody=requestBody.replace("<","&lt").replace(">","&gt")
                 reportParam.setInputs(requestBody)
                 self.emsVariableList[outputXmlResVar]=postapiAuthResponse.text
@@ -54,6 +55,7 @@ class RestApiAuthFactory(object):
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
             else:
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 reportParam.setActualCode(postapiAuthResponse.status_code)
                 reportParam.setResponseTime(postapiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(postapiAuthResponse.text)
@@ -64,6 +66,7 @@ class RestApiAuthFactory(object):
                 pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
+            reportParam.setInputs(u.convertDictinarytoJson(requestBody))
             reportParam.setActualCode("500")
             reportParam.setResponseTime("")
             reportParam.setActualRespone(e)
@@ -86,17 +89,16 @@ class RestApiAuthFactory(object):
             reportParam.setApiName(ApiName)
             reportParam.setExpectedCode(expectedresCode)
             if(bearerAuth == None):
-                getapiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers,auth=(username, password))
-            else:
-                getapiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers)
-                LOGGER.info(getapiAuthResponse.text)
-            # Collectin data for Report
-            self.output = getapiAuthResponse.text
+                getapiAuthResponse = requests.get(requestUrl, data=requestBody, headers=headers,auth=(username, password))
+            elif(bearerAuth == "Yes"):
+                getapiAuthResponse = requests.get(requestUrl, data=requestBody, headers=headers)
+            LOGGER.info(getapiAuthResponse.text)
             if getapiAuthResponse.status_code == expectedresCode and self.isJson(getapiAuthResponse.text):
-                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setInputs("")
                 response_dictionary = json.loads(getapiAuthResponse.text)
                 # LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
+                LOGGER.info(getapiAuthResponse.text)
                 reportParam.setActualCode(getapiAuthResponse.status_code)
                 reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(getapiAuthResponse.text)
@@ -107,21 +109,23 @@ class RestApiAuthFactory(object):
                         LOGGER.info(xPathList[i])
                         LOGGER.info(variableList[i])
                         self.getJsonXpathValue(getapiAuthResponse.text, variableList[i], xPathList[i])
-            elif getapiAuthResponse.status_code == expectedresCode and  self.isXml(getapiAuthResponse.text):
-                requestBody=requestBody.replace("<","&lt").replace(">","&gt")
-                reportParam.setInputs(requestBody)
-                self.emsVariableList[outputXmlResVar]=getapiAuthResponse.text
+
+            elif getapiAuthResponse.status_code == expectedresCode and self.isXml(getapiAuthResponse.text):
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setInputs("")
+                self.emsVariableList[outputXmlResVar] = getapiAuthResponse.text
                 myRoot = ET.fromstring(getapiAuthResponse.text)
                 for i, xpath in enumerate(xPathList):
                     selected_Tag = myRoot.find(xpath)
                     self.emsVariableList[variableList[i]] = selected_Tag.text
-                reportParam.setActualCode(getapiAuthResponse.status_code)
-                reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
-                getRes=getapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
-                reportParam.setActualRespone(getRes)
-                reportParam.setStatus("Pass")
-                reportParam.setExpectedResponse("")
+                    reportParam.setActualCode(getapiAuthResponse.status_code)
+                    reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
+                    getRes = getapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
+                    reportParam.setActualRespone(getRes)
+                    reportParam.setStatus("Pass")
+                    reportParam.setExpectedResponse("")
             else:
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 reportParam.setActualCode(getapiAuthResponse.status_code)
                 reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(getapiAuthResponse.text)
@@ -130,8 +134,81 @@ class RestApiAuthFactory(object):
                 self.data.append(reportParam.getReportParameters())
                 LOGGER.error(getapiAuthResponse.text)
                 pytest.fail("Response code not matched")
+
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
+            reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error(e)
+            pytest.fail("Connection error with server")
+        self.data.append(reportParam.getReportParameters())
+        self.getAuthApiresponse = [getapiAuthResponse.text, getapiAuthResponse.status_code,
+                                   reportParam.getReportParameters()]
+        LOGGER.info(self.data)
+        return self
+
+    def PatchAuthRequest(self, requestUrl, requestBody,headers,ApiName,expectedresCode,username,password,variableList=None,xPathList=None,bearerAuth=None,outputXmlResVar=None):
+        u=UtilityClass()
+        reportParam = ReportParam()
+        try:
+            reportParam.setApiName(ApiName)
+            reportParam.setExpectedCode(expectedresCode)
+            if(bearerAuth == None):
+                patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers,auth=(username, password))
+            else:
+                patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers)
+                LOGGER.info(patchApiAuthResponse.text)
+            # Collectin data for Report
+            self.output = patchApiAuthResponse.text
+            if patchApiAuthResponse.status_code == expectedresCode and self.isJson(patchApiAuthResponse.text):
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                response_dictionary = json.loads(patchApiAuthResponse.text)
+                # LOGGER.info(response_dictionary)
+                # Collecting data for Report Status if Test step Pass
+                reportParam.setActualCode(patchApiAuthResponse.status_code)
+                reportParam.setResponseTime(patchApiAuthResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(patchApiAuthResponse.text)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+                if (variableList != None and xPathList != None):
+                    for i, jsonxpath in enumerate(xPathList):
+                        LOGGER.info(xPathList[i])
+                        LOGGER.info(variableList[i])
+                        self.getJsonXpathValue(patchApiAuthResponse.text, variableList[i], xPathList[i])
+            elif patchApiAuthResponse.status_code == expectedresCode and  self.isXml(patchApiAuthResponse.text):
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                requestBody=requestBody.replace("<","&lt").replace(">","&gt")
+                reportParam.setInputs(requestBody)
+                self.emsVariableList[outputXmlResVar]=patchApiAuthResponse.text
+                myRoot = ET.fromstring(patchApiAuthResponse.text)
+                for i, xpath in enumerate(xPathList):
+                    selected_Tag = myRoot.find(xpath)
+                    self.emsVariableList[variableList[i]] = selected_Tag.text
+                reportParam.setActualCode(patchApiAuthResponse.status_code)
+                reportParam.setResponseTime(patchApiAuthResponse.elapsed.total_seconds())
+                putRes=patchApiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
+                reportParam.setActualRespone(putRes)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+            else:
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setActualCode(patchApiAuthResponse.status_code)
+                reportParam.setResponseTime(patchApiAuthResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(patchApiAuthResponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                LOGGER.error(patchApiAuthResponse.text)
+                pytest.fail("Response code not matched")
+        except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+            reportParam.setInputs(u.convertDictinarytoJson(requestBody))
             reportParam.setActualCode("500")
             reportParam.setResponseTime("")
             reportParam.setActualRespone(e)
@@ -141,6 +218,6 @@ class RestApiAuthFactory(object):
             pytest.fail("Connection error with server")
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
-        self.getAuthApiresponse = [getapiAuthResponse.text, getapiAuthResponse.status_code, reportParam.getReportParameters()]
+        self.patchAuthApiResponse = [patchApiAuthResponse.text, patchApiAuthResponse.status_code, reportParam.getReportParameters()]
         LOGGER.info(self.data)
         return self

@@ -12,7 +12,7 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class LicenseModelfactory(object):
-    def updateLicencezModelAttributeWithTag(self,LM_ATTR_Name,tag,value, response_LM_dictionary):
+    def updateLicenceModelAttributeByTag(self,LM_ATTR_Name,tag,value, response_LM_dictionary):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
         currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
         u=UtilityClass()
@@ -80,7 +80,7 @@ class LicenseModelfactory(object):
     #tagsList: tags names of LM Attributes List
     #valueList : correspondes value of Tags need to be updated
     #response_LM_dictionry : Dictionary object of LM Json
-    def updateLicencezModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LMJson_dictionary):
+    def updateLicenceModelAttributesbyTags(self, LM_ATTR_NameList, tagsList,valueList, response_LMJson_dictionary):
 
         currentFuncName = lambda n=0: sys._getframe(n + 1).f_code.co_name
         u = UtilityClass()
@@ -94,7 +94,7 @@ class LicenseModelfactory(object):
                 jsonpath_expression.find(response_LMJson_dictionary)
                 for match in jsonpath_expression.find(response_LMJson_dictionary):
                     if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
-                        LOGGER.info(attr[i])
+                        LOGGER.info(attr)
                         LOGGER.info(valueList[i])
                         match.value[tagsList[i]] = valueList[i]
                         self.Updated_LM_Json = response_LMJson_dictionary
@@ -215,9 +215,9 @@ class LicenseModelfactory(object):
 
     def addFlexibleLicenceModelStandalone(self, LMNameGenerator, response_LM_dict,expectedCode,variableList=None,xPathList=None):
         run_testcases = os.environ.get('PYTEST_CURRENT_TEST').split(':')[-1].split(' ')[0]
-        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE","value" ,"1", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE","value", "1", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("LICENSE_TYPE","value" ,"1", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("DEPLOYMENT_TYPE","value", "1", response_LM_dict)
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
@@ -241,9 +241,9 @@ class LicenseModelfactory(object):
 
 
     def addFlexibleLicenceModelNetwork(self, LMNameGenerator, response_LM_dict,expectedCode,resvariableList=None,resxPathList=None):
-        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value","0", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE", "value","1", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("LICENSE_TYPE", "value","0", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("DEPLOYMENT_TYPE", "value","1", response_LM_dict)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -262,9 +262,9 @@ class LicenseModelfactory(object):
 
 
     def addOnPremiseLMNetwork(self, LMNameGenerator, response_LM_dic,expectedCode,resvariableList=None,resxPathList=None):
-        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dic)
-        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value","0", response_LM_dic)
-        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE","value", "0", response_LM_dic)
+        self.updateLicenceModelAttributeByTag("ENFORCE_CLOCK_TAMPERED", "value","FALSE", response_LM_dic)
+        self.updateLicenceModelAttributeByTag("LICENSE_TYPE", "value","0", response_LM_dic)
+        self.updateLicenceModelAttributeByTag("DEPLOYMENT_TYPE","value", "0", response_LM_dic)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -283,9 +283,9 @@ class LicenseModelfactory(object):
 
     def addOnPremiseLMStandalone(self, LMNameGenerator, response_LM_dict, expectedCode, resvariableList=None,
                               resxPathList=None):
-        self.updateLicencezModelAttributeWithTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("LICENSE_TYPE", "value", "1", response_LM_dict)
-        self.updateLicencezModelAttributeWithTag("DEPLOYMENT_TYPE", "value", "0", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("ENFORCE_CLOCK_TAMPERED","value", "FALSE", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("LICENSE_TYPE", "value", "1", response_LM_dict)
+        self.updateLicenceModelAttributeByTag("DEPLOYMENT_TYPE", "value", "0", response_LM_dict)
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -343,7 +343,7 @@ class LicenseModelfactory(object):
         elif LMname != None and enforcementnameVersion != None:
             self.patchRequest(url + '/ems/api/v5/enforcements/nameVersion='+enforcementnameVersion+'/licenseModels/name='+LMname, LM_json,
                                              currentApiFuncName(), expectedCode,resvariableList,resxPathList)
-        if self.patchApiresponse[1] == expectedCode:
+        if self.patchApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])

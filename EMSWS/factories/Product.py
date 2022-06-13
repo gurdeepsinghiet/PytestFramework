@@ -158,19 +158,45 @@ class ProductFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.putRequest(url + '/ems/api/v5/products/' + id, product_json, currentApiFuncName(),
+            self.putRequest(url + '/ems/api/v5/products/' + id, product_json, currentApiFuncName(),
                                        expectedCode, resxPathList)
         elif externalId != None:
-            response = self.putRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
+            self.putRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif nameVersion != None:
-            response = self.putRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, product_json,
+            self.putRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, product_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif identifier != None:
-            response = self.putRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
+            self.putRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
-            if response[1] == expectedCode:
+            if self.putApiResponse[1] == expectedCode:
                 for i, resvar in enumerate(resvariableList):
                     LOGGER.info(resvariableList[i])
                     LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self
+
+    def deleteProduct(self, expectedCode,resvariableList=None, resxPathList=None, id=None, nameVersion=None, externalId=None, identifier=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        if id != None:
+            self.deleteRequest(url + '/ems/api/v5/products/' + id,"", currentApiFuncName(),
+                            expectedCode,resvariableList,resxPathList)
+        elif externalId != None:
+            self.deleteRequest(url + '/ems/api/v5/products/externalId=' + externalId,"",
+                            currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif nameVersion != None:
+            self.deleteRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion,"",
+                            currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        elif identifier != None:
+            self.deleteRequest(url + '/ems/api/v5/products/identifier=' + identifier,"",
+                            currentApiFuncName(), expectedCode,resvariableList,resxPathList)
+        if self.deleteApiresponse[0] == expectedCode:
+            if (self.deleteApiresponse[0] == 204):
+                LOGGER.info("Contact deleted successfully")
+            else:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+
         return self

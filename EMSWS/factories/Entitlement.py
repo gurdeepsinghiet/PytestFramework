@@ -17,7 +17,7 @@ class Entitlementfacory(object):
         self.UpdateJsonFile(entitlementjsonPath, ['$..customer.name', '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
                                             '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version','$.entitlement.entitlementAsWhole'], [customerName, product_name, product_version,True], ["entitlementRes"],
                         ['$'])
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["eid","entitelementid","entRes","pkId"],['$.entitlement.eId','$.entitlement.id','$','$.entitlement.productKeys.productKey[0].pkId'])
             LOGGER.info(self.emsVariableList["eid"])
             LOGGER.info(self.emsVariableList["entitelementid"])
@@ -32,7 +32,7 @@ class Entitlementfacory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
 
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,["eid", "entitelementid", "entRes", "pkId"], ['$.entitlement.eId', '$.entitlement.id', '$',
                                                                            '$.entitlement.productKeys.productKey[0].pkId'])
             LOGGER.info(self.emsVariableList["eid"])
@@ -53,7 +53,7 @@ class Entitlementfacory(object):
                                                            '$.entitlement.entitlementAsWhole'],
                             [customerName, product_name, product_version, False], ["entitlementRes"],
                             ['$'])
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(),
                              expectedCode, ["eid", "entitelementid", "entRes", "pkId"],
                              ['$.entitlement.eId', '$.entitlement.id', '$',
@@ -112,7 +112,7 @@ class Entitlementfacory(object):
             self.patchRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
         elif externalId != None:
             self.patchRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId , entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
-        if self.patchApiresponse[1] == expectedCode:
+        if self.patchApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
@@ -133,29 +133,29 @@ class Entitlementfacory(object):
                                            currentApiFuncName(), 200, resvariableList, resxPathList)
         elif externalId != None:
             self.getRequest(url + '/ems/api/v5/entitlements/externalId=' + externalId, "",currentApiFuncName(),200,resvariableList,resxPathList)
-        if self.getApiresponse[1] == expectedCode:
+        if self.getApiresponse[1] == expectedCode and resvariableList !=None and resxPathList !=None:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
-    def deleteEntitlement(self, expectedCode, resvariableList, resxPathList, id=None, eId=None, externalId=None):
+    def deleteEntitlement(self, expectedCode,resvariableList=None, resxPathList=None, id=None, eId=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.deleteRequest(url + '/ems/api/v5/entitlements/' + id, currentApiFuncName(), expectedCode,
-                                          resxPathList, )
+            self.deleteRequest(url + '/ems/api/v5/entitlements/' + id, "",currentApiFuncName(), expectedCode,resvariableList, resxPathList)
         elif eId != None:
-            response = self.deleteRequest(url + '/ems/api/v5/entitlements/eId=' + eId, currentApiFuncName(),
-                                          expectedCode, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/entitlements/eId=' + eId,"", currentApiFuncName(), expectedCode,resvariableList, resxPathList)
         elif externalId != None:
-            response = self.deleteRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId,
-                                          currentApiFuncName(), expectedCode, resxPathList, )
-        if response[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            self.deleteRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId,"",currentApiFuncName(), expectedCode,resvariableList, resxPathList)
+        if self.deleteApiresponse[0] == expectedCode:
+            if (self.deleteApiresponse[0] == Constant.HTTP204):
+                LOGGER.info("Contact deleted successfully")
+            else:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
         return self
 
     def replaceEntitlement(self, entitlement_json, expectedCode, resvariableList, resxPathList, id=None, eId=None,
@@ -164,15 +164,15 @@ class Entitlementfacory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            response = self.putRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(),
+            self.putRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(),
                                        expectedCode, resxPathList)
         elif eId != None:
-            response = self.putRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,
+            self.putRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
         elif externalId != None:
-            response = self.putRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId, entitlement_json,
+            self.putRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId, entitlement_json,
                                        currentApiFuncName(), expectedCode, resxPathList)
-        if response[1] == expectedCode:
+        if self.putApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
