@@ -34,8 +34,8 @@
             "name": "Sentinel RMS",
             "version": "10.0"
           },
-          "totalQuantity": 100,
-          "availableQuantity": 100,
+          "totalQuantity": 1,
+          "availableQuantity": 1,
           "splittedQuantity": 0,
           "activationMethod": "FIXED",
           "fixedQuantity": 1,
@@ -94,9 +94,9 @@
             "totalRegisteredQuantity": "1",
             "productKeyFingerprint": [
               {
-                "id": "f7055e96-80d9-4f00-8b8f-73a6ffd1f828",
-                "friendlyName": "FP-12345",
-                "registeredQuantity": "1"
+                "id": "",
+                "friendlyName": "",
+                "registeredQuantity": ""
               }
             ]
           }

@@ -1,0 +1,10 @@
+{
+  "user": {
+    "loginId": "TestUser",
+    "emailId": "TestUser@example.com",
+    "name": "TestUser",
+    "password": "Ems@12345",
+    "state": "ENABLE",
+    "userType": "STANDARD"
+  }
+}

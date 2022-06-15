@@ -1,0 +1,35 @@
+{
+  "bulkActivation": {
+    "activatees": {
+      "activatee": [
+        {
+          "activateeEmailId": "GSThales@thalesGroup.com",
+          "addIfNotAvailable": true
+        }
+      ]
+    },
+    "activationProductKeys": {
+      "activationProductKey": [
+        {
+          "activationQuantity": 1,
+          "pkId": "",
+          "activationComments": "this is automated Pytest Activation"
+        }
+      ]
+    },
+    "activationAttributes": {
+      "activationAttribute": [
+        {
+          "name": "PRIMARY_1_CRITERIA",
+          "value": 4,
+          "associatedAttribute": {
+            "name": "PRIMARY_1_INFO",
+            "value": 4,
+            "readOnly": false,
+            "mandatory": true
+          }
+        }
+      ]
+    }
+  }
+}

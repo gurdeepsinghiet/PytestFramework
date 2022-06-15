@@ -1,1 +1,9 @@
-{"contact": {"name": "emscontactlssulettc", "password": "Thales@123", "state": "ENABLE", "contactType": "Standard", "emailId": "bnnn1060129@Thales.com"}}
+{
+  "contact": {
+    "name": "",
+    "password": "",
+    "state": "ENABLE",
+    "contactType": "",
+    "emailId": ""
+  }
+}

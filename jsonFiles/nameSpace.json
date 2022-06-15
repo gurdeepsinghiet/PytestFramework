@@ -1,8 +1,10 @@
 {
   "namespace": {
     "name": "TestNamespace",
-    "refId1": "refId1",
-    "refId2": "refId2",
+    "refId1": "45",
+    "refId2": "56",
     "description": "Namespace description"
   }
 }
+
+

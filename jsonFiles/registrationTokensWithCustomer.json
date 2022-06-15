@@ -1,0 +1,19 @@
+{
+  "registrationToken": {
+    "id": "",
+    "customer": {
+      "id": "",
+      "name": "",
+      "identifier": "",
+      "externalId": ""
+    },
+    "identifier": "",
+    "token": "",
+    "count": "",
+    "usedCount": "",
+    "refId1": "",
+    "refId2": "",
+    "isEnabled": "",
+    "expirationDate": ""
+  }
+}

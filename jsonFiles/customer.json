@@ -1,1 +1,15 @@
-{"customer": {"name": "customerPyTestingTest3815042", "identifier": "customerPyTestingTest3815042", "externalId": "", "state": "ENABLE", "contacts": {"contact": [{"id": "61353fdd-acd0-47aa-8373-ada9c94f849d"}]}}}
+{
+  "customer": {
+    "name": "customerPyTestingTest3815042",
+    "identifier": "customerPyTestingTest3815042",
+    "externalId": "",
+    "state": "ENABLE",
+    "contacts": {
+      "contact": [
+        {
+          "id": "61353fdd-acd0-47aa-8373-ada9c94f849d"
+        }
+      ]
+    }
+  }
+}

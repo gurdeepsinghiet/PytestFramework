@@ -1,1 +1,24 @@
-{"product": {"namespace": {"name": "nameSpacePytesting6856557"}, "nameVersion": {"name": "productPytesting173454753", "version": "1.0"}, "state": "ENABLE", "productFeatures": {"productFeature": [{"feature": {"nameVersion": {"name": "FeaturePytest2357967", "version": "1.0"}}}]}}}
+{
+  "product": {
+    "namespace": {
+      "name": ""
+    },
+    "nameVersion": {
+      "name": "",
+      "version": ""
+    },
+    "state": "ENABLE",
+    "productFeatures": {
+      "productFeature": [
+        {
+          "feature": {
+            "nameVersion": {
+              "name": "",
+              "version": ""
+            }
+          }
+        }
+      ]
+    }
+  }
+}

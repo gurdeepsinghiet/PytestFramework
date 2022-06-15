@@ -1,1 +1,24 @@
-{"product": {"namespace": {"name": "pytestnamespace1610451"}, "nameVersion": {"name": "pytestproduct5684203", "version": "1.0"}, "state": "ENABLE", "productFeatures": {"productFeature": [{"feature": {"nameVersion": {"name": "pytestfeature2010808", "version": "1.0"}}}]}}}
+{
+  "product": {
+    "namespace": {
+      "name": ""
+    },
+    "nameVersion": {
+      "name": "",
+      "version": ""
+    },
+    "state": "ENABLE",
+    "productFeatures": {
+      "productFeature": [
+        {
+          "feature": {
+            "nameVersion": {
+              "name": "",
+              "version": ""
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "role": {
+    "name": "TestRole",
+    "description": "Role description",
+    "state": "ENABLE"
+  }
+}

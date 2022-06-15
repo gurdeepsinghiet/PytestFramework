@@ -1,0 +1,148 @@
+{
+  "entitlement": {
+
+    "entitlementAsWhole": true,
+    "eId": "",
+    "id": "",
+    "startDate": "2022-01-01",
+    "expiry": {
+      "neverExpires": true
+    },
+    "customer": {
+
+      "name": ""
+
+    },
+    "productKeys": {
+      "productKey": [
+        {
+          "pkId": "",
+          "creationDate": "",
+          "lastModifiedDate": "",
+          "startDate": "",
+          "expiry": {
+            "neverExpires": true
+          },
+          "id": "",
+          "enforcement": {
+            "id": "",
+            "name": "Sentinel RMS",
+            "version": "10.0"
+          },
+          "totalQuantity": 0,
+          "availableQuantity": 0,
+          "splittedQuantity": 0,
+          "activationMethod": "FIXED",
+          "fixedQuantity": 1,
+          "state": "ENABLE",
+          "item": {
+            "itemProduct": {
+              "product": {
+                "externalId": "",
+                "id": "",
+                "identifier": "",
+                "productType": "DEFAULT",
+                "nameVersion": {
+                  "name": "",
+                  "version": ""
+                }
+              },
+              "itemProductFeatures": {
+                "itemProductFeature": [
+                  {
+                    "itemFeatureLicenseModel": {
+                      "licenseModel": {
+                        "id": "",
+                        "name": ""
+                      },
+                      "attributes": {
+                        "attribute": [
+                          {
+                            "name": "START_LICENSE_FROM_ACTIVATION_DATE",
+                            "value": "FALSE"
+                          },
+                          {
+                            "name": "USAGE_LIMIT",
+                            "value": "0"
+                          },
+                          {
+                            "name": "LICENSE_TYPE",
+                            "value": "1",
+                            "displayText": "Standalone"
+                          },
+                          {
+                            "name": "VENDOR_INFO",
+                            "value": "",
+                            "encodeToBase64": false
+                          },
+                          {
+                            "name": "CONCURRENCY_CRITERIA",
+                            "value": "1",
+                            "displayText": "Per Login"
+                          },
+                          {
+                            "name": "DEPLOYMENT_TYPE",
+                            "value": "2",
+                            "displayText": "Cloud Served - Connected"
+                          },
+                          {
+                            "name": "START_DATE",
+                            "value": "2022-05-20 09:28"
+                          },
+                          {
+                            "name": "GRACE_LIMIT",
+                            "value": "0"
+                          },
+                          {
+                            "name": "END_DATE",
+                            "value": "2023-05-20 09:28"
+                          },
+                          {
+                            "name": "CONCURRENCY_LIMIT",
+                            "value": "0"
+                          },
+                          {
+                            "name": "GRACE_TIME",
+                            "value": "0"
+                          },
+                          {
+                            "name": "LICENSE_DURATION_IN_DAYS",
+                            "value": "365"
+                          },
+                          {
+                            "name": "USAGE_TYPE",
+                            "value": "1",
+                            "displayText": "Count Based"
+                          },
+                          {
+                            "name": "GRACE_TIME_DURATION",
+                            "value": "2",
+                            "displayText": "Days"
+                          }
+                        ]
+                      }
+                    },
+                    "itemFeatureState": "INCLUDED",
+                    "SAOT": "false"
+                  }
+                ]
+              }
+            }
+          },
+          "commonLicenseAttributes": {
+            "commonLicenseAttribute": [
+              {
+                "name": "NAMED_USER_LICENSE",
+                "value": "FALSE"
+              }
+            ]
+          },
+          "activationAttributes": null,
+          "customAttributes": null,
+          "productKeyFingerprints": null
+        }
+      ]
+    },
+    "entitlementAttributes": null
+  }
+}
