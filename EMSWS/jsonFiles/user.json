@@ -1,0 +1,10 @@
+{
+  "user": {
+    "loginId": "",
+    "emailId": "",
+    "name": "",
+    "password": "",
+    "state": "ENABLE",
+    "userType": "STANDARD"
+  }
+}

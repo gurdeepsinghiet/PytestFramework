@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role>
+  <name>TestRole</name>
+  <description>Role description</description>
+  <state>ENABLE</state>
+  <permissions>
+    
+    <permission>
+      <resource>root/RAM</resource>
+      <action>V</action>
+    </permission>
+    <permission>
+      <resource>root/DM</resource>
+      <action>V</action>
+    </permission>
+    <permission>
+      <resource>root/CM</resource>
+      <action>VEAD</action>
+    </permission>
+    <permission>
+      <resource>root/EM</resource>
+      <action>VEA</action>
+    </permission>
+  
+  </permissions>
+   <users>
+    <user>
+      <id></id>
+    </user>
+  </users>
+</role>

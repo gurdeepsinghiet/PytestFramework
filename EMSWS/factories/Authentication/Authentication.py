@@ -47,8 +47,8 @@ class AuthenticationFactory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if self.isXml(regTokenXmlJsonPath):
-            self.updateXMLFile(regTokenXmlJsonPath,
+        if self.isXml(self.getModulePath()+regTokenXmlJsonPath):
+            self.updateXMLFile(self.getModulePath()+regTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./count"],
                                [identifier, refId1, refId2, count])
 
@@ -78,10 +78,10 @@ class AuthenticationFactory(object):
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                      variableList, xPathList, bearerAuth="Yes")
-        elif self.isJson(regTokenXmlJsonPath):
+        elif self.isJson(self.getModulePath()+regTokenXmlJsonPath):
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Bearer " + keyClockToken
-            self.UpdateJsonFile(regTokenXmlJsonPath,
+            self.UpdateJsonFile(self.getModulePath()+regTokenXmlJsonPath,
                                 ['$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [identifier, refId1, refId2, count])
             if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
@@ -105,8 +105,8 @@ class AuthenticationFactory(object):
         identifier="regToken"+self.RandomString(8)
         refId1="regTokenrefId1"+self.RandomString(8)
         refId2="regTokenrefId2"+self.RandomString(8)
-        if self.isXmlFile(regTokenXmlJsonPath):
-            self.updateXMLFile(regTokenXmlJsonPath,
+        if self.isXmlFile(self.getModulePath()+regTokenXmlJsonPath):
+            self.updateXMLFile(self.getModulePath()+regTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./count"],
                                [identifier, refId1, refId2, count])
             headers = CaseInsensitiveDict()
@@ -132,7 +132,7 @@ class AuthenticationFactory(object):
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                      variableList, xPathList, bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-        elif self.isJsonFile(regTokenXmlJsonPath):
+        elif self.isJsonFile(self.getModulePath()+regTokenXmlJsonPath):
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Bearer " + keyClockToken
             self.UpdateJsonFile(regTokenXmlJsonPath,
@@ -158,8 +158,8 @@ class AuthenticationFactory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if self.isXmlFile(regTokenXmlJsonPath):
-            self.updateXMLFile(regTokenXmlJsonPath,
+        if self.isXmlFile(self.getModulePath()+regTokenXmlJsonPath):
+            self.updateXMLFile(self.getModulePath()+regTokenXmlJsonPath,
                                [".//name", "./identifier", "./refId1", "./refId2", "./count"],
                                [customerName, identifier, identifier, refId1, refId2, count])
             headers = CaseInsensitiveDict()
@@ -186,10 +186,10 @@ class AuthenticationFactory(object):
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                     variableList, xPathList, bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-        elif self.isJsonFile(regTokenXmlJsonPath):
+        elif self.isJsonFile(self.getModulePath()+regTokenXmlJsonPath):
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Bearer " + keyClockToken
-            self.UpdateJsonFile(regTokenXmlJsonPath,
+            self.UpdateJsonFile(self.getModulePath()+regTokenXmlJsonPath,
                                 ['$..name','$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [customerName,identifier, refId1, refId2, count])
             if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
@@ -213,13 +213,13 @@ class AuthenticationFactory(object):
         identifier = "regCustToken" + self.RandomString(8)
         refId1 = "regCustTokenrefId1" + self.RandomString(8)
         refId2 = "regCustTokenrefId2" + self.RandomString(8)
-        if self.isXmlFile(regTokenXmlJsonPath):
+        if self.isXmlFile(self.getModulePath()+regTokenXmlJsonPath):
             headers = CaseInsensitiveDict()
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
             headers["Authorization"] = "Bearer " + keyClockToken
 
-            self.updateXMLFile(regTokenXmlJsonPath,
+            self.updateXMLFile(self.getModulePath()+regTokenXmlJsonPath,
                                [".//name", "./identifier", "./refId1", "./refId2", "./count"],
                                [customerName, identifier, identifier, refId1, refId2, count])
 
@@ -244,10 +244,10 @@ class AuthenticationFactory(object):
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                      variableList, xPathList,
                                      bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-        elif self.isJsonFile(regTokenXmlJsonPath):
+        elif self.isJsonFile(self.getModulePath()+regTokenXmlJsonPath):
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Bearer " + keyClockToken
-            self.UpdateJsonFile(regTokenXmlJsonPath,
+            self.UpdateJsonFile(self.getModulePath()+regTokenXmlJsonPath,
                                 ['$..name','$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [customerName,identifier, refId1, refId2, count])
             if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
@@ -318,12 +318,12 @@ class AuthenticationFactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         headers = CaseInsensitiveDict()
-        if self.isXmlFile(accessTokenXmlJsonPath):
+        if self.isXmlFile(self.getModulePath()+accessTokenXmlJsonPath):
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
             headers["Authorization"] = "Basic " + registrationToken
 
-            self.updateXMLFile(accessTokenXmlJsonPath,
+            self.updateXMLFile(self.getModulePath()+accessTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./fqdn"],
                                [identifier, refId1, refId2, fqdn], ["acessTokenupdatedXml"], [self.xmlstroutput])
             if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
@@ -347,8 +347,8 @@ class AuthenticationFactory(object):
                                      self.emsVariableList["acessTokenupdatedXml"], headers,
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                      variableList, xPathList, bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-        elif self.isJsonFile(accessTokenXmlJsonPath):
-            self.UpdateJsonFile(accessTokenXmlJsonPath,
+        elif self.isJsonFile(self.getModulePath()+accessTokenXmlJsonPath):
+            self.UpdateJsonFile(self.getModulePath()+accessTokenXmlJsonPath,
                                 ['$..identifier', '$..refId1', '$..refId2', '$..fqdn'],
                                 [identifier, refId1, refId2, fqdn])
             headers = CaseInsensitiveDict()
@@ -376,14 +376,14 @@ class AuthenticationFactory(object):
         refId1 = "regCustTokenrefId1" + self.RandomString(8)
         refId2 = "regCustTokenrefId2" + self.RandomString(8)
         fqdn = "fqdn" + self.RandomString(9)
-        if self.isXmlFile(accessTokenXmlJsonPath):
+        if self.isXmlFile(self.getModulePath()+accessTokenXmlJsonPath):
 
             headers = CaseInsensitiveDict()
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
             headers["Authorization"] = "Basic " + registrationToken
 
-            self.updateXMLFile(accessTokenXmlJsonPath,
+            self.updateXMLFile(self.getModulePath()+accessTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./fqdn"],
                                [identifier, refId1, refId2, fqdn])
             if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
@@ -406,8 +406,8 @@ class AuthenticationFactory(object):
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/authTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, "", "",
                                      variableList, xPathList, bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-        elif self.isJsonFile(accessTokenXmlJsonPath):
-            self.UpdateJsonFile(accessTokenXmlJsonPath,
+        elif self.isJsonFile(self.getModulePath()+accessTokenXmlJsonPath):
+            self.UpdateJsonFile(self.getModulePath()+accessTokenXmlJsonPath,
                                 ['$..identifier', '$..refId1', '$..refId2', '$..fqdn'],
                                 [identifier, refId1, refId2, fqdn])
             headers = CaseInsensitiveDict()
@@ -426,7 +426,7 @@ class AuthenticationFactory(object):
 
         return self
 
-    def getRegistrationToken(self, keyClockToken, expectedCode,resvariableList,resxPathList,id=None,refId1=None,outputXmlResVar=None):
+    def getRegistrationToken(self, keyClockToken, expectedCode,resvariableList,resxPathList,id=None,identifier=None,refId1=None,refId2=None,outputXmlResVar=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -436,10 +436,24 @@ class AuthenticationFactory(object):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens/" + id, "", headers,
                                 currentApiFuncName(),
                                 Constant.HTTP200, "", "",resvariableList,resxPathList,bearerAuth="Yes")
-        elif(refId1 != None):
-            self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens/refId1" + refId1, "", headers,
+        elif(identifier != None):
+            self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?identifier" + identifier, "", headers,
                                 currentApiFuncName(),
                                 Constant.HTTP200, "", "",resvariableList,resxPathList,bearerAuth="Yes")
+        elif (refId1 != None):
+            self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId1" + refId1, "",
+                                headers,
+                                currentApiFuncName(),
+                                Constant.HTTP200, "", "", resvariableList, resxPathList, bearerAuth="Yes")
+        elif (refId2 != None):
+            self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId2" + refId2, "",
+                                headers,
+                                currentApiFuncName(),
+                                Constant.HTTP200, "", "", resvariableList, resxPathList, bearerAuth="Yes")
+        elif (token != None):
+            self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?token=" + token, "",
+                                headers, currentApiFuncName(),
+                                Constant.HTTP200, "", "", bearerAuth="Yes")
         if self.getAuthApiresponse[1] == expectedCode:
             for i,resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])

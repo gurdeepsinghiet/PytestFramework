@@ -26,9 +26,6 @@ class RestApiAuthFactory(object):
             # Collectin data for Report
             if postapiAuthResponse.status_code == expectedresCode and self.isJson(postapiAuthResponse.text):
                 reportParam.setInputs(u.convertDictinarytoJson(requestBody))
-                response_dictionary = json.loads(postapiAuthResponse.text)
-                # LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(postapiAuthResponse.status_code)
                 reportParam.setResponseTime(postapiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(postapiAuthResponse.text)
@@ -95,9 +92,6 @@ class RestApiAuthFactory(object):
             LOGGER.info(getapiAuthResponse.text)
             if getapiAuthResponse.status_code == expectedresCode and self.isJson(getapiAuthResponse.text):
                 reportParam.setInputs("")
-                response_dictionary = json.loads(getapiAuthResponse.text)
-                # LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
                 LOGGER.info(getapiAuthResponse.text)
                 reportParam.setActualCode(getapiAuthResponse.status_code)
                 reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
@@ -125,7 +119,7 @@ class RestApiAuthFactory(object):
                     reportParam.setStatus("Pass")
                     reportParam.setExpectedResponse("")
             else:
-                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setInputs("")
                 reportParam.setActualCode(getapiAuthResponse.status_code)
                 reportParam.setResponseTime(getapiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(getapiAuthResponse.text)
@@ -137,7 +131,7 @@ class RestApiAuthFactory(object):
 
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
-            reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+            reportParam.setInputs("")
             reportParam.setActualCode("500")
             reportParam.setResponseTime("")
             reportParam.setActualRespone(e)
@@ -168,9 +162,6 @@ class RestApiAuthFactory(object):
             if patchApiAuthResponse.status_code == expectedresCode and self.isJson(patchApiAuthResponse.text):
                 reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 reportParam.setInputs(u.convertDictinarytoJson(requestBody))
-                response_dictionary = json.loads(patchApiAuthResponse.text)
-                # LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(patchApiAuthResponse.status_code)
                 reportParam.setResponseTime(patchApiAuthResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(patchApiAuthResponse.text)
@@ -219,5 +210,74 @@ class RestApiAuthFactory(object):
             LOGGER.error(e)
         self.data.append(reportParam.getReportParameters())
         self.patchAuthApiResponse = [patchApiAuthResponse.text, patchApiAuthResponse.status_code, reportParam.getReportParameters()]
+        LOGGER.info(self.data)
+        return self
+
+    def deleteAuthRequest(self, requestUrl, requestBody, headers, ApiName, expectedresCode, username, password,
+                          resvariableList=None, resxPathList=None, bearerAuth=None, outputXmlResVar=None):
+        u = UtilityClass()
+        reportParam = ReportParam()
+        try:
+            reportParam.setApiName(ApiName)
+            reportParam.setExpectedCode(expectedresCode)
+            if (bearerAuth == None):
+                deleteapiAuthResponse = requests.delete(requestUrl, data=requestBody, headers=headers,
+                                                        auth=(username, password))
+            elif (bearerAuth == "Yes"):
+                deleteapiAuthResponse = requests.delete(requestUrl, data=requestBody, headers=headers)
+                LOGGER.info(deleteapiAuthResponse.text)
+            if deleteapiAuthResponse.status_code == expectedresCode and self.isJson(deleteapiAuthResponse.text):
+                reportParam.setInputs("")
+                response_dictionary = json.loads(deleteapiAuthResponse.text)
+                # Collecting data for Report Status if Test step Pass
+                LOGGER.info(deleteapiAuthResponse.text)
+                reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                reportParam.setActualRespone("Entity deleted successfully")
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+                if (resvariableList != None and resxPathList != None):
+                    for i, jsonxpath in enumerate(resxPathList):
+                        LOGGER.info(resxPathList[i])
+                        LOGGER.info(resvariableList[i])
+                        self.getJsonXpathValue(deleteapiAuthResponse.text, resvariableList[i], resxPathList[i])
+            elif deleteapiAuthResponse.status_code == expectedresCode and self.isXml(deleteapiAuthResponse.text):
+                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                reportParam.setInputs("")
+                self.emsVariableList[outputXmlResVar] = deleteapiAuthResponse.text
+                myRoot = ET.fromstring(deleteapiAuthResponse.text)
+                for i, xpath in enumerate(resxPathList):
+                    selected_Tag = myRoot.find(xpath)
+                    self.emsVariableList[resvariableList[i]] = selected_Tag.text
+                    reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                    reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                    getRes = deleteapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
+                    reportParam.setActualRespone(getRes)
+                    reportParam.setStatus("Pass")
+                    reportParam.setExpectedResponse("")
+            else:
+                reportParam.setInputs("")
+                reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                reportParam.setActualRespone(deleteapiAuthResponse.text)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.data.append(reportParam.getReportParameters())
+                LOGGER.error(deleteapiAuthResponse.text)
+                pytest.fail("Response code not matched")
+        except requests.exceptions.RequestException as e:
+            LOGGER.error(e)
+            reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+            reportParam.setActualCode("500")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error(e)
+            pytest.fail("Connection error with server")
+        self.data.append(reportParam.getReportParameters())
+        self.deleteapiAuthResponse = [deleteapiAuthResponse.text, deleteapiAuthResponse.status_code,
+                                      reportParam.getReportParameters()]
         LOGGER.info(self.data)
         return self

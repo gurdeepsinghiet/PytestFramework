@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<role>
+  <name>TestRole</name>
+  <description>Role description</description>
+  <state>ENABLE</state>
+ <users>
+    <user>
+      <id></id>
+    </user>
+  </users>
+</role>

@@ -1,0 +1,15 @@
+{
+  "customer": {
+    "name": "",
+    "identifier": "",
+    "externalId": "",
+    "state": "ENABLE",
+    "contacts": {
+      "contact": [
+        {
+          "id": ""
+        }
+      ]
+    }
+  }
+}

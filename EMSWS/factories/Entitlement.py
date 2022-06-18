@@ -47,7 +47,7 @@ class Entitlementfacory(object):
     def addEntitlementNONLVHEAWOFF(self,entitlementjsonPath,product_name,product_version,customerName,expectedCode,variableList=None,xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
-        self.UpdateJsonFile(entitlementjsonPath, ['$..customer.name',
+        self.UpdateJsonFile(self.getModulePath()+entitlementjsonPath, ['$..customer.name',
                                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
                                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version',
                                                            '$.entitlement.entitlementAsWhole'],
@@ -86,8 +86,8 @@ class Entitlementfacory(object):
                              variableList, xPathList)
         return self
 
-    def addProductKeyEntitlment(productName, productVersion, eId, productKeyJsonPath,variableList=None,xPathList=None,expectedCode=None):
-        productKeyFile = open(productKeyJsonPath, 'r')
+    def addProductKeyEntitlment(self,productName, productVersion, eId, productKeyJsonPath,variableList=None,xPathList=None,expectedCode=None):
+        productKeyFile = open(self.getModulePath()+productKeyJsonPath, 'r')
         productKeyFileData = productKeyFile.read()
         productKey_json_object = json.loads(productKeyFileData)
         productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["name"] = productName

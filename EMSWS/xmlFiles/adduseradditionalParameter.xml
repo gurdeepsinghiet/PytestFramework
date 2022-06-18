@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+  <loginId></loginId>
+  <emailId></emailId>
+  <name></name>
+  <password></password>
+  <state>ENABLE</state>
+  <userType>STANDARD</userType>
+   <externalId></externalId>
+  <refId1></refId1>
+  <refId2></refId2>
+</user>

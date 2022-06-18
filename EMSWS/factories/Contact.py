@@ -7,11 +7,11 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class ContactFactory:
-    def addStandardContact(self,conatctJsonFilepath,ContactName,ContactEmailId,expectedCode,variableList=None,xPathList=None):
+    def addStandardContact(self,contactJsonFilepath,ContactName,ContactEmailId,expectedCode,variableList=None,xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(conatctJsonFilepath, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],[ContactName,"Thales@123", "Standard",ContactEmailId])
+        self.UpdateJsonFile(contactJsonFilepath, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],[ContactName,"Thales@123", "Standard",ContactEmailId])
         if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, currentApiFuncName(), 201,["contact_name","contact_id" ,"contact_emailId","contactRes"],['$.contact.name','$.contact.id','contact.emailId','$'])
             LOGGER.info(self.emsVariableList["contact_name"])

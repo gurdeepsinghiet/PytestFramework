@@ -1,6 +1,7 @@
 import EMSWS.Constant as Constant
 import logging
 import random
+import os
 import json
 from jsonpath_ng.ext import parse
 import string
@@ -68,6 +69,9 @@ class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFact
             return False
         return True
 
+    def getModulePath(self):
+        path = os.path.dirname(Constant.__file__)
+        return path
 
     def isJsonFile(self,jsonFilePath):
         with open(jsonFilePath, 'r') as f:

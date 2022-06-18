@@ -5,6 +5,6 @@
     <usedCount></usedCount>
     <refId1></refId1>
     <refId2></refId2>
-    <isEnabled></isEnabled>
+    <isEnabled>true</isEnabled>
 	<expiryDate></expiryDate>
 </registrationToken>

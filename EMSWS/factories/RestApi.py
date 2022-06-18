@@ -21,12 +21,8 @@ class RestApiUtilityFactory(object):
             reportParam.setInputs(requestBody)
             reportParam.setExpectedCode(expectedresCode)
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
-            #LOGGER.info(postapiResponse)
-            # Collectin data for Report
+            LOGGER.info(postapiResponse)
             if postapiResponse.status_code == expectedresCode:
-                response_dictionary = json.loads(postapiResponse.text)
-                #LOGGER.info(response_dictionary)
-                # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(postapiResponse.text)
@@ -62,7 +58,6 @@ class RestApiUtilityFactory(object):
         return self
 
     def getRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
-
         reportParam = ReportParam()
         try:
             reportParam.setApiName(ApiName)
@@ -70,12 +65,8 @@ class RestApiUtilityFactory(object):
             reportParam.setExpectedCode(expectedresCode)
             getapiRes = requests.get(requestUrl, requestBody, auth=(username, password))
             LOGGER.info(getapiRes.status_code)
-            # Collectin data for Report
             if getapiRes.status_code == expectedresCode:
                 try:
-                    response_dictionary = json.loads(getapiRes.text)
-                    LOGGER.info(response_dictionary)
-                    # Collecting data for Report Status if Test step Pass
                     reportParam.setActualCode(getapiRes.status_code)
                     reportParam.setResponseTime(getapiRes.elapsed.total_seconds())
                     reportParam.setActualRespone(getapiRes.text)
@@ -127,7 +118,6 @@ class RestApiUtilityFactory(object):
             reportParam.setExpectedCode(expectedresCode)
             deleteApiresponse = requests.delete(requestUrl, data=requestBody, auth=(username, password))
             LOGGER.info(deleteApiresponse)
-            # Collectin data for Report
             if deleteApiresponse.status_code == expectedresCode:
                 # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(deleteApiresponse.status_code)
@@ -264,8 +254,8 @@ class RestApiUtilityFactory(object):
         reportParam.setApiName("UpdateJsonPath")
         reportParam.setInputs(jsonpath)
         reportParam.setExpectedCode("200")
-        with open(jsonpath) as f:
-            try:
+        try:
+            with open(self.getModulePath()+jsonpath) as f:
                 jsonData = json.load(f)
                 LOGGER.info(jsonData)
                 for i, jsonxpath in enumerate(jsontagsList):
@@ -274,38 +264,46 @@ class RestApiUtilityFactory(object):
                     LOGGER.info(jsonpath_expression)
                     jsonpath_expression.find(jsonData)
                     jsonpath_expression.update(jsonData, jsonValueList[i])
-                try:
-                    response = json.dumps(jsonData, indent=2)
-                    LOGGER.info(response)
-                    reportParam.setActualCode("200")
-                    reportParam.setResponseTime("")
-                    reportParam.setActualRespone(response)
-                    reportParam.setStatus("Pass")
-                    reportParam.setExpectedResponse("")
-                    self.UpdateJsonFileResponse=response
-                    if (variableList != None and xPathList != None):
-                        for i,jsonxpath in enumerate(xPathList):
-                            self.getJsonXpathValue(response, variableList[i], xPathList[i])
-                    self.data.append(reportParam.getReportParameters())
-                except TypeError as e:
-                    reportParam.setActualCode("404")
-                    reportParam.setResponseTime("")
-                    reportParam.setActualRespone(e)
-                    reportParam.setStatus("Failed")
-                    reportParam.setExpectedResponse("")
-                    self.data.append(reportParam.getReportParameters())
-                    LOGGER.error(e)
-                    pytest.fail("problem with json decoding")
-
-            except json.decoder.JSONDecodeError as e:
-                reportParam.setActualCode("404")
+                response = json.dumps(jsonData, indent=2)
+                LOGGER.info(response)
+                reportParam.setActualCode("200")
                 reportParam.setResponseTime("")
-                reportParam.setActualRespone(e)
-                reportParam.setStatus("Failed")
+                reportParam.setActualRespone(response)
+                reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
+                self.UpdateJsonFileResponse = response
+                if (variableList != None and xPathList != None):
+                    for i, jsonxpath in enumerate(xPathList):
+                        self.getJsonXpathValue(response, variableList[i], xPathList[i])
                 self.data.append(reportParam.getReportParameters())
-                LOGGER.error(e)
-                pytest.fail("problem with json decoding")
+
+        except FileNotFoundError as e:
+            reportParam.setActualCode("404")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error(e)
+            pytest.fail("File Not found at this path")
+        except json.decoder.JSONDecodeError as e:
+            reportParam.setActualCode("404")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error(e)
+            pytest.fail("problem with json decoding")
+        except TypeError as e:
+            reportParam.setActualCode("404")
+            reportParam.setResponseTime("")
+            reportParam.setActualRespone(e)
+            reportParam.setStatus("Failed")
+            reportParam.setExpectedResponse("")
+            self.data.append(reportParam.getReportParameters())
+            LOGGER.error(e)
+            pytest.fail("problem with json decoding")
         return self
 
     def UpdateJson(self,jsonDictionary,jsontagsList,jsonValueList,resVarList=None,resJpathList=None):
