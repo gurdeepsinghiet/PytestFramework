@@ -427,6 +427,7 @@ class AuthenticationFactory(object):
         return self
 
     def getRegistrationToken(self, keyClockToken, expectedCode,resvariableList,resxPathList,id=None,identifier=None,refId1=None,refId2=None,outputXmlResVar=None):
+
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -460,4 +461,40 @@ class AuthenticationFactory(object):
                 LOGGER.info(self.emsVariableList[resvariableList[i]])
                 LOGGER.info("enter in the get Api")
 
-        self
+        return self
+
+    def deleteRegistrationToken(self, keyClockToken, expectedCode,
+                                resvariableList=None, resxPathList=None, id=None, identifier=None, refId1=None,
+                                refId2=None, token=None, customer=None, customerId=None, outputXmlResVar=None):
+        utility = UtilityClass()
+        currentApiFuncName = utility.currentApiName()
+        LOGGER.info(currentApiFuncName())
+        headers = CaseInsensitiveDict()
+        headers["Authorization"] = "Bearer " + keyClockToken
+        if (id != None):
+            self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens/" + id, "", headers,
+                                   currentApiFuncName(), Constant.HTTP204, "", "", bearerAuth="Yes")
+        elif (identifier != None):
+            self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?identifier=" + identifier, "",
+                                   headers, currentApiFuncName(),
+                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+        elif (refId1 != None):
+            self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId1=" + refId1, "",
+                                   headers, currentApiFuncName(),
+                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+        elif (refId2 != None):
+            self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId2=" + refId2, "",
+                                   headers, currentApiFuncName(),
+                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+        elif (token != None):
+            self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?token=" + token, "",
+                                   headers, currentApiFuncName(),
+                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+        if self.deleteapiAuthResponse[0] == expectedCode:
+            if (int(self.deleteApiresponse[0])== Constant.HTTP204):
+                LOGGER.info("Contact deleted successfully")
+            else:
+                for i, resvar in enumerate(resvariableList):
+                    LOGGER.info(resvariableList[i])
+                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+        return self

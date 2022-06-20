@@ -10,7 +10,6 @@ import xml.etree.ElementTree as ET
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 
-
 class RestApiAuthFactory(object):
     def PostAuthRequest(self, requestUrl, requestBody,headers,ApiName,expectedresCode,username,password,variableList=None,xPathList=None,bearerAuth=None,outputXmlResVar=None):
         u=UtilityClass()
@@ -225,46 +224,63 @@ class RestApiAuthFactory(object):
                                                         auth=(username, password))
             elif (bearerAuth == "Yes"):
                 deleteapiAuthResponse = requests.delete(requestUrl, data=requestBody, headers=headers)
-                LOGGER.info(deleteapiAuthResponse.text)
-            if deleteapiAuthResponse.status_code == expectedresCode and self.isJson(deleteapiAuthResponse.text):
-                reportParam.setInputs("")
-                response_dictionary = json.loads(deleteapiAuthResponse.text)
-                # Collecting data for Report Status if Test step Pass
-                LOGGER.info(deleteapiAuthResponse.text)
-                reportParam.setActualCode(deleteapiAuthResponse.status_code)
-                reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
-                reportParam.setActualRespone("Entity deleted successfully")
-                reportParam.setStatus("Pass")
-                reportParam.setExpectedResponse("")
-                if (resvariableList != None and resxPathList != None):
-                    for i, jsonxpath in enumerate(resxPathList):
-                        LOGGER.info(resxPathList[i])
-                        LOGGER.info(resvariableList[i])
-                        self.getJsonXpathValue(deleteapiAuthResponse.text, resvariableList[i], resxPathList[i])
-            elif deleteapiAuthResponse.status_code == expectedresCode and self.isXml(deleteapiAuthResponse.text):
-                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
-                reportParam.setInputs("")
-                self.emsVariableList[outputXmlResVar] = deleteapiAuthResponse.text
-                myRoot = ET.fromstring(deleteapiAuthResponse.text)
-                for i, xpath in enumerate(resxPathList):
-                    selected_Tag = myRoot.find(xpath)
-                    self.emsVariableList[resvariableList[i]] = selected_Tag.text
+                LOGGER.info(deleteapiAuthResponse.text+"mmmmm")
+            if (deleteapiAuthResponse.text != ""):
+                if deleteapiAuthResponse.status_code == expectedresCode and self.isJson(deleteapiAuthResponse.text):
+                    reportParam.setInputs("")
+                    LOGGER.info(deleteapiAuthResponse.text)
                     reportParam.setActualCode(deleteapiAuthResponse.status_code)
                     reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
-                    getRes = deleteapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
-                    reportParam.setActualRespone(getRes)
+                    reportParam.setActualRespone("Entity deleted successfully")
                     reportParam.setStatus("Pass")
                     reportParam.setExpectedResponse("")
-            else:
-                reportParam.setInputs("")
-                reportParam.setActualCode(deleteapiAuthResponse.status_code)
-                reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
-                reportParam.setActualRespone(deleteapiAuthResponse.text)
-                reportParam.setStatus("Failed")
-                reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
-                LOGGER.error(deleteapiAuthResponse.text)
-                pytest.fail("Response code not matched")
+                    if (resvariableList != None and resxPathList != None):
+                        for i, jsonxpath in enumerate(resxPathList):
+                            LOGGER.info(resxPathList[i])
+                            LOGGER.info(resvariableList[i])
+                            self.getJsonXpathValue(deleteapiAuthResponse.text, resvariableList[i], resxPathList[i])
+                elif deleteapiAuthResponse.status_code == expectedresCode and self.isXml(deleteapiAuthResponse.text):
+                    reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+                    reportParam.setInputs("")
+                    self.emsVariableList[outputXmlResVar] = deleteapiAuthResponse.text
+                    myRoot = ET.fromstring(deleteapiAuthResponse.text)
+                    for i, xpath in enumerate(resxPathList):
+                        selected_Tag = myRoot.find(xpath)
+                        self.emsVariableList[resvariableList[i]] = selected_Tag.text
+                        reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                        reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                        getRes = deleteapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
+                        reportParam.setActualRespone(getRes)
+                        reportParam.setStatus("Pass")
+                        reportParam.setExpectedResponse("")
+                else:
+                    reportParam.setInputs("")
+                    reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                    reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                    reportParam.setActualRespone(deleteapiAuthResponse.text)
+                    reportParam.setStatus("Failed")
+                    reportParam.setExpectedResponse("")
+                    self.data.append(reportParam.getReportParameters())
+                    LOGGER.error(deleteapiAuthResponse.text)
+                    pytest.fail("Response code not matched")
+            elif(deleteapiAuthResponse.text  == ""):
+                if deleteapiAuthResponse.status_code == expectedresCode:
+                    reportParam.setInputs("")
+                    reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                    reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                    reportParam.setActualRespone("Entity deleted successfully")
+                    reportParam.setStatus("Pass")
+                    reportParam.setExpectedResponse("")
+                else:
+                    reportParam.setInputs("")
+                    reportParam.setActualCode(deleteapiAuthResponse.status_code)
+                    reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
+                    reportParam.setActualRespone(deleteapiAuthResponse.text)
+                    reportParam.setStatus("Failed")
+                    reportParam.setExpectedResponse("")
+                    self.data.append(reportParam.getReportParameters())
+                    LOGGER.error(deleteapiAuthResponse.text)
+                    pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
             reportParam.setInputs(u.convertDictinarytoJson(requestBody))
