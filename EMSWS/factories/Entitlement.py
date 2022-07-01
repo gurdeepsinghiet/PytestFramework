@@ -1,13 +1,12 @@
 import json
 from EMSWS.Utilities import UtilityClass
 import requests
-import  EMSWS.Constant as Constant
+import  EMSWS.EMSConfig as Constant
 import logging
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
-
 
 class Entitlementfacory(object):
 
@@ -151,7 +150,7 @@ class Entitlementfacory(object):
             self.deleteRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId,"",currentApiFuncName(), expectedCode,resvariableList, resxPathList)
         if self.deleteApiresponse[0] == expectedCode:
             if (self.deleteApiresponse[0] == Constant.HTTP204):
-                LOGGER.info("Contact deleted successfully")
+                LOGGER.info("Entitlement deleted successfully")
             else:
                 for i, resvar in enumerate(resvariableList):
                     LOGGER.info(resvariableList[i])

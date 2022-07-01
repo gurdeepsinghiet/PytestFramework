@@ -1,113 +1,113 @@
 import logging
 from EMSWS.Utilities import UtilityClass
-import  EMSWS.Constant as Constant
+import EMSWS.EMSConfig as Constant
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
-class CustomerFactory:
+class CustomerFactory(object):
 
-    def addCustomer(self, customerJsonPath,CustomerName,contact_id,expectedCode,variableList=None,xPathList=None):
+    def addCustomerJsonFilePath(self, customerJsonPath,CustomerName,contact_id,expectedCode,outVariableList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         self.UpdateJsonFile(customerJsonPath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],[CustomerName,CustomerName,contact_id],["custRes"],['$'])
-        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+        if expectedCode == Constant.HTTP201 and outVariableList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), 201,["customerName","custGUID","customerRes"],['$.customer.name','$.customer.id','$'])
             LOGGER.info(self.emsVariableList["customerName"])
             LOGGER.info(self.emsVariableList["custGUID"])
             LOGGER.info(self.emsVariableList["customerRes"])
-        elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,variableList, xPathList)
+        elif expectedCode != None and outVariableList != None and outJsonPathList != None:
+            self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,outVariableList, outJsonPathList)
         return self
 
-    def createCustomer(self, customerUpdate_json, expectedCode, variableList=None, xPathList=None):
+    def createCustomerJson(self, customer_json, expectedCode, outVariableList=None, outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
-            self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), 201,
+        if expectedCode == Constant.HTTP201 and outVariableList == None and outJsonPathList == None:
+            self.PostRequest(url + '/ems/api/v5/customers', customer_json, currentApiFuncName(), 201,
                              ["customerName", "custGUID", "customerRes"], ['$.customer.name', '$.customer.id', '$'])
             LOGGER.info(self.emsVariableList["customerName"])
             LOGGER.info(self.emsVariableList["custGUID"])
             LOGGER.info(self.emsVariableList["customerRes"])
-        elif expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/customers', customerUpdate_json, currentApiFuncName(), expectedCode,
-                             variableList, xPathList)
+        elif expectedCode != None and outVariableList != None and outJsonPathList != None:
+            self.PostRequest(url + '/ems/api/v5/customers', customer_json, currentApiFuncName(), expectedCode,
+                             outVariableList, outJsonPathList)
         return self
 
-    def partialUpdateCustomer(self, customer_json, expectedCode, resvariableList, resxPathList, id=None, emailId=None,
+    def partialUpdateCustomer(self, customer_json, expectedCode, outVariableList, outJsonPathList, id=None, emailId=None,
                               identifier=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
             self.patchRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
-                                         expectedCode, resxPathList)
+                                         expectedCode,outVariableList, outJsonPathList)
         elif emailId != None:
             self.patchRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
-                                         currentApiFuncName(), expectedCode, resxPathList)
+                                         currentApiFuncName(), expectedCode,outVariableList, outJsonPathList)
         elif identifier != None:
             self.patchRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
-                                         currentApiFuncName(), expectedCode, resxPathList)
+                                         currentApiFuncName(), expectedCode, outVariableList,outJsonPathList)
         elif externalId != None:
             self.patchRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
-                                         currentApiFuncName(), expectedCode, resxPathList)
+                                         currentApiFuncName(), expectedCode, outVariableList,outJsonPathList)
         if self.patchApiResponse[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            for i, resvar in enumerate(outVariableList):
+                LOGGER.info(outVariableList[i])
+                LOGGER.info(self.emsVariableList[outVariableList[i]])
         return self
 
-    def deleteCustomer(self, expectedCode,resvariableList=None, resxPathList=None, id=None, emailId=None, identifier=None,
+    def deleteCustomer(self, expectedCode,outVariableList=None, outJsonPathList=None, id=None, emailId=None, identifier=None,
                        externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            self.deleteRequest(url + '/ems/api/v5/customers/' + id,"", currentApiFuncName(), expectedCode,resvariableList, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/customers/' + id,"", currentApiFuncName(), expectedCode,outVariableList, outJsonPathList)
         elif emailId != None:
             self.deleteRequest(url + '/ems/api/v5/customers/emailId=' + emailId,"", currentApiFuncName(),
-                                          expectedCode,resvariableList, resxPathList)
+                                          expectedCode,outVariableList, outJsonPathList)
         elif identifier != None:
             self.deleteRequest(url + '/ems/api/v5/customers/identifier=' + identifier, "",currentApiFuncName(),
-                                          expectedCode,resvariableList, resxPathList)
+                                          expectedCode,outVariableList, outJsonPathList)
         elif externalId != None:
             self.deleteRequest(url + '/ems/api/v5/customers/externalId=' + externalId, "",currentApiFuncName(),
-                                          expectedCode,resvariableList, resxPathList)
+                                          expectedCode,outVariableList, outJsonPathList)
         if self.deleteApiresponse[0] == expectedCode:
             if(self.deleteApiresponse[0] == Constant.HTTP204):
-                LOGGER.info("Contact deleted successfully")
+                LOGGER.info("Customer deleted successfully")
             else:
-                for i, resvar in enumerate(resvariableList):
-                    LOGGER.info(resvariableList[i])
-                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+                for i, resvar in enumerate(outVariableList):
+                    LOGGER.info(outVariableList[i])
+                    LOGGER.info(self.emsVariableList[outVariableList[i]])
         return self
 
-    def replaceCustomer(self, customer_json, expectedCode, resvariableList, resxPathList, id=None, emailId=None,
+    def replaceCustomer(self, customer_json, expectedCode, outVariableList, outJsonPathList, id=None, emailId=None,
                         identifier=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
             self.putRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
-                                       expectedCode, resxPathList)
+                                       expectedCode,outVariableList, outJsonPathList)
         elif emailId != None:
             self.putRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
-                                       currentApiFuncName(), expectedCode, resxPathList)
+                                       currentApiFuncName(), expectedCode,outVariableList, outJsonPathList)
         elif identifier != None:
             self.putRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
-                                       currentApiFuncName(), expectedCode, resxPathList)
+                                       currentApiFuncName(), expectedCode,outVariableList, outJsonPathList)
         elif externalId != None:
             self.putRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
-                                       currentApiFuncName(), expectedCode, resxPathList)
+                                       currentApiFuncName(), expectedCode,outVariableList,outJsonPathList)
         if self.putApiResponse[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            for i, resvar in enumerate(outVariableList):
+                LOGGER.info(outVariableList[i])
+                LOGGER.info(self.emsVariableList[outVariableList[i]])
         return self
 
-    def searchCustomer(self, expectedCode, resvariableList, resxPathList, id=None, name=None, identifier=None,
+    def searchCustomer(self, expectedCode, outVariableList, outJsonPathList, id=None, name=None, identifier=None,
                        externalId=None, refId=None, crmId=None, description=None, marketGroupId=None,
                        marketGroupName=None, state=None, contactEmailId=None, contactId=None):
         utility = UtilityClass()
@@ -140,11 +140,11 @@ class CustomerFactory:
             responseurl += "contactId=" + contactId + "&"
         LOGGER.info(url + "/ems/api/v5/customers?" + responseurl[0:-1])
         self.getRequest(url + "/ems/api/v5/customers?" + responseurl[0:-1], "", currentApiFuncName(),
-                                   expectedCode, resvariableList, resxPathList)
+                                   expectedCode, outVariableList, outJsonPathList)
         if self.getApiresponse[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            for i, resvar in enumerate(outVariableList):
+                LOGGER.info(outVariableList[i])
+                LOGGER.info(self.emsVariableList[outVariableList[i]])
         return self
 
 

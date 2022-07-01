@@ -1,6 +1,6 @@
 import requests
 import logging
-import EMSWS.Constant as Constant
+import EMSWS.EMSConfig as Constant
 from EMSWS.ReportParameters import ReportParam
 import pytest
 import json
@@ -22,6 +22,7 @@ class RestApiUtilityFactory(object):
             reportParam.setExpectedCode(expectedresCode)
             postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
             LOGGER.info(postapiResponse)
+            #if expected code matches status_code of RestApi response,then reportParam collect Status Pass data for the report
             if postapiResponse.status_code == expectedresCode:
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
@@ -33,6 +34,7 @@ class RestApiUtilityFactory(object):
                         LOGGER.info(xPathList[i])
                         LOGGER.info(variableList[i])
                         self.getJsonXpathValue(postapiResponse.text,variableList[i],xPathList[i])
+            #if expected code does matches status_code of RestApi response,then reportParam collect Status Fail data for the report
             else:
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
@@ -41,7 +43,9 @@ class RestApiUtilityFactory(object):
                 reportParam.setExpectedResponse("")
                 self.data.append(reportParam.getReportParameters())
                 LOGGER.error(postapiResponse.text)
+                #Test case will be terminate at this Step
                 pytest.fail("Response code not matched")
+        #the below Step handle exception in the Rest Api like Server error,Connection error etc.
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
             reportParam.setActualCode("500")
@@ -330,7 +334,7 @@ class RestApiUtilityFactory(object):
                 if (resVarList != None and resJpathList != None):
                     for i, jsonxpath in enumerate(resJpathList):
                         self.getJsonXpathValue(response, resVarList[i], resJpathList[i])
-                    self.data.append(reportParam.getReportParameters())
+                self.data.append(reportParam.getReportParameters())
             except TypeError as e:
                     reportParam.setActualCode("404")
                     reportParam.setResponseTime("")

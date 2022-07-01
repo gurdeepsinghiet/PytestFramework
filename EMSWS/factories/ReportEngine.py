@@ -1,7 +1,7 @@
 import logging
 import os
 import EMSWS
-import  EMSWS.Constant as Constant
+import  EMSWS.EMSConfig as Constant
 LOGGER = logging.getLogger(__name__)
 class ReportGenerator():
     testsummaryData=[]

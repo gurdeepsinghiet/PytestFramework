@@ -4,7 +4,7 @@ import sys
 import pytest
 from jsonpath_ng.ext import parse
 from EMSWS.Utilities import UtilityClass
-import  EMSWS.Constant as Constant
+import  EMSWS.EMSConfig as Constant
 import logging
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -184,20 +184,21 @@ class LicenseModelfactory(object):
     def getEnforcementId(self) ->list:
         return self.enforcementProps
 
-    def searchFlexibleLicenseModel(self):
+    def searchFlexibleLicenseModel(self,expectedCode,outVariableList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         self.searchEnforcement();
         enforcementId=self.getEnforcementId()[0];
-        self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),200)
-        if self.getApiresponse[1] == 200:
-            flexibleLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
-            #LOGGER.info(flexibleLicenseModelJson)
-            self.FlexibleLicenseModelJson = flexibleLicenseModelJson
+        self.getRequest(url +'/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Flexible License Model', "", currentApiFuncName(),expectedCode,outVariableList,outJsonPathList)
+        if self.getApiresponse[1] == expectedCode:
+            for i, resvar in enumerate(outVariableList):
+                LOGGER.info(outVariableList[i])
+                LOGGER.info(self.emsVariableList[outVariableList[i]])
+            self.FlexibleLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
         return self
 
-    def searchCloudConnectedLicenceModel(self):
+    def searchCloudConnectedLicenceModel(self,expectedCode,outVariableList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -205,11 +206,12 @@ class LicenseModelfactory(object):
         enforcementId = self.getEnforcementId()[0];
         self.getRequest(
             url + '/ems/api/v5/enforcements/' + enforcementId + '/licenseModels/name=Connected License Model', "",
-            currentApiFuncName(), 200)
-        if self.getApiresponse[1] == 200:
-            cloudConnectedLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
-            LOGGER.info(cloudConnectedLicenseModelJson)
-            self.CloudConnectedLicenseModelJson = cloudConnectedLicenseModelJson
+            currentApiFuncName(), expectedCode,outVariableList,outJsonPathList)
+        if self.getApiresponse[1] == expectedCode:
+            for i, resvar in enumerate(outVariableList):
+                LOGGER.info(outVariableList[i])
+                LOGGER.info(self.emsVariableList[outVariableList[i]])
+            self.CloudConnectedLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
         return self
 
 

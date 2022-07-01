@@ -1,6 +1,6 @@
 import requests
 import logging
-import EMSWS.Constant as Constant
+import EMSWS.EMSConfig as Constant
 from EMSWS.ReportParameters import ReportParam
 import pytest
 import json
@@ -71,7 +71,6 @@ class RestApiAuthFactory(object):
             self.data.append(reportParam.getReportParameters())
             pytest.fail("Connection error with server")
             LOGGER.error(e)
-
         self.data.append(reportParam.getReportParameters())
         LOGGER.info(self.data)
 
@@ -151,9 +150,9 @@ class RestApiAuthFactory(object):
         try:
             reportParam.setApiName(ApiName)
             reportParam.setExpectedCode(expectedresCode)
-            if(bearerAuth == None):
+            if bearerAuth is None:
                 patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers,auth=(username, password))
-            else:
+            elif bearerAuth == "Yes":
                 patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers)
                 LOGGER.info(patchApiAuthResponse.text)
             # Collectin data for Report
