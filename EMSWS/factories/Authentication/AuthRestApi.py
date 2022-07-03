@@ -3,7 +3,6 @@ import logging
 import EMSWS.EMSConfig as Constant
 from EMSWS.ReportParameters import ReportParam
 import pytest
-import json
 from EMSWS.Utilities import UtilityClass
 import xml.etree.ElementTree as ET
 

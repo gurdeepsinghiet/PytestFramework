@@ -29,7 +29,7 @@ url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
-class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
+class EMSFactory( EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
                  ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
                  RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,
                  UserManagementFactory,RoleManagementFactory,
@@ -37,7 +37,7 @@ class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFact
 
     def __init__(self):
         self.data=[]
-        self.emsVariableList={}
+        self.out_param_List={}
     @staticmethod
     def RandomString(length) ->str:
         # Print the string in Lowercase
@@ -49,8 +49,8 @@ class EMSFactory(EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFact
         json_data = json.loads(jsonString)
         jsonpath_expression = parse(jsonXpath)
         match = jsonpath_expression.find(json_data)
-        self.emsVariableList[jsonVarible] = match[0].value
-        LOGGER.info(self.emsVariableList)
+        self.out_param_List[jsonVarible] = match[0].value
+        LOGGER.info(self.out_param_List)
 
 
     def getJsonXpathsValues(self,jsonString,jsonVaribleList,jsonXpathList):

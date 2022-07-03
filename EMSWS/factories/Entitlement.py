@@ -2,6 +2,7 @@ import json
 from EMSWS.Utilities import UtilityClass
 import requests
 import  EMSWS.EMSConfig as Constant
+import  EMSWS.ErrorCode as ErrorCode
 import logging
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -10,40 +11,40 @@ password = Constant.EMSPassword
 
 class Entitlementfacory(object):
 
-    def addEntitlementNONLVHEAWON(self,entitlementjsonPath,product_name,product_version,customerName,expectedCode,variableList=None,xPathList=None):
+    def addEntitlementNonLVHEawOnJsonPath(self,entitlementjsonPath,product_name,product_version,customerName,expectedCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         self.UpdateJsonFile(entitlementjsonPath, ['$..customer.name', '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
                                             '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version','$.entitlement.entitlementAsWhole'], [customerName, product_name, product_version,True], ["entitlementRes"],
                         ['$'])
-        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,["eid","entitelementid","entRes","pkId"],['$.entitlement.eId','$.entitlement.id','$','$.entitlement.productKeys.productKey[0].pkId'])
-            LOGGER.info(self.emsVariableList["eid"])
-            LOGGER.info(self.emsVariableList["entitelementid"])
-            LOGGER.info(self.emsVariableList["entRes"])
-            LOGGER.info(self.emsVariableList["pkId"])
-        if expectedCode != None and variableList !=None and xPathList !=None:
+            LOGGER.info(self.out_param_List["eid"])
+            LOGGER.info(self.out_param_List["entitelementid"])
+            LOGGER.info(self.out_param_List["entRes"])
+            LOGGER.info(self.out_param_List["pkId"])
+        if expectedCode != None and outParameterList !=None and outJsonPathList !=None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
-                             variableList, xPathList)
+                             outParameterList, outJsonPathList)
         return self
 
-    def createEntitlementNONLVHEAWON(self, entitlement_json, expectedCode, variableList=None, xPathList=None):
+    def addEntitlementNonLvhEawOnJson(self, entitlement_json, expectedCode, outParameterList=None, outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
 
-        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,["eid", "entitelementid", "entRes", "pkId"], ['$.entitlement.eId', '$.entitlement.id', '$',
                                                                            '$.entitlement.productKeys.productKey[0].pkId'])
-            LOGGER.info(self.emsVariableList["eid"])
-            LOGGER.info(self.emsVariableList["entitelementid"])
-            LOGGER.info(self.emsVariableList["entRes"])
-            LOGGER.info(self.emsVariableList["pkId"])
-        if expectedCode != None and variableList != None and xPathList != None:
+            LOGGER.info(self.out_param_List["eid"])
+            LOGGER.info(self.out_param_List["entitelementid"])
+            LOGGER.info(self.out_param_List["entRes"])
+            LOGGER.info(self.out_param_List["pkId"])
+        if expectedCode != None and outParameterList != None and outJsonPathList != None:
             self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
-                             variableList, xPathList)
+                             outParameterList, outJsonPathList)
         return self
 
-    def addEntitlementNONLVHEAWOFF(self,entitlementjsonPath,product_name,product_version,customerName,expectedCode,variableList=None,xPathList=None):
+    def addEntitlementNonLvhEawOffJsonPath(self,entitlementjsonPath,product_name,product_version,customerName,expectedCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         self.UpdateJsonFile(self.getModulePath()+entitlementjsonPath, ['$..customer.name',
@@ -52,40 +53,40 @@ class Entitlementfacory(object):
                                                            '$.entitlement.entitlementAsWhole'],
                             [customerName, product_name, product_version, False], ["entitlementRes"],
                             ['$'])
-        if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(),
                              expectedCode, ["eid", "entitelementid", "entRes", "pkId"],
                              ['$.entitlement.eId', '$.entitlement.id', '$',
                               '$.entitlement.productKeys.productKey[0].pkId'])
-            LOGGER.info(self.emsVariableList["eid"])
-            LOGGER.info(self.emsVariableList["entitelementid"])
-            LOGGER.info(self.emsVariableList["entRes"])
-            LOGGER.info(self.emsVariableList["pkId"])
-        if expectedCode != None and variableList != None and xPathList != None:
+            LOGGER.info(self.out_param_List["eid"])
+            LOGGER.info(self.out_param_List["entitelementid"])
+            LOGGER.info(self.out_param_List["entRes"])
+            LOGGER.info(self.out_param_List["pkId"])
+        if expectedCode != None and outParameterList != None and outJsonPathList != None:
             self.PostRequest(url + '/ems/api/v5/entitlements', self.UpdateJsonFileResponse, currentApiFuncName(),
                              expectedCode,
-                             variableList, xPathList)
+                             outParameterList, outJsonPathList)
         return self
 
-    def createEntitlementNONLVHEAWOFF(self, entitlement_json, expectedCode,
-                                      variableList=None, xPathList=None):
+    def addEntitlementNonLvhEawOffJson(self, entitlement_json, expectedReturnCode,
+                                      outParameterList=None, outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if expectedCode == 201 and variableList == None and xPathList == None:
-            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
+        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedReturnCode,
                              ["eid", "entitelementid", "entRes", "pkId"],
                              ['$.entitlement.eId', '$.entitlement.id', 'S', '$.entitlement',
                               '$.entitlement.productKeys.productKey[0].pkId'])
-            LOGGER.info(self.emsVariableList["eid"])
-            LOGGER.info(self.emsVariableList["entitelementid"])
-            LOGGER.info(self.emsVariableList["entRes"])
-        if expectedCode != None and variableList != None and xPathList != None:
-            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedCode,
-                             variableList, xPathList)
+            LOGGER.info(self.out_param_List["eid"])
+            LOGGER.info(self.out_param_List["entitelementid"])
+            LOGGER.info(self.out_param_List["entRes"])
+        if expectedReturnCode != None and outParameterList != None and outJsonPathList != None:
+            self.PostRequest(url + '/ems/api/v5/entitlements', entitlement_json, currentApiFuncName(), expectedReturnCode,
+                             outParameterList, outJsonPathList)
         return self
 
-    def addProductKeyEntitlment(self,productName, productVersion, eId, productKeyJsonPath,variableList=None,xPathList=None,expectedCode=None):
+    def addProductKeyEntitlment(self,productName, productVersion, eId, productKeyJsonPath,outParameterList=None,outJsonPathList=None,expectedCode=None):
         productKeyFile = open(self.getModulePath()+productKeyJsonPath, 'r')
         productKeyFileData = productKeyFile.read()
         productKey_json_object = json.loads(productKeyFileData)
@@ -99,81 +100,81 @@ class Entitlementfacory(object):
         print(responseEntitlement.text)
 
 
-    def partialUpdateEntitlement(self,entitlement_json,expectedCode,resvariableList, resxPathList,id=None,eId=None,externalId=None):
+    def partialUpdateEntitlement(self,entitlement_json,expectedReturnCode,outParameterList, outJsonPathList,id=None,eId=None,externalId=None):
         # getting the name of Current Running Test cases
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            self.patchRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(), expectedCode,
-                                         resvariableList, resxPathList)
+            self.patchRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(), expectedReturnCode,
+                                         outParameterList, outJsonPathList)
         elif eId != None:
-            self.patchRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
+            self.patchRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
         elif externalId != None:
-            self.patchRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId , entitlement_json,currentApiFuncName(), 200, resvariableList, resxPathList)
-        if self.patchApiResponse[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            self.patchRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId , entitlement_json,currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
+        if self.patchApiResponse[1] == expectedReturnCode:
+            for i, resvar in enumerate(outParameterList):
+                LOGGER.info(outParameterList[i])
+                LOGGER.info(self.out_param_List[outParameterList[i]])
         return self
 
-    def getEntitlement(self,resvariableList,resxPathList,expectedCode,entitlementId=None, id=None, eId=None, externalId=None):
+    def getEntitlement(self,outParameterList,outJsonPathList,expectedReturnCode,entitlementId=None, id=None, eId=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if entitlementId != None:
             self.getRequest(url + '/ems/api/v5/entitlements/' + entitlementId, "",
-                                           currentApiFuncName(), 200, resvariableList, resxPathList)
+                                           currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
         elif id != None:
             self.getRequest(url + '/ems/api/v5/entitlements/' + id, "",
-                                           currentApiFuncName(), 200, resvariableList, resxPathList)
+                                           currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
         elif eId != None:
             self.getApiresponse = self.getRequest(url + '/ems/api/v5/entitlements/eId=' + eId, "",
-                                           currentApiFuncName(), 200, resvariableList, resxPathList)
+                                           currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
         elif externalId != None:
-            self.getRequest(url + '/ems/api/v5/entitlements/externalId=' + externalId, "",currentApiFuncName(),200,resvariableList,resxPathList)
-        if self.getApiresponse[1] == expectedCode and resvariableList !=None and resxPathList !=None:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+            self.getRequest(url + '/ems/api/v5/entitlements/externalId=' + externalId, "",currentApiFuncName(),200,outParameterList,outJsonPathList)
+        if self.getApiresponse[1] == expectedReturnCode and outParameterList !=None and outJsonPathList !=None:
+            for i, resvar in enumerate(outParameterList):
+                LOGGER.info(outParameterList[i])
+                LOGGER.info(self.out_param_List[outParameterList[i]])
         return self
 
-    def deleteEntitlement(self, expectedCode,resvariableList=None, resxPathList=None, id=None, eId=None, externalId=None):
+    def deleteEntitlement(self, expectedReturnCode,outParameterList=None, outJsonPathList=None, id=None, eId=None, externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
-            self.deleteRequest(url + '/ems/api/v5/entitlements/' + id, "",currentApiFuncName(), expectedCode,resvariableList, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/entitlements/' + id, "",currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
         elif eId != None:
-            self.deleteRequest(url + '/ems/api/v5/entitlements/eId=' + eId,"", currentApiFuncName(), expectedCode,resvariableList, resxPathList)
+            self.deleteRequest(url + '/ems/api/v5/entitlements/eId=' + eId,"", currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
         elif externalId != None:
-            self.deleteRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId,"",currentApiFuncName(), expectedCode,resvariableList, resxPathList)
-        if self.deleteApiresponse[0] == expectedCode:
-            if (self.deleteApiresponse[0] == Constant.HTTP204):
+            self.deleteRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId,"",currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
+        if self.deleteApiresponse[0] == expectedReturnCode:
+            if (self.deleteApiresponse[0] == ErrorCode.HTTP204):
                 LOGGER.info("Entitlement deleted successfully")
             else:
-                for i, resvar in enumerate(resvariableList):
-                    LOGGER.info(resvariableList[i])
-                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+                for i, resvar in enumerate(outParameterList):
+                    LOGGER.info(outParameterList[i])
+                    LOGGER.info(self.out_param_List[outParameterList[i]])
         return self
 
-    def replaceEntitlement(self, entitlement_json, expectedCode, resvariableList, resxPathList, id=None, eId=None,
+    def replaceEntitlement(self, entitlement_json, expectedReturnCode, outParameterList, outJsonPathList, id=None, eId=None,
                            externalId=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         if id != None:
             self.putRequest(url + '/ems/api/v5/entitlements/' + id, entitlement_json, currentApiFuncName(),
-                                       expectedCode, resxPathList)
+                                       expectedReturnCode, outJsonPathList)
         elif eId != None:
             self.putRequest(url + '/ems/api/v5/entitlements/eId=' + eId, entitlement_json,
-                                       currentApiFuncName(), expectedCode, resxPathList)
+                                       currentApiFuncName(), expectedReturnCode, outJsonPathList)
         elif externalId != None:
             self.putRequest(url + '/ems/api/v5/entitlements/externalId =' + externalId, entitlement_json,
-                                       currentApiFuncName(), expectedCode, resxPathList)
-        if self.putApiResponse[1] == expectedCode:
-            for i, resvar in enumerate(resvariableList):
-                LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+                                       currentApiFuncName(), expectedReturnCode, outJsonPathList)
+        if self.putApiResponse[1] == expectedReturnCode:
+            for i, resvar in enumerate(outParameterList):
+                LOGGER.info(outParameterList[i])
+                LOGGER.info(self.out_param_List[outParameterList[i]])
         return self
 

@@ -1,4 +1,5 @@
 import EMSWS.EMSConfig as Constant
+import EMSWS.ErrorCode as ErrorCode
 import logging
 import requests
 from EMSWS.Utilities import UtilityClass
@@ -33,7 +34,7 @@ class AuthProxyStubFactory(object):
             headers["Accept"] = "application/xml"
             #request_url = Constant.EMSURL + "/" + app_name + "/validatetokens"
 
-            if expected_code == Constant.HTTP201 and variable_list is None and xpath_list is None and \
+            if expected_code == ErrorCode.HTTP201 and variable_list is None and xpath_list is None and \
                     output_xml_res_var is not None:
                 self.post_stub_request(request_url, self.xmlstroutput, headers,
                                        current_api_func_name(),
@@ -41,7 +42,7 @@ class AuthProxyStubFactory(object):
                                        ["registrationtoken"], ["./token"], bearer_auth="Yes",
                                        outputXmlResVar=output_xml_res_var,is_session_based_request="None")
 
-            elif expected_code == Constant.HTTP201 and variable_list is None and xpath_list is None and \
+            elif expected_code == ErrorCode.HTTP201 and variable_list is None and xpath_list is None and \
                     output_xml_res_var is None:
                 self.post_stub_request(request_url, self.xmlstroutput, headers,
                                        current_api_func_name(),
@@ -69,7 +70,7 @@ class AuthProxyStubFactory(object):
                                 ['$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [identifier, ref_id1, ref_id2, count])
             LOGGER.info('dhsdihfsdssfff')
-            if expected_code == Constant.HTTP201 and variable_list is None and xpath_list is None:
+            if expected_code == ErrorCode.HTTP201 and variable_list is None and xpath_list is None:
 
                 self.post_stub_request(request_url, self.UpdateJsonFileResponse, headers,
                                      current_api_func_name(), expected_code, "", "","",

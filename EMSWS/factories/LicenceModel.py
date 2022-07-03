@@ -5,6 +5,7 @@ import pytest
 from jsonpath_ng.ext import parse
 from EMSWS.Utilities import UtilityClass
 import  EMSWS.EMSConfig as Constant
+import  EMSWS.ErrorCode as ErrorCode
 import logging
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
@@ -56,8 +57,8 @@ class LicenseModelfactory(object):
         try:
             for match in jsonpath_expression.find(response_LM_dictionary):
                 if (match.value["enforcementAttribute"]["name"] == LM_ATTR_Name):
-                    self.emsVariableList[variable]=match.value[tag]
-            LOGGER.info(self.emsVariableList[variable])
+                    self.out_param_List[variable]=match.value[tag]
+            LOGGER.info(self.out_param_List[variable])
             AssertionsReport["actual_Code"] = "200"
             AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
             AssertionsReport["Status"] = "Pass"
@@ -131,7 +132,7 @@ class LicenseModelfactory(object):
                     if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
                         LOGGER.info(attr[i])
                         LOGGER.info(variableList[i])
-                        self.emsVariableList[variableList[i]]=match.value[tagsList[i]]
+                        self.out_param_List[variableList[i]]=match.value[tagsList[i]]
             AssertionsReport["actual_Code"] = "200"
             AssertionsReport["Expected_Response"] = u.convertDictinarytoJson(response_LM_dictionary)
             AssertionsReport["Status"] = "Pass"
@@ -157,14 +158,14 @@ class LicenseModelfactory(object):
                 if (match.value["enforcementAttribute"]["name"] == LM_ATTR_NameList[i]):
                     LOGGER.info(attr[i])
                     LOGGER.info(getvalueList[i])
-                    self.emsVariableList[getvalueList[i]] = match.value[tagsList[i]]
+                    self.out_param_List[getvalueList[i]] = match.value[tagsList[i]]
         return self
     def getEnforcement(self):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         self.getApiresponse = self.getRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0',"",currentApiFuncName(),200)
-        if self.getApiresponse[1] == 200:
+        if self.getApiresponse[1] == ErrorCode.HTTP200:
             response_Enforcement = utility.convertJsontoDictinary(self.getApiresponse[0])
             enforcementId = response_Enforcement["enforcement"]["id"]
             self.enforcementProps = [enforcementId]
@@ -175,7 +176,7 @@ class LicenseModelfactory(object):
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
         self.getRequest(url + '/ems/api/v5/enforcements?name=Sentinel RMS',"",currentApiFuncName(),200)
-        if self.getApiresponse[1] == 200:
+        if self.getApiresponse[1] == ErrorCode.HTTP200:
             response_Enforcement = utility.convertJsontoDictinary(self.getApiresponse[0])
             enforcementId = response_Enforcement["enforcements"]["enforcement"][0]["id"]
             self.enforcementProps = [enforcementId]
@@ -194,7 +195,7 @@ class LicenseModelfactory(object):
         if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(outVariableList):
                 LOGGER.info(outVariableList[i])
-                LOGGER.info(self.emsVariableList[outVariableList[i]])
+                LOGGER.info(self.out_param_List[outVariableList[i]])
             self.FlexibleLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
         return self
 
@@ -210,7 +211,7 @@ class LicenseModelfactory(object):
         if self.getApiresponse[1] == expectedCode:
             for i, resvar in enumerate(outVariableList):
                 LOGGER.info(outVariableList[i])
-                LOGGER.info(self.emsVariableList[outVariableList[i]])
+                LOGGER.info(self.out_param_List[outVariableList[i]])
             self.CloudConnectedLicenseModelJson = utility.convertJsontoDictinary(self.getApiresponse[0])
         return self
 
@@ -228,13 +229,13 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_dict["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_dict)
-        if expectedCode == 201 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name", "lmId","LMRES"],
                              ['$.licenseModel.name', '$.licenseModel.id','$'])
-            LOGGER.info(self.emsVariableList["LM_name"])
-            LOGGER.info(self.emsVariableList["lmId"])
-            LOGGER.info(self.emsVariableList["LMRES"])
+            LOGGER.info(self.out_param_List["LM_name"])
+            LOGGER.info(self.out_param_List["lmId"])
+            LOGGER.info(self.out_param_List["LMRES"])
         elif (variableList != None and xPathList != None):
             LOGGER.info("========================================")
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
@@ -251,12 +252,12 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_dict["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_dict)
-        if expectedCode == 201 and resvariableList == None and resxPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_onpremNetwork", "lmId_onprem_network"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
-            LOGGER.info(self.emsVariableList["LM_name_onpremNetwork"])
-            LOGGER.info(self.emsVariableList["lmId_onprem_network"])
+            LOGGER.info(self.out_param_List["LM_name_onpremNetwork"])
+            LOGGER.info(self.out_param_List["lmId_onprem_network"])
         elif (resvariableList != None and resxPathList != None):
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
                              resvariableList, resxPathList)
@@ -272,12 +273,12 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_dic["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_dic)
-        if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_onPrem_Net", "lmId_onPrem_net"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
-            LOGGER.info(self.emsVariableList["LM_name_onPrem_Net"])
-            LOGGER.info(self.emsVariableList["lmId_onPrem_net"])
+            LOGGER.info(self.out_param_List["LM_name_onPrem_Net"])
+            LOGGER.info(self.out_param_List["lmId_onPrem_net"])
         elif (expectedCode != None and expectedCode != None and resxPathList != None):
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
                              resvariableList, resxPathList)
@@ -293,12 +294,12 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_dict["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_dict)
-        if expectedCode == expectedCode and resvariableList == None and resxPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                              response_LM_json1, currentApiFuncName(), expectedCode, ["LM_name_OnpremStand", "lmId_OnpremStand"],
                              ['$.licenseModel.name', '$.licenseModel.id'])
-            LOGGER.info(self.emsVariableList["LM_name_OnpremStand"])
-            LOGGER.info(self.emsVariableList["lmId_OnpremStand"])
+            LOGGER.info(self.out_param_List["LM_name_OnpremStand"])
+            LOGGER.info(self.out_param_List["lmId_OnpremStand"])
         elif (expectedCode != None and expectedCode != None and resxPathList != None):
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode,
                              resvariableList, resxPathList)
@@ -310,11 +311,11 @@ class LicenseModelfactory(object):
         LOGGER.info(currentApiFuncName())
         response_LM_dict["licenseModel"]["name"] = LMNameGenerator
         response_LM_json1 = json.dumps(response_LM_dict)
-        if expectedCode == 201 and resvariableList == None and resxPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and resvariableList == None and resxPathList == None:
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
                                         response_LM_json1, currentApiFuncName(), expectedCode,["LM_name","lmId"],['$.licenseModel.name','$.licenseModel.id'])
-            LOGGER.info(self.emsVariableList["LM_name"])
-            LOGGER.info(self.emsVariableList["lmId"])
+            LOGGER.info(self.out_param_List["LM_name"])
+            LOGGER.info(self.out_param_List["lmId"])
         elif(expectedCode != None and expectedCode !=None and resxPathList !=None):
             self.PostRequest(url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1, currentApiFuncName(), expectedCode, resvariableList, resxPathList)
         return self
@@ -348,5 +349,5 @@ class LicenseModelfactory(object):
         if self.patchApiResponse[1] == expectedCode:
             for i, resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
-                LOGGER.info(self.emsVariableList[resvariableList[i]])
+                LOGGER.info(self.out_param_List[resvariableList[i]])
         return self

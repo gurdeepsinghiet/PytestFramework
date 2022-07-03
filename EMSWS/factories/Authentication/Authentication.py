@@ -1,4 +1,5 @@
 import EMSWS.EMSConfig as Constant
+import  EMSWS.ErrorCode as ErrorCode
 import logging
 from EMSWS.Utilities import UtilityClass
 from requests.structures import CaseInsensitiveDict
@@ -28,18 +29,18 @@ class AuthenticationFactory(object):
         LOGGER.info(currentApiFuncName())
         headers = CaseInsensitiveDict()
         headers["Content-Type"] = "application/x-www-form-urlencoded"
-        self.getIDPConfiguration(Constant.HTTP200,["realm","tokenEndpoint","clientId"],["$..realm","$..tokenEndpoint","$..clientId"])
+        self.getIDPConfiguration(ErrorCode.HTTP200,["realm","tokenEndpoint","clientId"],["$..realm","$..tokenEndpoint","$..clientId"])
         data = {"grant_type": Constant.grant_type, "username": user, "password": passwrd,
                 "client_id": self.emsVariableList["clientId"]}
-        if expectedCode == Constant.HTTP200 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
             self.PostAuthRequest(self.emsVariableList["tokenEndpoint"].split("/auth")[0]+
                 "/auth/realms/"+self.emsVariableList["realm"]+"/protocol/openid-connect/token",
-                data, headers, "keyclocktokenApi", 200, user, passwrd,["access_token"],["$.access_token"],bearerAuth="Yes")
+                data, headers, "keyclocktokenApi", expectedCode, user, passwrd,["access_token"],["$.access_token"],bearerAuth="Yes")
             LOGGER.info(self.emsVariableList["access_token"])
         elif expectedCode != None and variableList != None and xPathList != None:
             self.PostAuthRequest(self.emsVariableList["tokenEndpoint"].split("/auth")[0] +
                                  "/auth/realms/" + self.emsVariableList["realm"] + "/protocol/openid-connect/token",
-                                 data, headers, "keyclocktokenApi", 200, user, passwrd,variableList,xPathList,bearerAuth="Yes")
+                                 data, headers, "keyclocktokenApi", expectedCode, user, passwrd,variableList,xPathList,bearerAuth="Yes")
         return self
 
 
@@ -56,14 +57,14 @@ class AuthenticationFactory(object):
             headers["Authorization"] = "Bearer " + keyClockToken
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(),
                                      expectedCode, Constant.EMSUserName, Constant.EMSPassword,
                                      ["registrationtoken"], ["./token"], bearerAuth="Yes",
                                      outputXmlResVar=outputXmlResVar)
 
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(),
                                      expectedCode, Constant.EMSUserName, Constant.EMSPassword,
@@ -84,8 +85,8 @@ class AuthenticationFactory(object):
             self.UpdateJsonFile(regTokenXmlJsonPath,
                                 ['$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [identifier, refId1, refId2, count])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
-                self.PostAuthRequest(url + '/token/api/v5/registrationTokens', self.UpdateJsonFileResponse, headers,currentApiFuncName(), 201,"","",
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
+                self.PostAuthRequest(url + '/token/api/v5/registrationTokens', self.UpdateJsonFileResponse, headers,currentApiFuncName(), expectedCode,"","",
                                  ["regToken", "registrationRes"],
                                  ['$..token', '$'],bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -114,11 +115,11 @@ class AuthenticationFactory(object):
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
             LOGGER.info(self.xmlstroutput)
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, "", "",
                                      ["registrationtoken"], ["./token"], bearerAuth="Yes")
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode, "", "",
                                      ["registrationtoken"], ["./token"], bearerAuth="Yes",
@@ -138,9 +139,9 @@ class AuthenticationFactory(object):
             self.UpdateJsonFile(regTokenXmlJsonPath,
                                 ['$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [identifier, refId1, refId2, count])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/registrationTokens', self.UpdateJsonFileResponse, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      variableList=["regToken", "registrationRes","tokenId"],
                                      xPathList=['$..token', '$','$..id'],bearerAuth="Yes",outputXmlResVar=None)
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -166,12 +167,12 @@ class AuthenticationFactory(object):
             headers["Content-Type"] = "application/xml"
             headers["Accept"] = "application/xml"
             headers["Authorization"] = "Bearer " + keyClockToken
-            if expectedCode == 201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword,
                                      ["registrationtoken"], ["./token"], bearerAuth="Yes")
-            elif expectedCode == 201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword,
@@ -192,9 +193,9 @@ class AuthenticationFactory(object):
             self.UpdateJsonFile(regTokenXmlJsonPath,
                                 ['$..name','$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [customerName,identifier, refId1, refId2, count])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/registrationTokens', self.UpdateJsonFileResponse, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      ["regToken", "registrationRes"],
                                      ['$..token', '$'], bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -223,13 +224,13 @@ class AuthenticationFactory(object):
                                [".//name", "./identifier", "./refId1", "./refId2", "./count"],
                                [customerName, identifier, identifier, refId1, refId2, count])
 
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword, ["registrationtoken"], ["./token"],
                                      bearerAuth="Yes")
 
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword, ["registrationtoken"], ["./token"],
@@ -250,9 +251,9 @@ class AuthenticationFactory(object):
             self.UpdateJsonFile(regTokenXmlJsonPath,
                                 ['$..name','$..identifier', '$..refId1', '$..refId2', '$..count'],
                                 [customerName,identifier, refId1, refId2, count])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/registrationTokens', self.UpdateJsonFileResponse, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      ["regToken", "registrationRes"],
                                      ['$..token', '$'], bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -274,13 +275,13 @@ class AuthenticationFactory(object):
         headers["Accept"] = "application/xml"
         headers["Authorization"]= "Bearer "+keyClockToken
         if self.isXml(regTokenXmlJson):
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", regTokenXmlJson, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword, ["registrationtoken"], ["./token"],
                                      bearerAuth="Yes")
 
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens", regTokenXmlJson, headers,
                                      currentApiFuncName(), expectedCode,
                                      Constant.EMSUserName, Constant.EMSPassword, ["registrationtoken"], ["./token"],
@@ -298,9 +299,9 @@ class AuthenticationFactory(object):
         elif self.isJson(regTokenXmlJson):
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Bearer " + keyClockToken
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/registrationTokens', regTokenXmlJson, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      ["regToken", "registrationRes"],
                                      ['$..token', '$'], bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -326,12 +327,12 @@ class AuthenticationFactory(object):
             self.updateXMLFile(accessTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./fqdn"],
                                [identifier, refId1, refId2, fqdn], ["acessTokenupdatedXml"], [self.xmlstroutput])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/authTokens",
                                      self.emsVariableList["acessTokenupdatedXml"], headers, currentApiFuncName(),
                                      expectedCode, Constant.EMSUserName, Constant.EMSPassword, ["accesstoken"],
                                      ["./token"], bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/authTokens",
                                      self.emsVariableList["acessTokenupdatedXml"], headers,
                                      currentApiFuncName(), expectedCode, Constant.EMSUserName, Constant.EMSPassword,
@@ -353,9 +354,9 @@ class AuthenticationFactory(object):
                                 [identifier, refId1, refId2, fqdn])
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Basic " + registrationToken
-            if expectedCode == 201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/authTokens', self.UpdateJsonFileResponse, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      ["authToken", "authAccessRes"],
                                      ['$..token', '$'], bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -386,13 +387,13 @@ class AuthenticationFactory(object):
             self.updateXMLFile(accessTokenXmlJsonPath,
                                ["./identifier", "./refId1", "./refId2", "./fqdn"],
                                [identifier, refId1, refId2, fqdn])
-            if expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar != None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/authTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(),
                                      expectedCode, "", "", ["accesstoken"],
                                      ["./token"], bearerAuth="Yes", outputXmlResVar=outputXmlResVar)
 
-            elif expectedCode == Constant.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
+            elif expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None and outputXmlResVar == None:
                 self.PostAuthRequest(Constant.EMSURL + "/token/api/v5/authTokens", self.xmlstroutput, headers,
                                      currentApiFuncName(),
                                      expectedCode, "", "", ["accesstoken"],
@@ -412,9 +413,9 @@ class AuthenticationFactory(object):
                                 [identifier, refId1, refId2, fqdn])
             headers = CaseInsensitiveDict()
             headers["Authorization"] = "Basic " + registrationToken
-            if expectedCode == 201 and variableList == None and xPathList == None:
+            if expectedCode == ErrorCode.HTTP201 and variableList == None and xPathList == None:
                 self.PostAuthRequest(url + '/token/api/v5/authTokens', self.UpdateJsonFileResponse, headers,
-                                     currentApiFuncName(), 201,"","",
+                                     currentApiFuncName(), expectedCode,"","",
                                      ["authToken", "authAccessRes"],
                                      ['$..token', '$'], bearerAuth="Yes")
                 LOGGER.info(self.emsVariableList["regToken"])
@@ -426,7 +427,7 @@ class AuthenticationFactory(object):
 
         return self
 
-    def getRegistrationToken(self, keyClockToken, expectedCode,resvariableList,resxPathList,id=None,identifier=None,refId1=None,refId2=None,outputXmlResVar=None):
+    def getRegistrationToken(self, keyClockToken, expectedCode,resvariableList,resxPathList,id=None,identifier=None,refId1=None,refId2=None,token=None,outputXmlResVar=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -435,25 +436,25 @@ class AuthenticationFactory(object):
         if (id != None):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens/" + id, "", headers,
                                 currentApiFuncName(),
-                                Constant.HTTP200, "", "",resvariableList,resxPathList,bearerAuth="Yes")
+                                expectedCode, "", "",resvariableList,resxPathList,bearerAuth="Yes")
         elif(identifier != None):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?identifier" + identifier, "", headers,
                                 currentApiFuncName(),
-                                Constant.HTTP200, "", "",resvariableList,resxPathList,bearerAuth="Yes")
+                                expectedCode, "", "",resvariableList,resxPathList,bearerAuth="Yes")
         elif (refId1 != None):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId1" + refId1, "",
                                 headers,
                                 currentApiFuncName(),
-                                Constant.HTTP200, "", "", resvariableList, resxPathList, bearerAuth="Yes")
+                                expectedCode, "", "", resvariableList, resxPathList, bearerAuth="Yes")
         elif (refId2 != None):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId2" + refId2, "",
                                 headers,
                                 currentApiFuncName(),
-                                Constant.HTTP200, "", "", resvariableList, resxPathList, bearerAuth="Yes")
+                                expectedCode, "", "", resvariableList, resxPathList, bearerAuth="Yes")
         elif (token != None):
             self.GetAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?token=" + token, "",
                                 headers, currentApiFuncName(),
-                                Constant.HTTP200, "", "", bearerAuth="Yes")
+                                expectedCode, "", "", bearerAuth="Yes")
         if self.getAuthApiresponse[1] == expectedCode:
             for i,resvar in enumerate(resvariableList):
                 LOGGER.info(resvariableList[i])
@@ -472,23 +473,23 @@ class AuthenticationFactory(object):
         headers["Authorization"] = "Bearer " + keyClockToken
         if (id != None):
             self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens/" + id, "", headers,
-                                   currentApiFuncName(), Constant.HTTP204, "", "", bearerAuth="Yes")
+                                   currentApiFuncName(), expectedCode, "", "", bearerAuth="Yes")
         elif (identifier != None):
             self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?identifier=" + identifier, "",
                                    headers, currentApiFuncName(),
-                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+                                   expectedCode, "", "", bearerAuth="Yes")
         elif (refId1 != None):
             self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId1=" + refId1, "",
                                    headers, currentApiFuncName(),
-                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+                                   expectedCode, "", "", bearerAuth="Yes")
         elif (refId2 != None):
             self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?refId2=" + refId2, "",
                                    headers, currentApiFuncName(),
-                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+                                   expectedCode, "", "", bearerAuth="Yes")
         elif (token != None):
             self.deleteAuthRequest(Constant.EMSURL + "/token/api/v5/registrationTokens?token=" + token, "",
                                    headers, currentApiFuncName(),
-                                   Constant.HTTP204, "", "", bearerAuth="Yes")
+                                   expectedCode, "", "", bearerAuth="Yes")
         if self.deleteapiAuthResponse[0] == expectedCode:
             if (int(self.deleteApiresponse[0])== Constant.HTTP204):
                 LOGGER.info("Contact deleted successfully")

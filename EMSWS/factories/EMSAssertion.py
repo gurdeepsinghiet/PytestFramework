@@ -42,7 +42,7 @@ class EMSAssertionFactory:
             jsonpath_expression = parse(jsonxpath)
             match = jsonpath_expression.find(jsonDictionary)
             self.verifyAssertions(match[0].value,expectedValueList[i])
-        self
+        return self
 
 
     def verifyJsonxpathValue(self,jsonDictionary,jsontag,expectedValue):
@@ -50,7 +50,7 @@ class EMSAssertionFactory:
         match = jsonpath_expression.find(jsonDictionary)
         LOGGER.info(match[0].value)
         self.verifyAssertions(expectedValue,match[0].value)
-        self
+        return self
 
 
 

@@ -1,4 +1,5 @@
 import EMSWS.EMSConfig as Constant
+import EMSWS.ErrorCode as ErrorCode
 import logging
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
@@ -14,12 +15,12 @@ class ActivationFactory(object):
         self.UpdateJsonFile(activationJsonPathFile, ['$..activationProductKeys.activationProductKey[0].pkId'], [pkId], ["activationRes"],
                         ['$'])
         LOGGER.info(self.UpdateJsonFileResponse)
-        if expectedResponseCode == expectedResponseCode and outVariableList == None and outJsonPathList == None:
+        if expectedResponseCode == ErrorCode.HTTP200 and outVariableList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/activations/bulkActivate', self.UpdateJsonFileResponse, currentApiFuncName(), expectedResponseCode,
                          ["aId","activationRes"],
                          ['$.activations.activation[0].aId','$'])
-            LOGGER.info(self.emsVariableList["aId"])
-            LOGGER.info(self.emsVariableList["activationRes"])
+            LOGGER.info(self.out_param_List["aId"])
+            LOGGER.info(self.out_param_List["activationRes"])
         elif (expectedResponseCode != None and outVariableList != None and outJsonPathList != None):
             self.PostRequest(url + '/ems/api/v5/activations/bulkActivate', self.UpdateJsonFileResponse, currentApiFuncName(), expectedResponseCode,
                              outVariableList, outJsonPathList)
@@ -30,12 +31,12 @@ class ActivationFactory(object):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        if expectedCode == 200 and variableList == None and xPathList == None:
+        if expectedCode == ErrorCode.HTTP200 and variableList == None and xPathList == None:
             self.PostRequest(url + '/ems/api/v5/activations/bulkActivate', activationUpdated_json, currentApiFuncName(), expectedCode,
                          ["aId","activationRes"],
                          ['$.activations.activation[0].aId','$'])
-            LOGGER.info(self.emsVariableList["aId"])
-            LOGGER.info(self.emsVariableList["activationRes"])
+            LOGGER.info(self.out_param_List["aId"])
+            LOGGER.info(self.out_param_List["activationRes"])
         elif (expectedCode != None and expectedCode != None and xPathList != None):
             self.PostRequest(url + '/ems/api/v5/activations/bulkActivate', activationUpdated_json, currentApiFuncName(), expectedCode,
                              variableList, xPathList)
