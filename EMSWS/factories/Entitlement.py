@@ -86,18 +86,7 @@ class Entitlementfacory(object):
                              outParameterList, outJsonPathList)
         return self
 
-    def addProductKeyEntitlment(self,productName, productVersion, eId, productKeyJsonPath,outParameterList=None,outJsonPathList=None,expectedCode=None):
-        productKeyFile = open(self.getModulePath()+productKeyJsonPath, 'r')
-        productKeyFileData = productKeyFile.read()
-        productKey_json_object = json.loads(productKeyFileData)
-        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["name"] = productName
-        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"][
-            "version"] = productVersion
-        productKeyFile.close()
-        json_object1 = json.dumps(productKey_json_object)
-        responseEntitlement = requests.post(url + '/ems/api/v5/entitlements/eId=' + eId + '/productKeys', json_object1,
-                                            auth=(username, password))
-        print(responseEntitlement.text)
+
 
 
     def partialUpdateEntitlement(self,entitlement_json,expectedReturnCode,outParameterList, outJsonPathList,id=None,eId=None,externalId=None):
@@ -178,3 +167,15 @@ class Entitlementfacory(object):
                 LOGGER.info(self.out_param_List[outParameterList[i]])
         return self
 
+    def addProductKeyEntitlment(self,productName, productVersion, eId, productKeyJsonPath,outParameterList=None,outJsonPathList=None,expectedCode=None):
+        productKeyFile = open(self.getModulePath()+productKeyJsonPath, 'r')
+        productKeyFileData = productKeyFile.read()
+        productKey_json_object = json.loads(productKeyFileData)
+        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"]["name"] = productName
+        productKey_json_object["productKey"]["item"]["itemProduct"]["product"]["nameVersion"][
+            "version"] = productVersion
+        productKeyFile.close()
+        json_object1 = json.dumps(productKey_json_object)
+        responseEntitlement = requests.post(url + '/ems/api/v5/entitlements/eId=' + eId + '/productKeys', json_object1,
+                                            auth=(username, password))
+        print(responseEntitlement.text)

@@ -8,7 +8,7 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class RoleManagementFactory(object):
-    def addRole(self,roleJsonFilePath,roleName,expectedCode,outParameterList=None,outJsonPathList=None):
+    def addRoleJsonFilePath(self,roleJsonFilePath,roleName,expectedCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
@@ -23,7 +23,7 @@ class RoleManagementFactory(object):
                              expectedCode, outParameterList, outJsonPathList)
         return self
 
-    def createRole(self,role_Json,expectedCode,outParameterList=None,outJsonPathList=None):
+    def addRoleJson(self,role_Json,expectedCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())

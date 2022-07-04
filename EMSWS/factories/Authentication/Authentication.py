@@ -10,15 +10,15 @@ password = Constant.EMSPassword
 
 class AuthenticationFactory(object):
 
-    def getIDPConfiguration(self,expectedCode,resvariableList,resxPathList):
+    def getIDPConfiguration(self,expectedCode,outParameterList,outJsonPathList):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        self.GetAuthRequest(Constant.EMSURL +"/token/api/v5/idpConfigurations","", "", currentApiFuncName(), Constant.HTTP200, "", "",resvariableList,resxPathList)
+        self.GetAuthRequest(Constant.EMSURL +"/token/api/v5/idpConfigurations","", "", currentApiFuncName(), Constant.HTTP200, "", "",outParameterList,outJsonPathList)
         if self.getAuthApiresponse[1] == expectedCode:
-                for i, resvar in enumerate(resvariableList):
-                    LOGGER.info(resvariableList[i])
-                    LOGGER.info(self.emsVariableList[resvariableList[i]])
+                for i, resvar in enumerate(outParameterList):
+                    LOGGER.info(outParameterList[i])
+                    LOGGER.info(self.emsVariableList[outParameterList[i]])
 
         return self
 
@@ -491,7 +491,7 @@ class AuthenticationFactory(object):
                                    headers, currentApiFuncName(),
                                    expectedCode, "", "", bearerAuth="Yes")
         if self.deleteapiAuthResponse[0] == expectedCode:
-            if (int(self.deleteApiresponse[0])== Constant.HTTP204):
+            if (int(self.deleteApiresponse[0])== ErrorCode.HTTP204):
                 LOGGER.info("Contact deleted successfully")
             else:
                 for i, resvar in enumerate(resvariableList):
@@ -508,7 +508,7 @@ class AuthenticationFactory(object):
         headers["Authorization"] = "Basic " + registrationToken
         if (id != None):
             self.PatchAuthRequest(url + "/token/api/v5/authTokens/" + id, accessTokenXmlJson, headers,
-                                  currentApiFuncName(), Constant.HTTP200, "", "", ["authToken"], ["$..access_token"],
+                                  currentApiFuncName(), expectedCode, "", "", ["authToken"], ["$..access_token"],
                                   bearerAuth="Yes")
 
         if self.patchAuthApiResponse[1] == expectedCode and resvariableList != None and resxPathList != None and outputXmlResVar == None:

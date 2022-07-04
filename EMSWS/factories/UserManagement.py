@@ -8,7 +8,7 @@ username = Constant.EMSUserName
 password = Constant.EMSPassword
 
 class UserManagementFactory(object):
-    def addUser(self, userJsonFilePath,loginId,userName,userEmailId,userPassword,userType,userState,expectedCode,outParameterList=None,outJsonPathList=None):
+    def addUserJsonFilePath(self, userJsonFilePath,loginId,userName,userEmailId,userPassword,userType,userState,expectedCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())

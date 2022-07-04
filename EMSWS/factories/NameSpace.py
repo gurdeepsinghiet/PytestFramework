@@ -1,5 +1,6 @@
 import EMSWS.EMSConfig as Constant
 import EMSWS.ErrorCode as ErrorCode
+import EMSWS.JsonPath as JsonPath
 import logging
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ class NameSpacefactory(object):
         utility=UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(Constant.nameSpaceJsonPath, ['$.namespace.name'],["emsNameSpace"+self.RandomString(9)])
+        self.UpdateJsonFile(JsonPath.nameSpaceJsonPath, ['$.namespace.name'],["emsNameSpace"+self.RandomString(9)])
         LOGGER.info(self.UpdateJsonFileResponse)
         # Dictionary object for creating NameSpace Report
         if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:

@@ -1,5 +1,6 @@
 import EMSWS.EMSConfig as Constant
 import EMSWS.ErrorCode as ErrorCode
+import EMSWS.JsonPath as JsonPath
 import logging
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class ActivationFactory(object):
         return self
 
 
-    def createActivation(self,activationUpdated_json,expectedCode,variableList=None,xPathList=None):
+    def addActivationJson(self,activationUpdated_json,expectedCode,variableList=None,xPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())

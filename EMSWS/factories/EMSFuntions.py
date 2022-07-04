@@ -6,7 +6,10 @@ import random
 from jsonpath_ng.ext import parse
 import EMSWS.EMSConfig as Constant
 import xml.etree.ElementTree as ET
+
+from EMSWS.Utilities import UtilityClass
 from EMSWS.factories.Feature import FeatureFactory
+from EMSWS.factories.FingerPrint import FingerPrintFactory
 from EMSWS.factories.Product import ProductFactory
 from EMSWS.factories.Contact import ContactFactory
 from EMSWS.factories.Customer import CustomerFactory
@@ -33,7 +36,7 @@ class EMSFactory( EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFac
                  ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
                  RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,
                  UserManagementFactory,RoleManagementFactory,
-                 AuthProxyStubFactory,RestAuthProxyStubFactory):
+                 AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory):
 
     def __init__(self):
         self.data=[]
@@ -98,7 +101,10 @@ class EMSFactory( EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFac
 
 
     def retriveFingerPrint(self,fpXmlFileName):
+        u=UtilityClass()
         filename=fpXmlFileName+self.RandomString(8)+".xml"
         command=self.getModulePath()+"//FingerPrintCreation//fingerPrint.exe -f "+ self.getModulePath()+Constant.emsReportPath+filename
         os.system('cmd /c '+command)
-        return filename
+        content=u.readFile(self.getModulePath()+"\\output\\"+filename)
+        u.deleteFile(self.getModulePath()+"\\output\\"+filename)
+        return content
