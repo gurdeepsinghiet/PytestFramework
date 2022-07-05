@@ -1,10 +1,9 @@
 #Ems Stack Configuration
-EMSURL=""
-KeyClockAuthUrl=""
+EMSURL="
+KeyClockAuthUrl="https://kcpostgre.highend.engg-services.com"
 EMSUserName=""
 EMSPassword=""
 #KeyClock Configuration
-chromepath="C://jgjgjhj"
 client_secret=""
 client_id="ems-scl-public-client"
 grant_type="password"

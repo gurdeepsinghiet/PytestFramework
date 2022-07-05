@@ -7,7 +7,6 @@ import pytest
 
 LOGGER = logging.getLogger(__name__)
 class UtilityClass(object):
-
     def readFile(self,path):
         try:
             with open(path) as f_obj:
@@ -18,6 +17,13 @@ class UtilityClass(object):
         except FileNotFoundError as error:
             LOGGER.error(error)
             pytest.fail()
+
+    def deleteFile(self,path):
+        try:
+            if os.path.exists(path):
+                os.remove(path)
+        except:
+            LOGGER.error("error in deleting file")
 
 
     def convertJsontoDictinary(self,jsonData):
@@ -54,3 +60,12 @@ class UtilityClass(object):
         except ValueError:
             LOGGER.error("Error parsing json data")
 
+
+    def retriveFingerPrint(self,fpXmlFileName):
+        u=UtilityClass()
+        filename=fpXmlFileName+self.RandomString(8)+".xml"
+        command=self.getModulePath()+"//FingerPrintCreation//fingerPrint.exe -f "+ self.getModulePath()+Constant.emsReportPath+filename
+        os.system('cmd /c '+command)
+        content=u.readFile(self.getModulePath()+"\\output\\"+filename)
+        u.deleteFile(self.getModulePath()+"\\output\\"+filename)
+        return content
