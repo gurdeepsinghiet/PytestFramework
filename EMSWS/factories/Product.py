@@ -1,231 +1,266 @@
-import  EMSWS.EMSConfig as Constant
-import  EMSWS.ErrorCode as ErrorCode
-import  EMSWS.JsonPath as JsonPath
+import EMSWS.EMSConfig as Constant
+import EMSWS.ErrorCode as ErrorCode
+import EMSWS.JsonPath as JsonPath
 import logging
 from EMSWS.Utilities import UtilityClass
+
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
+
 class ProductFactory(object):
 
-    def addProductNonLvh(self,nameSpaceName,featureName,featureVersion,expectedReturnCode,outParameterList=None,outJsonPathList=None):
+    def add_product_non_lvh(self, namespace_name, feature_name, feature_version, expected_return_code,
+                            out_parameter_list=None, out_json_path_list=None):
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
         # getting the name of Current exectuting Function
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(JsonPath.productJsonPath, ['$.product.nameVersion.name', '$.product.nameVersion.version', '$..namespace.name',
-                        '$..productFeature[0].feature.nameVersion.name',
-                        '$..productFeature[0].feature.nameVersion.version'], ["ptr"+self.RandomString(9), "1.0", nameSpaceName, featureName, featureVersion], ["productRes"], ['$'])
-        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/products',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,
-                             ["product_name", "product_version", "productRes","product_feature_name","product_feature_version","productRes"],
-                             ['$.product.nameVersion.name', '$.product.nameVersion.version','$..productFeatures.productFeature[0].feature.nameVersion.name',
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.UpdateJsonFile(JsonPath.productJsonPath,
+                            ['$.product.nameVersion.name', '$.product.nameVersion.version', '$..namespace.name',
+                             '$..productFeature[0].feature.nameVersion.name',
+                             '$..productFeature[0].feature.nameVersion.version'],
+                            ["ptr" + self.RandomString(9), "1.0", namespace_name, feature_name, feature_version],
+                            ["productRes"], ['$'])
+        if expected_return_code == ErrorCode.HTTP201 and out_parameter_list is None and out_json_path_list is None:
+            self.PostRequest(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, current_api_name(),
+                             expected_return_code,
+                             ["product_name", "product_version", "productRes", "product_feature_name",
+                              "product_feature_version", "productRes"],
+                             ['$.product.nameVersion.name', '$.product.nameVersion.version',
+                              '$..productFeatures.productFeature[0].feature.nameVersion.name',
                               '$..productFeatures.productFeature[0].feature.nameVersion.version', '$'])
             LOGGER.info(self.out_param_List["product_name"])
             LOGGER.info(self.out_param_List["product_version"])
             LOGGER.info(self.out_param_List["product_feature_name"])
             LOGGER.info(self.out_param_List["product_feature_version"])
             LOGGER.info(self.out_param_List["productRes"])
-        elif (expectedReturnCode != None and outParameterList != None and outJsonPathList != None):
-            self.PostRequest(url + '/ems/api/v5/products',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,
-                             outParameterList, outJsonPathList)
+        elif (expected_return_code is not None and out_parameter_list is not None and out_json_path_list is not None):
+            self.PostRequest(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, current_api_name(),
+                             expected_return_code,
+                             out_parameter_list, out_json_path_list)
 
         return self
 
-    def addProductNonLvhJsonPath(self,productjsonFilePath,productName,productVersion,nameSpaceName,featureName,featureVersion,expectedReturnCode,outParameterList=None,outJsonPathList=None):
+    def add_product_non_lvh_json_file_path(self, product_json_file_path, product_name, product_version, namespace_name,
+                                           feature_name,
+                                           feature_version, expected_return_code, out_parameter_list=None,
+                                           out_json_path_list=None):
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
         # getting the name of Current exectuting Function
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(productjsonFilePath, ['$.product.nameVersion.name', '$.product.nameVersion.version', '$..namespace.name',
-                        '$..productFeature[0].feature.nameVersion.name',
-                        '$..productFeature[0].feature.nameVersion.version'], [productName, productVersion, nameSpaceName, featureName, featureVersion], ["productRes"], ['$'])
-        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/products',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,
-                             ["product_name", "product_version", "productRes","product_feature_name","product_feature_version","productRes"],
-                             ['$.product.nameVersion.name', '$.product.nameVersion.version','$..productFeatures.productFeature[0].feature.nameVersion.name',
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.UpdateJsonFile(product_json_file_path,
+                            ['$.product.nameVersion.name', '$.product.nameVersion.version', '$..namespace.name',
+                             '$..productFeature[0].feature.nameVersion.name',
+                             '$..productFeature[0].feature.nameVersion.version'],
+                            [product_name, product_version, namespace_name, feature_name, feature_version],
+                            ["productRes"],
+                            ['$'])
+        if expected_return_code == ErrorCode.HTTP201 and out_parameter_list is None and out_json_path_list is None:
+            self.PostRequest(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, current_api_name(),
+                             expected_return_code,
+                             ["product_name", "product_version", "productRes", "product_feature_name",
+                              "product_feature_version", "productRes"],
+                             ['$.product.nameVersion.name', '$.product.nameVersion.version',
+                              '$..productFeatures.productFeature[0].feature.nameVersion.name',
                               '$..productFeatures.productFeature[0].feature.nameVersion.version', '$'])
             LOGGER.info(self.out_param_List["product_name"])
             LOGGER.info(self.out_param_List["product_version"])
             LOGGER.info(self.out_param_List["product_feature_name"])
             LOGGER.info(self.out_param_List["product_feature_version"])
             LOGGER.info(self.out_param_List["productRes"])
-        elif (expectedReturnCode != None and outParameterList != None and outJsonPathList != None):
-            self.PostRequest(url + '/ems/api/v5/products',  self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,
-                             outParameterList, outJsonPathList)
+        elif expected_return_code is not None and out_parameter_list is not None and out_json_path_list is not None:
+            self.PostRequest(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, current_api_name(),
+                             expected_return_code,
+                             out_parameter_list, out_json_path_list)
 
         return self
 
-    def addProductNonLvhJson(self,product_json,expectedReturnCode,outParameterList=None,outJsonPathList=None):
+    def add_product_non_lvh_json(self, product_json, expected_return_code, out_parameter_list=None,
+                                 out_json_path_list=None):
         utility = UtilityClass()
         running_testcases = utility.runningPytestCaseName()
         LOGGER.info(running_testcases)
         # getting the name of Current exectuting Function
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/products', product_json, currentApiFuncName(), expectedReturnCode,
-                             ["product_name", "product_version", "productRes","product_feature_name","product_feature_version","productRes"],
-                             ['$.product.nameVersion.name', '$.product.nameVersion.version','$..productFeatures.productFeature[0].feature.nameVersion.name',
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        if expected_return_code == ErrorCode.HTTP201 and out_parameter_list is None and out_json_path_list is None:
+            self.PostRequest(url + '/ems/api/v5/products', product_json, current_api_name(), expected_return_code,
+                             ["product_name", "product_version", "productRes", "product_feature_name",
+                              "product_feature_version", "productRes"],
+                             ['$.product.nameVersion.name', '$.product.nameVersion.version',
+                              '$..productFeatures.productFeature[0].feature.nameVersion.name',
                               '$..productFeatures.productFeature[0].feature.nameVersion.version', '$'])
             LOGGER.info(self.out_param_List["product_name"])
             LOGGER.info(self.out_param_List["product_version"])
             LOGGER.info(self.out_param_List["product_feature_name"])
             LOGGER.info(self.out_param_List["product_feature_version"])
             LOGGER.info(self.out_param_List["productRes"])
-        elif (expectedReturnCode != None and outParameterList != None and outJsonPathList != None):
-            self.PostRequest(url + '/ems/api/v5/products', product_json, currentApiFuncName(), expectedReturnCode,
-                             outParameterList, outJsonPathList)
+        elif expected_return_code is not None and out_parameter_list is not None and out_json_path_list is not None:
+            self.PostRequest(url + '/ems/api/v5/products', product_json, current_api_name(), expected_return_code,
+                             out_parameter_list, out_json_path_list)
 
         return self
 
-    def partialUpdateProduct(self, product_json,expectedReturnCode,outParameterList, outJsonPathList,id=None,nameVersion=None,identifierNamespace =None,identifier =None,externalId =None):
+    def partial_update_product(self, product_json, expected_return_code, out_parameter_list, out_json_path_list,
+                               id=None,
+                               name_version=None, identifier_namespace=None, identifier=None, external_id=None):
         # getting the name of Current Running Test cases
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id !=None:
-            self.patchRequest(url + '/ems/api/v5/products/'+id, product_json, currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        elif nameVersion !=None:
-            self.patchRequest(url + '/ems/api/v5/products/nameVersion='+nameVersion, product_json, currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        elif identifier != None:
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        if id is not None:
+            self.patchRequest(url + '/ems/api/v5/products/' + id, product_json, current_api_name(),
+                              expected_return_code,
+                              out_parameter_list, out_json_path_list)
+        elif name_version is not None:
+            self.patchRequest(url + '/ems/api/v5/products/nameVersion=' + name_version, product_json,
+                              current_api_name(),
+                              expected_return_code, out_parameter_list, out_json_path_list)
+        elif identifier is not None:
             self.patchRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
-                                             currentApiFuncName(), expectedReturnCode, outParameterList,outJsonPathList)
-        elif externalId != None:
-            self.patchRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
-                                             currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        if self.patchApiresponse[1] == expectedReturnCode:
-            for i,resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+                              current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif external_id is not None:
+            self.patchRequest(url + '/ems/api/v5/products/externalId=' + external_id, product_json,
+                              current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        if self.patchApiresponse[1] == expected_return_code:
+            for i, out_param in enumerate(out_parameter_list):
+                LOGGER.info(out_parameter_list[i])
+                LOGGER.info(self.out_param_List[out_parameter_list[i]])
         return self
 
-    def getProduct(self, outParameterList, outJsonPathList, expectedReturnCode, productId=None, nameVersion=None, identifier=None, externalId=None, id=None):
+    def get_product(self, out_parameter_list, out_json_path_list, expected_return_code, product_id=None,
+                    name_version=None,
+                    identifier=None, external_id=None, id=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if productId != None:
-            self.getRequest(url + '/ems/api/v5/products/productId=' + productId, "", currentApiFuncName(),
-                                       expectedReturnCode, outParameterList, outJsonPathList)
-        elif id != None:
-            self.getRequest(url + '/ems/api/v5/products/' + id, "", currentApiFuncName(), expectedReturnCode,
-                                       outParameterList, outJsonPathList)
-        elif nameVersion != None:
-            self.getRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, "",
-                                       currentApiFuncName(), expectedReturnCode, outParameterList, outJsonPathList)
-        elif identifier != None:
-            self.getRequest(url + '/ems/api/v5/products/identifier=' + identifier, "", currentApiFuncName(),
-                                       expectedReturnCode, outParameterList, outJsonPathList)
-        elif externalId != None:
-            self.getRequest(url + '/ems/api/v5/products/externalId=' + externalId, "", currentApiFuncName(),
-                                       expectedReturnCode, outParameterList, outJsonPathList)
-        if self.getApiresponse[1] == expectedReturnCode:
-            for i, resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        if product_id is not None:
+            self.getRequest(url + '/ems/api/v5/products/productId=' + product_id, "", current_api_name(),
+                            expected_return_code, out_parameter_list, out_json_path_list)
+        elif id is not None:
+            self.getRequest(url + '/ems/api/v5/products/' + id, "", current_api_name(), expected_return_code,
+                            out_parameter_list, out_json_path_list)
+        elif name_version is not None:
+            self.getRequest(url + '/ems/api/v5/products/nameVersion=' + name_version, "",
+                            current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif identifier is not None:
+            self.getRequest(url + '/ems/api/v5/products/identifier=' + identifier, "", current_api_name(),
+                            expected_return_code, out_parameter_list, out_json_path_list)
+        elif external_id is not None:
+            self.getRequest(url + '/ems/api/v5/products/externalId=' + external_id, "", current_api_name(),
+                            expected_return_code, out_parameter_list, out_json_path_list)
+        if self.getApiresponse[1] == expected_return_code:
+            for i, out_param in enumerate(out_parameter_list):
+                LOGGER.info(out_parameter_list[i])
+                LOGGER.info(self.out_param_List[out_parameter_list[i]])
         return self
 
-    def searchProduct(self, expectedReturnCode, outParameterList, outJsonPathList, id=None, identifier=None, version=None,
-                      namespaceId=None,
-                      namespaceName=None, name=None, description=None, externalId=None, productType=None, refId1=None,
-                      refId2=None, licenseModelName=None, licenseModelId=None, featureId=None, featureName=None,
-                      state=None):
+    def search_product(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, identifier=None,
+                       version=None,
+                       namespace_id=None,
+                       namespace_name=None, name=None, description=None, external_id=None, product_type=None, ref_id1=None,
+                       ref_id2=None, license_model_name=None, license_model_id=None, feature_id=None, feature_name=None,
+                       state=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        responseurl = ""
-        if id != None:
-            responseurl = "id=" + id + "&"
-        if (identifier != None):
-            responseurl = "identifier=" + identifier + "&"
-        if (licenseModelName != None):
-            responseurl = "licenseModelName=" + licenseModelName + "&"
-        if (licenseModelId != None):
-            responseurl = "licenseModelId=" + licenseModelId + "&"
-        if (namespaceId != None):
-            responseurl = "namespaceId=" + namespaceId + "&"
-        if (namespaceName != None):
-            responseurl = "namespaceName=" + namespaceName + "&"
-        if (name != None):
-            responseurl = "name=" + name + "&"
-        if (description != None):
-            responseurl = "description=" + description + "&"
-        if (version != None):
-            responseurl = "version=" + version + "&"
-        if (externalId != None):
-            responseurl = "externalId=" + externalId + "&"
-        if (productType != None):
-            responseurl = "productType=" + productType + "&"
-        if (refId1 != None):
-            responseurl = "refId1=" + refId1 + "&"
-        if (refId2 != None):
-            responseurl = "refId2=" + refId2 + "&"
-        if (featureName != None):
-            responseurl = "featureName=" + featureName + "&"
-        if (featureId != None):
-            responseurl = "featureId" + featureId + "&"
-        if (state != None):
-            responseurl = "state=" + state + "&"
-        LOGGER.info(url + "/ems/api/v5/products?" + responseurl[0:-1])
-        self.getRequest(url + "/ems/api/v5/products?" + responseurl[0:-1], "", currentApiFuncName(),
-                                   expectedReturnCode, outParameterList, outJsonPathList)
-        if self.getApiresponse[1] == expectedReturnCode:
-            for i, resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        request_url = ""
+        if id is not None:
+            request_url = "id=" + id + "&"
+        if identifier is not None:
+            request_url = "identifier=" + identifier + "&"
+        if license_model_name is not None:
+            request_url = "licenseModelName=" + license_model_name + "&"
+        if license_model_id is not None:
+            request_url = "licenseModelId=" + license_model_id + "&"
+        if namespace_id is not None:
+            request_url = "namespaceId=" + namespace_id + "&"
+        if namespace_name is not None:
+            request_url = "namespaceName=" + namespace_name + "&"
+        if name is not None:
+            request_url = "name=" + name + "&"
+        if description is not None:
+            request_url = "description=" + description + "&"
+        if version is not None:
+            request_url = "version=" + version + "&"
+        if external_id is not None:
+            request_url = "externalId=" + external_id + "&"
+        if product_type is not None:
+            request_url = "productType=" + product_type + "&"
+        if ref_id1 is not None:
+            request_url = "refId1=" + ref_id1 + "&"
+        if ref_id2 is not None:
+            request_url = "refId2=" + ref_id2 + "&"
+        if feature_name is not None:
+            request_url = "featureName=" + feature_name + "&"
+        if feature_id is not None:
+            request_url = "featureId" + feature_id + "&"
+        if state is not None:
+            request_url = "state=" + state + "&"
+        LOGGER.info(url + "/ems/api/v5/products?" + request_url[0:-1])
+        self.getRequest(url + "/ems/api/v5/products?" + request_url[0:-1], "", current_api_name(),
+                        expected_return_code, out_parameter_list, out_json_path_list)
+        if self.getApiresponse[1] == expected_return_code:
+            for i, out_param in enumerate(out_parameter_list):
+                LOGGER.info(out_parameter_list[i])
+                LOGGER.info(self.out_param_List[out_parameter_list[i]])
         return self
 
-    def replaceProduct(self, product_json, expectedCode, outParameterList, outJsonPathList, id=None, nameVersion=None,
-                       externalId=None, identifier=None):
+    def replace_product(self, product_json, expected_return_code, out_parameter_list, out_json_path_list, id=None,
+                        name_version=None,
+                        external_id=None, identifier=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.putRequest(url + '/ems/api/v5/products/' + id, product_json, currentApiFuncName(),
-                                       expectedCode,outParameterList, outJsonPathList)
-        elif externalId != None:
-            self.putRequest(url + '/ems/api/v5/products/externalId=' + externalId, product_json,
-                                       currentApiFuncName(), expectedCode,outParameterList, outJsonPathList)
-        elif nameVersion != None:
-            self.putRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion, product_json,
-                                       currentApiFuncName(), expectedCode,outParameterList, outJsonPathList)
-        elif identifier != None:
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        if id is not None:
+            self.putRequest(url + '/ems/api/v5/products/' + id, product_json, current_api_name(),
+                            expected_return_code, out_parameter_list, out_json_path_list)
+        elif external_id is not None:
+            self.putRequest(url + '/ems/api/v5/products/externalId=' + external_id, product_json,
+                            current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif name_version is not None:
+            self.putRequest(url + '/ems/api/v5/products/nameVersion=' + name_version, product_json,
+                            current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif identifier is not None:
             self.putRequest(url + '/ems/api/v5/products/identifier=' + identifier, product_json,
-                                       currentApiFuncName(), expectedCode,outParameterList, outJsonPathList)
-            if self.putApiResponse[1] == expectedCode:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+                            current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+            if self.putApiResponse[1] == expected_return_code:
+                for i, out_param in enumerate(out_parameter_list):
+                    LOGGER.info(out_parameter_list[i])
+                    LOGGER.info(self.out_param_List[out_parameter_list[i]])
         return self
 
-    def deleteProduct(self, expectedReturnCode,outParameterList=None, outJsonPathList=None, id=None, nameVersion=None, externalId=None, identifier=None):
+    def delete_product(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None,
+                       name_version=None, external_id=None, identifier=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.deleteRequest(url + '/ems/api/v5/products/' + id,"", currentApiFuncName(),
-                            expectedReturnCode,outParameterList,outJsonPathList)
-        elif externalId != None:
-            self.deleteRequest(url + '/ems/api/v5/products/externalId=' + externalId,"",
-                            currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        elif nameVersion != None:
-            self.deleteRequest(url + '/ems/api/v5/products/nameVersion=' + nameVersion,"",
-                            currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        elif identifier != None:
-            self.deleteRequest(url + '/ems/api/v5/products/identifier=' + identifier,"",
-                            currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        if self.deleteApiresponse[0] == expectedReturnCode:
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        if id is not None:
+            self.deleteRequest(url + '/ems/api/v5/products/' + id, "", current_api_name(),
+                               expected_return_code, out_parameter_list, out_json_path_list)
+        elif external_id is not None:
+            self.deleteRequest(url + '/ems/api/v5/products/externalId=' + external_id, "",
+                               current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif name_version is not None:
+            self.deleteRequest(url + '/ems/api/v5/products/nameVersion=' + name_version, "",
+                               current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        elif identifier is not None:
+            self.deleteRequest(url + '/ems/api/v5/products/identifier=' + identifier, "",
+                               current_api_name(), expected_return_code, out_parameter_list, out_json_path_list)
+        if self.deleteApiresponse[0] == expected_return_code:
             if (self.deleteApiresponse[0] == ErrorCode.HTTP204):
                 LOGGER.info("Product deleted successfully")
             else:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+                for i, out_param in enumerate(out_parameter_list):
+                    LOGGER.info(out_parameter_list[i])
+                    LOGGER.info(self.out_param_List[out_parameter_list[i]])
 
         return self

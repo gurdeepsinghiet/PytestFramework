@@ -13,7 +13,7 @@ from EMSWS.factories.FingerPrint import FingerPrintFactory
 from EMSWS.factories.Product import ProductFactory
 from EMSWS.factories.Contact import ContactFactory
 from EMSWS.factories.Customer import CustomerFactory
-from EMSWS.factories.NameSpace import NameSpacefactory
+from EMSWS.factories.NameSpace import NameSpaceFactory
 from EMSWS.factories.ReportEngine import ReportGenerator
 from EMSWS.factories.Activation import ActivationFactory
 from EMSWS.factories.Entitlement import Entitlementfacory
@@ -32,7 +32,7 @@ url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
-class EMSFactory( EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFactory,
+class EMSFactory( EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFactory,
                  ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelfactory,ReportGenerator,
                  RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,
                  UserManagementFactory,RoleManagementFactory,
@@ -99,12 +99,11 @@ class EMSFactory( EMSAssertionFactory,NameSpacefactory,FeatureFactory,ProductFac
                 return False
             return True
 
-
-    def retriveFingerPrint(self,fpXmlFileName):
-        u=UtilityClass()
-        filename=fpXmlFileName+self.RandomString(8)+".xml"
-        command=self.getModulePath()+"//FingerPrintCreation//fingerPrint.exe -f "+ self.getModulePath()+Constant.emsReportPath+filename
-        os.system('cmd /c '+command)
-        content=u.readFile(self.getModulePath()+"\\output\\"+filename)
-        u.deleteFile(self.getModulePath()+"\\output\\"+filename)
+    def retrive_finger_print(self, fp_xml_file_name):
+        u = UtilityClass()
+        file_name = fp_xml_file_name + self.RandomString(8) + ".xml"
+        command = self.getModulePath() + "//FingerPrintCreation//fingerPrint.exe -f " + self.getModulePath() + Constant.emsReportPath + file_name
+        os.system('cmd /c ' + command)
+        content = u.readFile(self.getModulePath() + "\\output\\" + file_name)
+        u.deleteFile(self.getModulePath() + "\\output\\" + file_name)
         return content
