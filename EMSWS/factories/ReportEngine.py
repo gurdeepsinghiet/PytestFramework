@@ -86,7 +86,7 @@ class ReportGenerator():
 
     def getReportData(self)->list:
         LOGGER.info(self.data)
-        return self.data
+        return self.report_data
 
 
     def ConsolidatedReport(self):

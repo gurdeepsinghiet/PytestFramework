@@ -39,7 +39,7 @@ class EMSFactory( EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFac
                  AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory):
 
     def __init__(self):
-        self.data=[]
+        self.report_data=[]
         self.out_param_List={}
     @staticmethod
     def RandomString(length) ->str:

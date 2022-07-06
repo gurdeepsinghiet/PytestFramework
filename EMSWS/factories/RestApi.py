@@ -41,7 +41,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(postapiResponse.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
                 LOGGER.error(postapiResponse.text)
                 #Test case will be terminate at this Step
                 pytest.fail("Response code not matched")
@@ -53,11 +53,11 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             pytest.fail("Connection error with server")
             LOGGER.error(e)
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+        self.report_data.append(reportParam.getReportParameters())
+        LOGGER.info(self.report_data)
         #return [postapiResponse.text,postapiResponse.status_code,reportParam.getReportParameters()]
         return self
 
@@ -88,7 +88,7 @@ class RestApiUtilityFactory(object):
                     reportParam.setActualRespone("response json decode error")
                     reportParam.setStatus("Failed")
                     reportParam.setExpectedResponse("")
-                    self.data.append(reportParam.getReportParameters())
+                    self.report_data.append(reportParam.getReportParameters())
                     LOGGER.error(e)
                     pytest.fail("problem with json decoding")
             else:
@@ -98,7 +98,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(getapiRes.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
                 pytest.fail("Problem with getting Entity")
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
@@ -107,9 +107,9 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+            self.report_data.append(reportParam.getReportParameters())
+        self.report_data.append(reportParam.getReportParameters())
+        LOGGER.info(self.report_data)
         self.getApiresponse=[getapiRes.text, getapiRes.status_code, reportParam.getReportParameters()]
 
         return self
@@ -140,7 +140,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(deleteApiresponse.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
                 LOGGER.error(deleteApiresponse.text)
                 pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
@@ -150,11 +150,11 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             pytest.fail("Connection error with server")
             LOGGER.error(e)
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+        self.report_data.append(reportParam.getReportParameters())
+        LOGGER.info(self.report_data)
         self.deleteApiresponse = [deleteApiresponse.status_code, reportParam.getReportParameters()]
         return self
 
@@ -187,7 +187,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(patchapiRes.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
                 LOGGER.error(patchapiRes.text)
                 pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
@@ -197,11 +197,11 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             pytest.fail("Connection error with server")
             LOGGER.error(e)
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+        self.report_data.append(reportParam.getReportParameters())
+        LOGGER.info(self.report_data)
         self.patchApiResponse = [patchapiRes.text, patchapiRes.status_code, reportParam.getReportParameters()]
         return self
 
@@ -234,7 +234,7 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(putApiResponse.text)
                 reportParam.setStatus("Failed")
                 reportParam.setExpectedResponse("")
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
                 LOGGER.error(putApiResponse.text)
                 pytest.fail("Response code not matched")
         except requests.exceptions.RequestException as e:
@@ -244,11 +244,11 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             pytest.fail("Connection error with server")
             LOGGER.error(e)
-        self.data.append(reportParam.getReportParameters())
-        LOGGER.info(self.data)
+        self.report_data.append(reportParam.getReportParameters())
+        LOGGER.info(self.report_data)
         self.putApiResponse = [putApiResponse.text, putApiResponse.status_code, reportParam.getReportParameters()]
         return self
 
@@ -279,7 +279,7 @@ class RestApiUtilityFactory(object):
                 if (variableList != None and xPathList != None):
                     for i, jsonxpath in enumerate(xPathList):
                         self.getJsonXpathValue(response, variableList[i], xPathList[i])
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
 
         except FileNotFoundError as e:
             reportParam.setActualCode("404")
@@ -287,7 +287,7 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             LOGGER.error(e)
             pytest.fail("File Not found at this path")
         except json.decoder.JSONDecodeError as e:
@@ -296,7 +296,7 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             LOGGER.error(e)
             pytest.fail("problem with json decoding")
         except TypeError as e:
@@ -305,7 +305,7 @@ class RestApiUtilityFactory(object):
             reportParam.setActualRespone(e)
             reportParam.setStatus("Failed")
             reportParam.setExpectedResponse("")
-            self.data.append(reportParam.getReportParameters())
+            self.report_data.append(reportParam.getReportParameters())
             LOGGER.error(e)
             pytest.fail("problem with json decoding")
         return self
@@ -334,14 +334,14 @@ class RestApiUtilityFactory(object):
                 if (resVarList != None and resJpathList != None):
                     for i, jsonxpath in enumerate(resJpathList):
                         self.getJsonXpathValue(response, resVarList[i], resJpathList[i])
-                self.data.append(reportParam.getReportParameters())
+                self.report_data.append(reportParam.getReportParameters())
             except TypeError as e:
                     reportParam.setActualCode("404")
                     reportParam.setResponseTime("")
                     reportParam.setActualRespone(e)
                     reportParam.setStatus("Failed")
                     reportParam.setExpectedResponse("")
-                    self.data.append(reportParam.getReportParameters())
+                    self.report_data.append(reportParam.getReportParameters())
                     LOGGER.error(e)
                     pytest.fail("problem with json decoding")
         return self
