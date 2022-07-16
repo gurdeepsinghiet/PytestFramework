@@ -85,7 +85,7 @@ class ReportGenerator():
         return preExistingTempleteData
 
     def getReportData(self)->list:
-        LOGGER.info(self.data)
+        LOGGER.info(self.report_data)
         return self.report_data
 
 

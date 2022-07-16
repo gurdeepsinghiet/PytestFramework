@@ -1,0 +1,701 @@
+API:
+-
+ name: "add_namespace_wrap"
+ protocol: "POST"
+ url: "/ems/api/v5/namespaces"
+ return_type : self
+
+-
+  name: "get_namespace_wrap"
+  protocol: "GET"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "search_namespace_wrap"
+  protocol: "GET"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: refId1
+   type: urlParam
+  -
+   name: refId2
+   type: urlParam
+  -
+   name: Description
+   type: urlParam
+  -
+   name: State
+   type: urlParam
+-
+  name: "partial_update_namespace_wrap"
+  protocol: "PATCH"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+  name: "delete_namespace_wrap"
+  protocol: "DELETE"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+  name: "replace_namespace_wrap"
+  protocol: "PUT"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+ name: "add_namespace"
+ protocol: "POST"
+ url: "/ems/api/v5/namespaces"
+ return_type : self
+
+-
+  name: "get_namespace"
+  protocol: "GET"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "search_namespace"
+  protocol: "GET"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: refId1
+   type: urlParam
+  -
+   name: refId2
+   type: urlParam
+  -
+   name: Description
+   type: urlParam
+  -
+   name: State
+   type: urlParam
+-
+  name: "partial_update_namespace"
+  protocol: "PATCH"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+  name: "delete_namespace"
+  protocol: "DELETE"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+  name: "replace_namespace"
+  protocol: "PUT"
+  url: "/ems/api/v5/namespaces/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+  -
+   name: name
+   type: urlParam
+-
+ name: "add_namespace_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/namespaces"
+ return_type : self
+
+-
+ name: "add_namespace_json"
+ protocol: "POST"
+ url: "/ems/api/v5/namespaces"
+ return_type : self
+
+-
+ name: "add_feature"
+ protocol: "POST"
+ url: "/ems/api/v5/features"
+ return_type : self
+
+-
+ name: "add_feature_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/features"
+ return_type : self
+
+-
+ name: "add_feature_json"
+ protocol: "POST"
+ url: "/ems/api/v5/features"
+ return_type : self
+
+-
+  name: "get_feature"
+  protocol: "GET"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+  -
+   name: feature_id
+   type: urlParam
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier_namespace
+   type: urlParam
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+-
+  name: "partial_update_feature"
+  protocol: "PATCH"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: feature_id
+   type: urlParam
+
+  -
+   name: identifier_namespace
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+-
+  name: "search_feature"
+  protocol: "GET"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: license_model_name
+   type: urlParam
+
+  -
+   name: license_model_id
+   type: urlParam
+
+  -
+   name: namespace_id
+   type: urlParam
+
+  -
+   name: namespace_name
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+  -
+   name: description
+   type: urlParam
+
+  -
+   name: version
+   type: urlParam
+
+  -
+   name: ref_id1
+   type: urlParam
+
+  -
+   name: ref_id2
+   type: urlParam
+
+-
+  name: "delete_feature"
+  protocol: "DELETE"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: feature_id
+   type: urlParam
+
+  -
+   name: identifier_namespace
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+-
+  name: "replace_feature"
+  protocol: "PUT"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: feature_id
+   type: urlParam
+
+  -
+   name: identifier_namespace
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+-
+ name: "add_product_non_lvh"
+ protocol: "POST"
+ url: "/ems/api/v5/products"
+ return_type : self
+
+-
+ name: "add_product_non_lvh_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/products"
+ return_type : self
+
+-
+ name: "add_product_non_lvh_json"
+ protocol: "POST"
+ url: "/ems/api/v5/products"
+ return_type : self
+
+-
+  name: "partial_update_product"
+  protocol: "PATCH"
+  url: "/ems/api/v5/products/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+-
+  name: "get_product"
+  protocol: "GET"
+  url: "/ems/api/v5/products/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+  -
+   name: product_id
+   type: urlParam
+
+-
+  name: "replace_product"
+  protocol: "PUT"
+  url: "/ems/api/v5/products/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+  -
+   name: product_id
+   type: urlParam
+
+-
+  name: "delete_product"
+  protocol: "DELETE"
+  url: "/ems/api/v5/products/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: name_version
+   type: urlParam
+
+  -
+   name: product_id
+   type: urlParam
+
+-
+ name: "add_finger_print"
+ protocol: "POST"
+ url: "/ems/api/v5/customers/{{customer_id}}/fingerprints"
+
+-
+ name: "add_entitlement_non_lvh_eaw_on_json_path"
+ protocol: "POST"
+ url: "/ems/api/v5/entitlements"
+
+-
+ name: "add_entitlement_json"
+ protocol: "POST"
+ url: "/ems/api/v5/entitlements"
+
+-
+ name: "add_entitlement_non_lvh_eaw_off_json_path"
+ protocol: "POST"
+ url: "/ems/api/v5/entitlements"
+
+-
+  name: "partial_update_entitlement"
+  protocol: "PATCH"
+  url: "/ems/api/v5/entitlements/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: e_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "get_entitlement"
+  protocol: "GET"
+  url: "/ems/api/v5/entitlements/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: e_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "delete_entitlement"
+  protocol: "DELETE"
+  url: "/ems/api/v5/entitlements/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: e_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+
+-
+  name: "replace_entitlement"
+  protocol: "PUT"
+  url: "/ems/api/v5/entitlements/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: e_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+ name: "add_product_key_entitlement"
+ protocol: "POST"
+ url: "/ems/api/v5/entitlements/eId={{e_id}}/productKeys"
+
+-
+ name: "add_standard_contact_json_path"
+ protocol: "POST"
+ url: "/ems/api/v5/contacts"
+
+-
+ name: "add_standard_contact_json"
+ protocol: "POST"
+ url: "/ems/api/v5/contacts"
+
+-
+  name: "get_contact"
+  protocol: "GET"
+  url: "/ems/api/v5/contacts/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+-
+  name: "partial_update_contact"
+  protocol: "PATCH"
+  url: "/ems/api/v5/contacts/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+-
+  name: "delete_contact"
+  protocol: "DELETE"
+  url: "/ems/api/v5/contacts/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+-
+  name: "replace_contact"
+  protocol: "PUT"
+  url: "/ems/api/v5/contacts/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+-
+  name: "search_contact"
+  protocol: "GET"
+  url: "/ems/api/v5/features/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+  -
+   name: market_group_name
+   type: urlParam
+
+  -
+   name: market_group_id
+   type: urlParam
+
+  -
+   name: customer_name
+   type: urlParam
+
+  -
+   name: customer_id
+   type: urlParam
+
+  -
+   name: state
+   type: urlParam
+
+  -
+   name: phone_number
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: ref_id1
+   type: urlParam
+
+  -
+   name: ref_id2
+   type: urlParam

@@ -12,29 +12,33 @@ url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
+
 class RestApiUtilityFactory(object):
 
-    def PostRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
+
+    def post_request(self, request_url, request_body, api_name, expected_return_code, out_parameter_list=None,
+                     out_json_path_list=None, xmlSupport=None):
+
         reportParam = ReportParam()
         try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            postapiResponse = requests.post(requestUrl, requestBody,auth=(username, password))
+            reportParam.setApiName(api_name)
+            reportParam.setInputs(request_body)
+            reportParam.setExpectedCode(expected_return_code)
+            postapiResponse = requests.post(request_url, request_body, auth=(username, password))
             LOGGER.info(postapiResponse)
-            #if expected code matches status_code of RestApi response,then reportParam collect Status Pass data for the report
-            if postapiResponse.status_code == expectedresCode:
+            # if expected code matches status_code of RestApi response,then reportParam collect Status Pass data for the report
+            if postapiResponse.status_code == expected_return_code:
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
                 reportParam.setActualRespone(postapiResponse.text)
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
-                if(variableList != None and xPathList !=None):
-                    for i, jsonxpath in enumerate(xPathList):
-                        LOGGER.info(xPathList[i])
-                        LOGGER.info(variableList[i])
-                        self.getJsonXpathValue(postapiResponse.text,variableList[i],xPathList[i])
-            #if expected code does matches status_code of RestApi response,then reportParam collect Status Fail data for the report
+                if out_parameter_list != None and out_json_path_list != None:
+                    for i, jsonxpath in enumerate(out_json_path_list):
+                        LOGGER.info(out_json_path_list[i])
+                        LOGGER.info(out_parameter_list[i])
+                        self.getJsonXpathValue(postapiResponse.text, out_parameter_list[i], out_json_path_list[i])
+            # if expected code does matches status_code of RestApi response,then reportParam collect Status Fail data for the report
             else:
                 reportParam.setActualCode(postapiResponse.status_code)
                 reportParam.setResponseTime(postapiResponse.elapsed.total_seconds())
@@ -43,9 +47,9 @@ class RestApiUtilityFactory(object):
                 reportParam.setExpectedResponse("")
                 self.report_data.append(reportParam.getReportParameters())
                 LOGGER.error(postapiResponse.text)
-                #Test case will be terminate at this Step
+                # Test case will be terminate at this Step
                 pytest.fail("Response code not matched")
-        #the below Step handle exception in the Rest Api like Server error,Connection error etc.
+        # the below Step handle exception in the Rest Api like Server error,Connection error etc.
         except requests.exceptions.RequestException as e:
             LOGGER.error(e)
             reportParam.setActualCode("500")
@@ -58,29 +62,30 @@ class RestApiUtilityFactory(object):
             LOGGER.error(e)
         self.report_data.append(reportParam.getReportParameters())
         LOGGER.info(self.report_data)
-        #return [postapiResponse.text,postapiResponse.status_code,reportParam.getReportParameters()]
+        # return [postapiResponse.text,postapiResponse.status_code,reportParam.getReportParameters()]
         return self
 
-    def getRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
+    def get_request(self, request_url, request_body, api_name, expected_return_code, out_parameter_list=None,
+                    out_json_path_list=None, xmlSupport=None):
         reportParam = ReportParam()
         try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            getapiRes = requests.get(requestUrl, requestBody, auth=(username, password))
+            reportParam.setApiName(api_name)
+            reportParam.setInputs(request_body)
+            reportParam.setExpectedCode(expected_return_code)
+            getapiRes = requests.get(request_url, request_body, auth=(username, password))
             LOGGER.info(getapiRes.status_code)
-            if getapiRes.status_code == expectedresCode:
+            if getapiRes.status_code == expected_return_code:
                 try:
                     reportParam.setActualCode(getapiRes.status_code)
                     reportParam.setResponseTime(getapiRes.elapsed.total_seconds())
                     reportParam.setActualRespone(getapiRes.text)
                     reportParam.setStatus("Pass")
                     reportParam.setExpectedResponse("")
-                    if (variableList != None and xPathList != None):
-                        for i, jsonxpath in enumerate(xPathList):
-                            LOGGER.info(xPathList[i])
-                            LOGGER.info(variableList[i])
-                            self.getJsonXpathValue(getapiRes.text, variableList[i], xPathList[i])
+                    if (out_parameter_list != None and out_json_path_list != None):
+                        for i, jsonxpath in enumerate(out_json_path_list):
+                            LOGGER.info(out_json_path_list[i])
+                            LOGGER.info(out_parameter_list[i])
+                            self.getJsonXpathValue(getapiRes.text, out_parameter_list[i], out_json_path_list[i])
 
                 except json.decoder.JSONDecodeError as e:
                     reportParam.setActualCode(getapiRes.status_code)
@@ -110,30 +115,31 @@ class RestApiUtilityFactory(object):
             self.report_data.append(reportParam.getReportParameters())
         self.report_data.append(reportParam.getReportParameters())
         LOGGER.info(self.report_data)
-        self.getApiresponse=[getapiRes.text, getapiRes.status_code, reportParam.getReportParameters()]
+        self.getApiresponse = [getapiRes.text, getapiRes.status_code, reportParam.getReportParameters()]
 
         return self
 
-    def deleteRequest(self, requestUrl, requestBody, ApiName, expectedresCode,variableList=None,xPathList=None):
+    def delete_request(self, request_url, request_body, api_name, expected_return_code, out_parameter_list=None,
+                       out_json_path_list=None):
         reportParam = ReportParam()
         try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            deleteApiresponse = requests.delete(requestUrl, data=requestBody, auth=(username, password))
+            reportParam.setApiName(api_name)
+            reportParam.setInputs(request_body)
+            reportParam.setExpectedCode(expected_return_code)
+            deleteApiresponse = requests.delete(request_url, data=request_body, auth=(username, password))
             LOGGER.info(deleteApiresponse)
-            if deleteApiresponse.status_code == expectedresCode:
+            if deleteApiresponse.status_code == expected_return_code:
                 # Collecting data for Report Status if Test step Pass
                 reportParam.setActualCode(deleteApiresponse.status_code)
                 reportParam.setResponseTime(deleteApiresponse.elapsed.total_seconds())
                 reportParam.setActualRespone("Entity deleted successfully")
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
-                if (variableList != None and xPathList != None and deleteApiresponse.text !=None):
-                    for i, jsonxpath in enumerate(xPathList):
-                         LOGGER.info(xPathList[i])
-                         LOGGER.info(variableList[i])
-                         self.getJsonXpathValue(deleteApiresponse.text, variableList[i], xPathList[i])
+                if (out_parameter_list != None and out_json_path_list != None and deleteApiresponse.text != None):
+                    for i, jsonxpath in enumerate(out_json_path_list):
+                        LOGGER.info(out_json_path_list[i])
+                        LOGGER.info(out_parameter_list[i])
+                        self.getJsonXpathValue(deleteApiresponse.text, out_parameter_list[i], out_json_path_list[i])
             else:
                 reportParam.setActualCode(deleteApiresponse.status_code)
                 reportParam.setResponseTime(deleteApiresponse.elapsed.total_seconds())
@@ -158,16 +164,17 @@ class RestApiUtilityFactory(object):
         self.deleteApiresponse = [deleteApiresponse.status_code, reportParam.getReportParameters()]
         return self
 
-    def patchRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None,xmlSupport=None):
+    def patch_request(self, request_url, request_body, api_name, expected_return_code, out_parameter_list=None,
+                      out_json_path_list=None, xmlSupport=None):
         reportParam = ReportParam()
         try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            patchapiRes = requests.patch(requestUrl, requestBody, auth=(username, password))
+            reportParam.setApiName(api_name)
+            reportParam.setInputs(request_body)
+            reportParam.setExpectedCode(expected_return_code)
+            patchapiRes = requests.patch(request_url, request_body, auth=(username, password))
             LOGGER.info(patchapiRes)
             # Collectin data for Report
-            if patchapiRes.status_code == expectedresCode:
+            if patchapiRes.status_code == expected_return_code:
                 response_dictionary = json.loads(patchapiRes.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
@@ -176,11 +183,11 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(patchapiRes.text)
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
-                if (variableList != None and xPathList != None):
-                    for i, jsonxpath in enumerate(xPathList):
-                        LOGGER.info(xPathList[i])
-                        LOGGER.info(variableList[i])
-                        self.getJsonXpathValue(patchapiRes.text, variableList[i], xPathList[i])
+                if (out_parameter_list != None and out_json_path_list != None):
+                    for i, jsonxpath in enumerate(out_json_path_list):
+                        LOGGER.info(out_json_path_list[i])
+                        LOGGER.info(out_parameter_list[i])
+                        self.getJsonXpathValue(patchapiRes.text, out_parameter_list[i], out_json_path_list[i])
             else:
                 reportParam.setActualCode(patchapiRes.status_code)
                 reportParam.setResponseTime(patchapiRes.elapsed.total_seconds())
@@ -205,16 +212,17 @@ class RestApiUtilityFactory(object):
         self.patchApiResponse = [patchapiRes.text, patchapiRes.status_code, reportParam.getReportParameters()]
         return self
 
-    def putRequest(self, requestUrl, requestBody, ApiName,expectedresCode,variableList=None,xPathList=None):
+    def put_request(self, request_url, request_body, api_name, expected_return_code, out_parameter_list=None,
+                    out_json_path_list=None):
         reportParam = ReportParam()
         try:
-            reportParam.setApiName(ApiName)
-            reportParam.setInputs(requestBody)
-            reportParam.setExpectedCode(expectedresCode)
-            putApiResponse = requests.patch(requestUrl, requestBody, auth=(username, password))
+            reportParam.setApiName(api_name)
+            reportParam.setInputs(request_body)
+            reportParam.setExpectedCode(expected_return_code)
+            putApiResponse = requests.put(request_url, request_body, auth=(username, password))
             LOGGER.info(putApiResponse)
             # Collectin data for Report
-            if putApiResponse.status_code == expectedresCode:
+            if putApiResponse.status_code == expected_return_code:
                 response_dictionary = json.loads(putApiResponse.text)
                 LOGGER.info(response_dictionary)
                 # Collecting data for Report Status if Test step Pass
@@ -223,11 +231,11 @@ class RestApiUtilityFactory(object):
                 reportParam.setActualRespone(putApiResponse.text)
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
-                if (variableList != None and xPathList != None):
-                    for i, jsonxpath in enumerate(xPathList):
-                        LOGGER.info(xPathList[i])
-                        LOGGER.info(variableList[i])
-                        self.getJsonXpathValue(putApiResponse.text, variableList[i], xPathList[i])
+                if (out_parameter_list != None and out_json_path_list != None):
+                    for i, jsonxpath in enumerate(out_json_path_list):
+                        LOGGER.info(out_json_path_list[i])
+                        LOGGER.info(out_parameter_list[i])
+                        self.getJsonXpathValue(putApiResponse.text, out_parameter_list[i], out_json_path_list[i])
             else:
                 reportParam.setActualCode(putApiResponse.status_code)
                 reportParam.setResponseTime(putApiResponse.elapsed.total_seconds())
@@ -252,23 +260,23 @@ class RestApiUtilityFactory(object):
         self.putApiResponse = [putApiResponse.text, putApiResponse.status_code, reportParam.getReportParameters()]
         return self
 
-    def UpdateJsonFile(self,jsonpath,jsontagsList,jsonValueList,variableList=None,xPathList=None):
-        utilityClass=UtilityClass()
+    def UpdateJsonFile(self, json_file_path, json_tags_list, json_value_list, out_parameter_list=None, out_json_path_list=None):
+        utilityClass = UtilityClass()
         reportParam = ReportParam()
         reportParam.setApiName("UpdateJsonPath")
-        reportParam.setInputs(jsonpath)
+        reportParam.setInputs(json_file_path)
         reportParam.setExpectedCode("200")
         try:
-            with open(self.getModulePath()+jsonpath) as f:
-                jsonData = json.load(f)
-                LOGGER.info(jsonData)
-                for i, jsonxpath in enumerate(jsontagsList):
+            with open(self.getModulePath() + json_file_path) as f:
+                json_data = json.load(f)
+                LOGGER.info(json_data)
+                for i, jsonxpath in enumerate(json_tags_list):
                     LOGGER.info(jsonxpath)
                     jsonpath_expression = parse(jsonxpath)
                     LOGGER.info(jsonpath_expression)
-                    jsonpath_expression.find(jsonData)
-                    jsonpath_expression.update(jsonData, jsonValueList[i])
-                response = json.dumps(jsonData, indent=2)
+                    jsonpath_expression.find(json_data)
+                    jsonpath_expression.update(json_data, json_value_list[i])
+                response = json.dumps(json_data, indent=2)
                 LOGGER.info(response)
                 reportParam.setActualCode("200")
                 reportParam.setResponseTime("")
@@ -276,9 +284,9 @@ class RestApiUtilityFactory(object):
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
                 self.UpdateJsonFileResponse = response
-                if (variableList != None and xPathList != None):
-                    for i, jsonxpath in enumerate(xPathList):
-                        self.getJsonXpathValue(response, variableList[i], xPathList[i])
+                if out_parameter_list is not None and out_json_path_list is not None:
+                    for i, jsonxpath in enumerate(out_json_path_list):
+                        self.getJsonXpathValue(response, out_parameter_list[i], out_json_path_list[i])
                 self.report_data.append(reportParam.getReportParameters())
 
         except FileNotFoundError as e:
@@ -310,13 +318,13 @@ class RestApiUtilityFactory(object):
             pytest.fail("problem with json decoding")
         return self
 
-    def UpdateJson(self,jsonDictionary,jsontagsList,jsonValueList,resVarList=None,resJpathList=None):
-        utilityClass=UtilityClass()
+    def UpdateJson(self, jsonDictionary, jsontagsList, jsonValueList, resVarList=None, resJpathList=None):
+        utilityClass = UtilityClass()
         reportParam = ReportParam()
         reportParam.setApiName("UpdateJsonPath")
         reportParam.setInputs(utilityClass.convertDictinarytoJson(jsonDictionary))
         reportParam.setExpectedCode("200")
-        for i,jsonxpath in enumerate(jsontagsList):
+        for i, jsonxpath in enumerate(jsontagsList):
             LOGGER.info(jsonxpath)
             jsonpath_expression = parse(jsonxpath)
             LOGGER.info(jsonpath_expression)
@@ -336,31 +344,79 @@ class RestApiUtilityFactory(object):
                         self.getJsonXpathValue(response, resVarList[i], resJpathList[i])
                 self.report_data.append(reportParam.getReportParameters())
             except TypeError as e:
-                    reportParam.setActualCode("404")
-                    reportParam.setResponseTime("")
-                    reportParam.setActualRespone(e)
-                    reportParam.setStatus("Failed")
-                    reportParam.setExpectedResponse("")
-                    self.report_data.append(reportParam.getReportParameters())
-                    LOGGER.error(e)
-                    pytest.fail("problem with json decoding")
+                reportParam.setActualCode("404")
+                reportParam.setResponseTime("")
+                reportParam.setActualRespone(e)
+                reportParam.setStatus("Failed")
+                reportParam.setExpectedResponse("")
+                self.report_data.append(reportParam.getReportParameters())
+                LOGGER.error(e)
+                pytest.fail("problem with json decoding")
         return self
 
-
-    def updateXMLFile(self,xmlFilePath,xpathList,xpathValueList,resVarList=None,resXpathList=None):
-        xmlTree=ET.parse(xmlFilePath)
-        myRoot=xmlTree.getroot()
-        for i, xpath in enumerate(xpathList):
-            new_tag=myRoot.find(xpath)
+    def updateXMLFile(self, xmlFilePath, out_json_path_list, xpathValueList, resVarList=None,
+                      resout_json_path_list=None):
+        xmlTree = ET.parse(xmlFilePath)
+        myRoot = xmlTree.getroot()
+        for i, xpath in enumerate(out_json_path_list):
+            new_tag = myRoot.find(xpath)
             new_tag.text = xpathValueList[i]
         self.xmlstroutput = ET.tostring(myRoot, encoding='unicode', method='xml')
         LOGGER.info(self.xmlstroutput)
-        if (resVarList != None and resXpathList != None):
-            for i,xpath in enumerate(resXpathList):
+        if (resVarList != None and resout_json_path_list != None):
+            for i, xpath in enumerate(resout_json_path_list):
                 selected_Tag = myRoot.find(xpath)
-                self.emsVariableList[resVarList[i]] = selected_Tag.text
+                self.emsout_parameter_list[resVarList[i]] = selected_Tag.text
         return self
 
-
-    def updateXML(self,xmlData,xpathList,xpathValueList,resVarList=None,resJpathList=None):
+    def updateXML(self, xml_data, out_json_path_list, xpathValueList, resVarList=None, resJpathList=None):
         pass
+
+    def getJsonXpathValue(self, jsonString, jsonVarible, jsonXpath):
+        json_data = json.loads(jsonString)
+        jsonpath_expression = parse(jsonXpath)
+        match = jsonpath_expression.find(json_data)
+        self.out_param_List[jsonVarible] = match[0].value
+        LOGGER.info(self.out_param_List)
+
+    def getJsonXpathsValues(self, jsonString, jsonVaribleList, jsonXpathList):
+        if (jsonVaribleList != None and jsonXpathList != None):
+            for i, jsonxpath in enumerate(jsonXpathList):
+                self.getJsonXpathValue(jsonString, jsonVaribleList[i], jsonXpathList[i])
+        return self
+
+    def isJson(self, jsonString):
+        try:
+            json.loads(jsonString)
+        except ValueError as e:
+            return False
+        return True
+
+    def isXml(self, xmlString):
+        try:
+            ET.fromstring(xmlString)
+        except ET.ParseError:
+            return False
+        return True
+
+    def getModulePath(self):
+        path = os.path.dirname(Constant.__file__)
+        return path
+
+    def isJsonFile(self, jsonFilePath):
+        with open(jsonFilePath, 'r') as f:
+            data = f.read()
+            try:
+                json.loads(data)
+            except ValueError as e:
+                return False
+            return True
+
+    def isXmlFile(self, xmlFilePath):
+        with open(xmlFilePath, 'r') as f:
+            data = f.read()
+            try:
+                ET.fromstring(data)
+            except ET.ParseError:
+                return False
+            return True

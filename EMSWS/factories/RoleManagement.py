@@ -18,7 +18,7 @@ class RoleManagementFactory(object):
             self.PostRequest(url+'/ems/api/v5/roles', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
                              ["resvar", "roleName"],["$", "$.role.name"])
 
-        elif (expectedCode != None and outParameterList != None and outJsonPathList != None):
+        elif expectedCode != None and outParameterList != None and outJsonPathList != None:
             self.PostRequest(url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, currentApiFuncName(),
                              expectedCode, outParameterList, outJsonPathList)
         return self

@@ -10,7 +10,6 @@ class EMSAssertionFactory:
 
     def __init__(self):
         pass
-
     def verify_assertions(self,expected,actual,verification_comments=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
@@ -34,15 +33,16 @@ class EMSAssertionFactory:
             self.data.append(report_param.getReportParameters())
             LOGGER.error("expected value " + str(expected) + " is not matched with " + str(actual))
             pytest.fail("Test case is  Failed as expected value is not matched with actual value")
-        self.data.append(report_param.getReportParameters())
+        self.report_data.append(report_param.getReportParameters())
         return self
 
     def verify_json_path_values(self, json_dictionary, json_tag_list, expected_value_list):
         for i, json_path in enumerate(json_tag_list):
             jsonpath_expression = parse(json_path)
             match = jsonpath_expression.find(json_dictionary)
-            self.verify_assertions(match[0].value, expected_value_list[i])
+            self.verify_assertions(expected_value_list[i],match[0].value)
         return self
+
 
     def verify_json_path_value(self,json_dictionary,json_tag,expected_value):
         jsonpath_expression = parse(json_tag)

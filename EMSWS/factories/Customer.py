@@ -7,13 +7,16 @@ LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
+
+
 class CustomerFactory(object):
 
     def addCustomerJsonFilePath(self, customerJsonFilePath,CustomerName,contact_id,expectedReturnCode,outParameterList=None,outJsonPathList=None):
         utility = UtilityClass()
         currentApiFuncName = utility.currentApiName()
         LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(customerJsonFilePath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],[CustomerName,CustomerName,contact_id],["custRes"],['$'])
+        self.UpdateJsonFile(customerJsonFilePath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
+                            [CustomerName,CustomerName,contact_id],["custRes"],['$'])
         if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
             self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,["customerName","custGUID","customerRes"],['$.customer.name','$.customer.id','$'])
             LOGGER.info(self.out_param_List["customerName"])
