@@ -653,7 +653,7 @@ API:
 -
   name: "search_contact"
   protocol: "GET"
-  url: "/ems/api/v5/features/"
+  url: "/ems/api/v5/contacts/"
   xsd: ''
   params:
   -
@@ -698,4 +698,382 @@ API:
 
   -
    name: ref_id2
+   type: urlParam
+
+-
+ name: "add_customer_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/customers"
+
+-
+ name: "add_customer_json"
+ protocol: "POST"
+ url: "/ems/api/v5/customers"
+
+-
+  name: "partial_update_customer"
+  protocol: "PATCH"
+  url: "/ems/api/v5/customers/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "replace_customer"
+  protocol: "PUT"
+  url: "/ems/api/v5/customers/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: identifier
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "search_customer"
+  protocol: "GET"
+  url: "/ems/api/v5/customers/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+  -
+   name: market_group_name
+   type: urlParam
+
+  -
+   name: market_group_id
+   type: urlParam
+
+  -
+   name: description
+   type: urlParam
+
+  -
+   name: contact_id
+   type: urlParam
+
+  -
+   name: state
+   type: urlParam
+
+  -
+   name: crm_id
+   type: urlParam
+
+  -
+   name: contact_email_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: ref_id
+   type: urlParam
+
+-
+ name: "add_role_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/roles"
+
+-
+ name: "add_role_json"
+ protocol: "POST"
+ url: "/ems/api/v5/roles"
+
+-
+  name: "get_role"
+  protocol: "GET"
+  url: "/ems/api/v5/roles/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "update_role"
+  protocol: "PATCH"
+  url: "/ems/api/v5/roles/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "replace_role"
+  protocol: "PUT"
+  url: "/ems/api/v5/roles/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "delete_role"
+  protocol: "DELETE"
+  url: "/ems/api/v5/roles/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+-
+  name: "search_role"
+  protocol: "GET"
+  url: "/ems/api/v5/roles/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+  -
+   name: description
+   type: urlParam
+
+  -
+   name: creation_date_from
+   type: urlParam
+
+  -
+   name: creation_date_to
+   type: urlParam
+
+  -
+   name: page_start_index
+   type: urlParam
+
+  -
+   name: page_size
+   type: urlParam
+
+  -
+   name: search_pattern
+   type: urlParam
+
+  -
+   name: sort_by_asc
+   type: urlParam
+
+  -
+   name: sort_by_desc
+   type: urlParam
+
+-
+ name: "add_user_json_file_path"
+ protocol: "POST"
+ url: "/ems/api/v5/users"
+
+-
+ name: "add_user_json"
+ protocol: "POST"
+ url: "/ems/api/v5/users"
+
+-
+  name: "get_user"
+  protocol: "GET"
+  url: "/ems/api/v5/users/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: login_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "update_user"
+  protocol: "PATCH"
+  url: "/ems/api/v5/users/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: login_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "replace_user"
+  protocol: "PUT"
+  url: "/ems/api/v5/users/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: login_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "delete_user"
+  protocol: "DELETE"
+  url: "/ems/api/v5/users/"
+  xsd: ''
+  params:
+
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: login_id
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+-
+  name: "search_user"
+  protocol: "GET"
+  url: "/ems/api/v5/users/"
+  xsd: ''
+  params:
+  -
+   name: id
+   type: urlParam
+
+  -
+   name: name
+   type: urlParam
+
+  -
+   name: state
+   type: urlParam
+
+  -
+   name: role_name
+   type: urlParam
+
+  -
+   name: login_id
+   type: urlParam
+
+  -
+   name: market_group_name
+   type: urlParam
+
+  -
+   name: email_id
+   type: urlParam
+
+  -
+   name: ref_id1
+   type: urlParam
+
+  -
+   name: ref_id2
+   type: urlParam
+
+  -
+   name: external_id
+   type: urlParam
+
+  -
+   name: creation_date_from
+   type: urlParam
+
+  -
+   name: creation_date_to
    type: urlParam

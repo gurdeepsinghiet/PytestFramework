@@ -11,145 +11,110 @@ password = Constant.EMSPassword
 
 class CustomerFactory(object):
 
-    def addCustomerJsonFilePath(self, customerJsonFilePath,CustomerName,contact_id,expectedReturnCode,outParameterList=None,outJsonPathList=None):
+    def add_customer_json_file_path(self, customerJsonFilePath,CustomerName,contact_id,
+                                    expected_return_code,out_parameter_list=None,out_json_path_list=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
         self.UpdateJsonFile(customerJsonFilePath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
                             [CustomerName,CustomerName,contact_id],["custRes"],['$'])
-        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,["customerName","custGUID","customerRes"],['$.customer.name','$.customer.id','$'])
-            LOGGER.info(self.out_param_List["customerName"])
-            LOGGER.info(self.out_param_List["custGUID"])
-            LOGGER.info(self.out_param_List["customerRes"])
-        elif expectedReturnCode != None and outParameterList != None and outJsonPathList != None:
-            self.PostRequest(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
+        self.ems_api_request_wrapper(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def addCustomerJson(self, customer_json, expectedReturnCode, outParameterList=None, outJsonPathList=None):
+    def add_customer_json(self, customer_json, expected_return_code, out_parameter_list=None, out_json_path_list=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if expectedReturnCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/customers', customer_json, currentApiFuncName(), expectedReturnCode,
-                             ["customerName", "custGUID", "customerRes"], ['$.customer.name', '$.customer.id', '$'])
-            LOGGER.info(self.out_param_List["customerName"])
-            LOGGER.info(self.out_param_List["custGUID"])
-            LOGGER.info(self.out_param_List["customerRes"])
-        elif expectedReturnCode != None and outParameterList != None and outJsonPathList != None:
-            self.PostRequest(url + '/ems/api/v5/customers', customer_json, currentApiFuncName(), expectedReturnCode,
-                             outParameterList, outJsonPathList)
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.ems_api_request_wrapper(url + '/ems/api/v5/customers',customer_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def partialUpdateCustomer(self, customer_json, expectedReturnCode, outParameterList, outJsonPathList, id=None, emailId=None,
-                              identifier=None, externalId=None):
+    def partial_update_customer(self, customer_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, email_id=None,
+                              identifier=None, external_id=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.patchRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
-                                         expectedReturnCode,outParameterList, outJsonPathList)
-        elif emailId != None:
-            self.patchRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
-                                         currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
-        elif identifier != None:
-            self.patchRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
-                                         currentApiFuncName(), expectedReturnCode, outParameterList,outJsonPathList)
-        elif externalId != None:
-            self.patchRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
-                                         currentApiFuncName(), expectedReturnCode, outParameterList,outJsonPathList)
-        if self.patchApiResponse[1] == expectedReturnCode:
-            for i, resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/customers/' + id
+        elif email_id is not None:
+            request_url = url + '/ems/api/v5/customers/emailId=' + email_id
+        elif identifier is not None:
+            request_url = url + '/ems/api/v5/customers/identifier=' + identifier
+        elif external_id is not None:
+            request_url = url + '/ems/api/v5/customers/externalId=' + external_id
+        self.ems_api_request_wrapper(request_url, customer_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def deleteCustomer(self, expectedReturnCode,outParameterList=None, outJsonPathList=None, id=None, emailId=None, identifier=None,
-                       externalId=None):
+    def delete_customer(self, expected_return_code,out_parameter_list=None, out_json_path_list=None,
+                        id=None, email_id=None, identifier=None,external_id=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.deleteRequest(url + '/ems/api/v5/customers/' + id,"", currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
-        elif emailId != None:
-            self.deleteRequest(url + '/ems/api/v5/customers/emailId=' + emailId,"", currentApiFuncName(),
-                                          expectedReturnCode,outParameterList, outJsonPathList)
-        elif identifier != None:
-            self.deleteRequest(url + '/ems/api/v5/customers/identifier=' + identifier, "",currentApiFuncName(),
-                                          expectedReturnCode,outParameterList, outJsonPathList)
-        elif externalId != None:
-            self.deleteRequest(url + '/ems/api/v5/customers/externalId=' + externalId, "",currentApiFuncName(),
-                                          expectedReturnCode,outParameterList, outJsonPathList)
-        if self.deleteApiresponse[0] == expectedReturnCode:
-            if(self.deleteApiresponse[0] == ErrorCode.HTTP204):
-                LOGGER.info("Customer deleted successfully")
-            else:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/customers/' + id
+        elif email_id is not None:
+            request_url = url + '/ems/api/v5/customers/emailId=' + email_id
+        elif identifier is not None:
+            request_url = url + '/ems/api/v5/customers/identifier=' + identifier
+        elif external_id is not None:
+            request_url = url + '/ems/api/v5/customers/externalId=' + external_id
+        self.ems_api_request_wrapper(request_url, "", expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def replaceCustomer(self, customer_json, expectedReturnCode, outParameterList, outJsonPathList, id=None, emailId=None,
-                        identifier=None, externalId=None):
+    def replace_customer(self, customer_json, expected_return_code, out_parameter_list, out_json_path_list,
+                        id=None, email_id=None,identifier=None, external_id=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.putRequest(url + '/ems/api/v5/customers/' + id, customer_json, currentApiFuncName(),
-                                       expectedReturnCode,outParameterList, outJsonPathList)
-        elif emailId != None:
-            self.putRequest(url + '/ems/api/v5/customers/emailId=' + emailId, customer_json,
-                                       currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
-        elif identifier != None:
-            self.putRequest(url + '/ems/api/v5/customers/identifier=' + identifier, customer_json,
-                                       currentApiFuncName(), expectedReturnCode,outParameterList, outJsonPathList)
-        elif externalId != None:
-            self.putRequest(url + '/ems/api/v5/customers/externalId=' + externalId, customer_json,
-                                       currentApiFuncName(), expectedReturnCode,outParameterList,outJsonPathList)
-        if self.putApiResponse[1] == expectedReturnCode:
-            for i, resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url=url + '/ems/api/v5/customers/' + id
+        elif email_id is not None:
+            request_url = url + '/ems/api/v5/customers/emailId=' + email_id
+        elif identifier is not None:
+            request_url = url + '/ems/api/v5/customers/identifier=' + identifier
+        elif external_id is not None:
+            request_url = url + '/ems/api/v5/customers/externalId=' + external_id
+        self.ems_api_request_wrapper(request_url, customer_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def searchCustomer(self, expectedReturnCode, outParameterList, outJsonPathList, id=None, name=None, identifier=None,
-                       externalId=None, refId=None, crmId=None, description=None, marketGroupId=None,
-                       marketGroupName=None, state=None, contactEmailId=None, contactId=None):
+    def search_customer(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None, identifier=None,
+                       external_id=None, ref_id=None, crm_id=None, description=None, market_group_id=None,
+                       market_group_name=None, state=None, contact_email_id=None, contact_id=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        responseurl = ""
-        if (id != None):
-            responseurl += "id=" + id + "&"
-        if (name != None):
-            responseurl += "name=" + name + "&"
-        if identifier != None:
-            responseurl += "identifier=" + identifier + "&"
-        if (externalId != None):
-            responseurl += "externalId=" + externalId + "&"
-        if refId != None:
-            responseurl += "refId=" + refId + "&"
-        if (crmId != None):
-            responseurl += "crmId=" + crmId + "&"
-        if description != None:
-            responseurl += "description=" + description + "&"
-        if (marketGroupId != None):
-            responseurl += "marketGroupId=" + marketGroupId + "&"
-        if (marketGroupName) != None:
-            responseurl += "marketGroupName=" + marketGroupName + "&"
-        if (state != None):
-            responseurl += "state=" + state + "&"
-        if (contactEmailId) != None:
-            responseurl += "contactEmailId=" + contactEmailId + "&"
-        if (contactId != None):
-            responseurl += "contactId=" + contactId + "&"
-        LOGGER.info(url + "/ems/api/v5/customers?" + responseurl[0:-1])
-        self.getRequest(url + "/ems/api/v5/customers?" + responseurl[0:-1], "", currentApiFuncName(),
-                                   expectedReturnCode, outParameterList, outJsonPathList)
-        if self.getApiresponse[1] == expectedReturnCode:
-            for i, resvar in enumerate(outParameterList):
-                LOGGER.info(outParameterList[i])
-                LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        request_url = ""
+        if id is not None:
+            request_url += "id=" + id + "&"
+        if name is not None:
+            request_url += "name=" + name + "&"
+        if identifier is not None:
+            request_url += "identifier=" + identifier + "&"
+        if external_id is not None:
+            request_url += "externalId=" + external_id + "&"
+        if ref_id is not None:
+            request_url += "refId=" + ref_id + "&"
+        if crm_id is not None:
+            request_url += "crmId=" + crm_id + "&"
+        if description is not None:
+            request_url += "description=" + description + "&"
+        if market_group_id is not None:
+            request_url += "marketGroupId=" + market_group_id + "&"
+        if market_group_name is not None:
+            request_url += "marketGroupName=" + market_group_name + "&"
+        if state is not None:
+            request_url += "state=" + state + "&"
+        if contact_email_id is not None:
+            request_url += "contactEmailId=" + contact_email_id + "&"
+        if contact_id is not None:
+            request_url += "contactId=" + contact_id + "&"
+        request_url = url + "/ems/api/v5/customers?" + request_url[0:-1]
+        self.ems_api_request_wrapper(request_url, "", expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
 

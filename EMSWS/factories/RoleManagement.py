@@ -1,135 +1,113 @@
 from EMSWS.Utilities import UtilityClass
-import  EMSWS.EMSConfig as Constant
-import  EMSWS.ErrorCode as ErrorCode
+import EMSWS.EMSConfig as Constant
+import EMSWS.ErrorCode as ErrorCode
 import logging
+
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
 password = Constant.EMSPassword
 
+
 class RoleManagementFactory(object):
-    def addRoleJsonFilePath(self,roleJsonFilePath,roleName,expectedCode,outParameterList=None,outJsonPathList=None):
+
+    def add_role_json_file_path(self, role_json_file_path, role_name,
+                                expected_return_code, out_parameter_list=None, out_json_path_list=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        self.UpdateJsonFile(roleJsonFilePath,['$.role.name'],[roleName])
-
-        if expectedCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url+'/ems/api/v5/roles', self.UpdateJsonFileResponse, currentApiFuncName(), expectedCode,
-                             ["resvar", "roleName"],["$", "$.role.name"])
-
-        elif expectedCode != None and outParameterList != None and outJsonPathList != None:
-            self.PostRequest(url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, currentApiFuncName(),
-                             expectedCode, outParameterList, outJsonPathList)
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.UpdateJsonFile(role_json_file_path, ['$.role.name'], [role_name])
+        self.ems_api_request_wrapper(url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def addRoleJson(self,role_Json,expectedCode,outParameterList=None,outJsonPathList=None):
+    def add_role_json(self, role_json, expected_return_code, out_parameter_list=None, out_json_path_list=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if expectedCode == ErrorCode.HTTP201 and outParameterList == None and outJsonPathList == None:
-            self.PostRequest(url + '/ems/api/v5/roles', role_Json, currentApiFuncName(), expectedCode,
-            ["resvar", "roleName",],["$", "$.role.name"])
-        elif (expectedCode != None and outParameterList != None and outJsonPathList != None):
-            self.PostRequest(url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, currentApiFuncName(),
-                             expectedCode, outParameterList, outJsonPathList)
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.ems_api_request_wrapper(url + '/ems/api/v5/roles', role_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
+    def get_role(self, expected_return_code, out_parameter_list,
+                 out_json_path_list, id=None, name=None):
 
-    def getRole(self, outParameterList, outJsonPathList, expectedCode, id=None, name=None):
-            utility = UtilityClass()
-            currentApiFuncName = utility.currentApiName()
-            LOGGER.info(currentApiFuncName())
-            if id != None:
-                self.getRequest(url + '/ems/api/v5/roles/' + id, "", currentApiFuncName(), expectedCode,
-                                outParameterList, outJsonPathList)
-            elif name != None:
-                self.getRequest(url + '/ems/api/v5/roles/name=' + name, "", currentApiFuncName(), expectedCode,
-                                outParameterList, outJsonPathList)
-            if self.getApiresponse[1] == expectedCode:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
-            return self
-
-    def searchRole(self,expectedCode, outParameterList, outJsonPathList,  id=None, name=None,description=None,creationDateFrom=None,creationDateTo=None,pageStartIndex=None,pageSize=None,searchPattern=None,sortByAsc=None ,sortByDesc=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        responeurl = ""
-        if (id != None):
-            responeurl +="id="+id+"&"
-        if (name !=None):
-            responeurl +="name="+name+"&"
-        if (description != None):
-            responeurl +="description="+description+"&"
-        if (creationDateFrom !=None):
-            responeurl +="creationDateFrom"+creationDateFrom+"&"
-        if (creationDateTo !=None):
-            responeurl +="creationDateTo"+creationDateTo+"&"
-        if (pageStartIndex !=None):
-            responeurl +="pageStartIndex"+pageStartIndex+"&"
-        if (pageSize !=None):
-            responeurl +="pageSize"+pageSize+"&"
-        if (searchPattern !=None):
-            responeurl +="searchPattern"+searchPattern+"&"
-        if (sortByAsc !=None):
-            responeurl +="sortByAsc"+sortByAsc+"&"
-        if (sortByDesc !=None):
-            responeurl +="sortByDesc"+sortByDesc+"&"
-        self.getRequest(url + "/ems/api/v5/roles?" + responeurl[0:-1], "", currentApiFuncName(), expectedCode,
-                        outParameterList, outJsonPathList)
-        if self.getApiresponse[1] == expectedCode:
-               for i, resvar in enumerate(outParameterList):
-                   LOGGER.info(outParameterList[i])
-                   LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/roles/' + id
+        elif name is not None:
+            request_url = url + '/ems/api/v5/roles/name=' + name
+        self.ems_api_request_wrapper(request_url, "", expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def updateRole(self,role_json,expectedCode,outParameterList, outJsonPathList,id=None,name=None):
+    def search_role(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None, description=None,
+                   creation_date_from=None, creation_date_to=None, page_start_index=None, page_size=None, search_pattern=None,
+                   sort_by_asc=None, sort_by_desc=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.patchRequest(url + '/ems/api/v5/roles/' + id, role_json, expectedCode,outParameterList, outJsonPathList)
-        elif name != None:
-            self.patchRequest(url + '/ems/api/v5/roles/name=' + name, role_json,
-                              expectedCode,outParameterList, outJsonPathList)
-        if self.patchApiResponse[1] == expectedCode:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        request_url = ""
+        if id is not None:
+            request_url += "id=" + id + "&"
+        if name is not None:
+            request_url += "name=" + name + "&"
+        if description is not None:
+            request_url += "description=" + description + "&"
+        if creation_date_from is not None:
+            request_url += "creationDateFrom" + creation_date_from + "&"
+        if creation_date_to is not None:
+            request_url += "creationDateTo" + creation_date_to + "&"
+        if page_start_index is not None:
+            request_url += "pageStartIndex" + page_start_index + "&"
+        if page_size is not None:
+            request_url += "pageSize" + page_size + "&"
+        if search_pattern is not None:
+            request_url += "searchPattern" + search_pattern + "&"
+        if sort_by_asc is not None:
+            request_url += "sortByAsc" + sort_by_asc + "&"
+        if sort_by_desc is not None:
+            request_url += "sortByDesc" + sort_by_desc + "&"
+        request_url = url + "/ems/api/v5/roles?" + request_url[0:-1]
+        LOGGER.info(request_url)
+        self.ems_api_request_wrapper(request_url, "", expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def replaceRole(self,role_json,expectedCode,outParameterList, outJsonPathList,id=None,name=None):
+    def update_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.putRequest(url + '/ems/api/v5/roles/' + id, role_json,currentApiFuncName(), expectedCode,
-                              outParameterList, outJsonPathList)
-        elif name != None:
-            self.putRequest(url + '/ems/api/v5/roles/name=' + name, role_json,currentApiFuncName(),
-                              expectedCode,outParameterList, outJsonPathList)
-        if self.putApiResponse[1] == expectedCode:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/roles/' + id
+        elif name is not None:
+            request_url = url + '/ems/api/v5/roles/name=' + name
+        self.ems_api_request_wrapper(request_url, role_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
-    def deleteRole(self, expectedCode,outParameterList=None, outJsonPathList=None, id=None, name=None):
+    def replace_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None):
         utility = UtilityClass()
-        currentApiFuncName = utility.currentApiName()
-        LOGGER.info(currentApiFuncName())
-        if id != None:
-            self.deleteRequest(url + '/ems/api/v5/roles/' + id, "", currentApiFuncName(), expectedCode,outParameterList,outJsonPathList)
-        elif name != None:
-            self.deleteRequest(url + '/ems/api/v5/roles/name=' + name, "", currentApiFuncName(), expectedCode,outParameterList,outJsonPathList)
-        if self.deleteApiresponse[0] == expectedCode:
-            if (self.deleteApiresponse[0] == ErrorCode.HTTP204):
-                LOGGER.info("Role deleted successfully")
-            else:
-                for i, resvar in enumerate(outParameterList):
-                    LOGGER.info(outParameterList[i])
-                    LOGGER.info(self.out_param_List[outParameterList[i]])
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/roles/' + id
+        elif name is not None:
+            request_url = url + '/ems/api/v5/roles/name=' + name
+        self.ems_api_request_wrapper(request_url, role_json, expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
         return self
 
+    def delete_role(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None, name=None):
+        utility = UtilityClass()
+        current_api_name = utility.currentApiName()
+        request_url = ""
+        if id is not None:
+            request_url = url + '/ems/api/v5/roles/' + id
+        elif name is not None:
+            request_url = url + '/ems/api/v5/roles/name=' + name
+        self.ems_api_request_wrapper(request_url, "", expected_return_code,
+                                     current_api_name(), out_parameter_list, out_json_path_list)
+        return self
