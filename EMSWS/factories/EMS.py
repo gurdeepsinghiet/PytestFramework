@@ -6,22 +6,23 @@ import random
 from jsonpath_ng.ext import parse
 import EMSWS.EMSConfig as Constant
 import xml.etree.ElementTree as ET
-
+from EMSWS.EmsApiAuthWrapper import EmsAuthApiWrapper
 from EMSWS.EmsApiWrapper import EmsApiWrapper
 from EMSWS.Utilities import UtilityClass
+from EMSWS.factories.EMSProperties import EmsPropertiesFactory
 from EMSWS.factories.Feature import FeatureFactory
 from EMSWS.factories.FingerPrint import FingerPrintFactory
-from EMSWS.factories.NameSpaceWithWrapper import NameSpaceFactoryWrapper
 from EMSWS.factories.Product import ProductFactory
 from EMSWS.factories.Contact import ContactFactory
 from EMSWS.factories.Customer import CustomerFactory
 from EMSWS.factories.NameSpace import NameSpaceFactory
 from EMSWS.factories.ReportEngine import ReportGenerator
 from EMSWS.factories.Activation import ActivationFactory
-from EMSWS.factories.Entitlement import Entitlementfacory
+from EMSWS.factories.Entitlement import EntitlementFacory
 from EMSWS.factories.RestApi import RestApiUtilityFactory
 from EMSWS.factories.EMSAssertion import EMSAssertionFactory
 from EMSWS.factories.LicenceModel import LicenseModelFactory
+from EMSWS.factories.SCC import SCCFactory
 from EMSWS.factories.UserManagement import UserManagementFactory
 from EMSWS.factories.RoleManagement import RoleManagementFactory
 from EMSWS.factories.Authentication.AuthRestApi import RestApiAuthFactory
@@ -36,10 +37,10 @@ password = Constant.EMSPassword
 
 
 class EMSFactory(EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFactory,
-                 ContactFactory,CustomerFactory,Entitlementfacory,LicenseModelFactory,ReportGenerator,
+                 ContactFactory,CustomerFactory,EntitlementFacory,LicenseModelFactory,ReportGenerator,
                  RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,
                  UserManagementFactory,RoleManagementFactory,
-                 AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory,NameSpaceFactoryWrapper,EmsApiWrapper):
+                 AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory,EmsApiWrapper,EmsAuthApiWrapper,EmsPropertiesFactory,SCCFactory):
 
     def __init__(self):
         self.report_data=[]
@@ -68,3 +69,58 @@ class EMSFactory(EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFact
         content = utility.readFile(self.getModulePath() + "\\output\\" + file_name)
         utility.deleteFile(self.getModulePath() + "\\output\\" + file_name)
         return content
+
+    def getJsonXpathValue(self, jsonString, jsonVarible, jsonXpath):
+        json_data = json.loads(jsonString)
+        jsonpath_expression = parse(jsonXpath)
+        match = jsonpath_expression.find(json_data)
+        self.out_param_List[jsonVarible] = match[0].value
+        LOGGER.info(self.out_param_List)
+
+    def getJsonXpathsValues(self, jsonString, jsonVaribleList, jsonXpathList):
+        if (jsonVaribleList != None and jsonXpathList != None):
+            for i, jsonxpath in enumerate(jsonXpathList):
+                self.getJsonXpathValue(jsonString, jsonVaribleList[i], jsonXpathList[i])
+        return self
+
+    def isJson(self, jsonString):
+        try:
+            json.loads(jsonString)
+        except ValueError as e:
+            return False
+        return True
+
+    def isXml(self, xmlString):
+        try:
+            ET.fromstring(xmlString)
+        except ET.ParseError:
+            return False
+        return True
+
+    def getModulePath(self):
+        path = os.path.dirname(Constant.__file__)
+        return path
+
+    def isJsonFile(self, jsonFilePath):
+        with open(jsonFilePath, 'r') as f:
+            data = f.read()
+            try:
+                json.loads(data)
+            except ValueError as e:
+                return False
+            return True
+
+    def isXmlFile(self, xmlFilePath):
+        with open(xmlFilePath, 'r') as f:
+            data = f.read()
+            try:
+                ET.fromstring(data)
+            except ET.ParseError:
+                return False
+            return True
+
+    def is_dictionary(self, str):
+        if type(str) is dict:
+            return True
+        else:
+            return False

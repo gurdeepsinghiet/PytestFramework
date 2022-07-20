@@ -1,6 +1,4 @@
 import EMSWS.EMSConfig as Constant
-import  EMSWS.ErrorCode as ErrorCode
-import EMSWS.JsonPath as JsonPath
 import logging
 from EMSWS.Utilities import UtilityClass
 LOGGER = logging.getLogger(__name__)
@@ -12,25 +10,29 @@ password = Constant.EMSPassword
 class ContactFactory:
 
     def add_standard_contact_json_path(self,contact_json_file_path,contact_name,contact_email_id,
-                                       expected_return_code,out_parameter_list=None,out_json_path_list=None):
+                                       expected_return_code,out_parameter_list=None,out_json_path_list=None, output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         self.UpdateJsonFile(contact_json_file_path, ['$.contact.name', '$.contact.password','$.contact.contactType','$.contact.emailId'],
                             [contact_name,"Thales@123", "Standard",contact_email_id])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/contacts', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password,expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def add_standard_contact_json(self,contact_json,expected_return_code,out_parameter_list=None,out_json_path_list=None):
+    def add_standard_contact_json(self,contact_json,expected_return_code,out_parameter_list=None,out_json_path_list=None,
+                                  output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.ems_api_request_wrapper(url + '/ems/api/v5/contacts',contact_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/contacts', contact_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def get_contact(self, expected_return_code, out_parameter_list, out_json_path_list,id=None,email_id=None):
+    def get_contact(self, expected_return_code, out_parameter_list, out_json_path_list,id=None,email_id=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -38,12 +40,14 @@ class ContactFactory:
             request_url = url + '/ems/api/v5/contacts/' + id
         elif email_id is not None:
             request_url = url + '/ems/api/v5/contacts/emailId=' + email_id
-        self.ems_api_request_wrapper(request_url,"", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def partial_update_contact(self, contact_json, expected_return_code,
-                               out_parameter_list, out_json_path_list, id=None, emailId=None):
+                               out_parameter_list, out_json_path_list, id=None, emailId=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -51,11 +55,14 @@ class ContactFactory:
             request_url = url + '/ems/api/v5/contacts/' + id
         elif emailId is not None:
             request_url = url + '/ems/api/v5/contacts/emailId=' + emailId
-        self.ems_api_request_wrapper(request_url,contact_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, contact_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def delete_contact(self, expected_return_code,out_parameter_list=None, out_json_path_list=None, id=None, emailId=None):
+    def delete_contact(self, expected_return_code,out_parameter_list=None, out_json_path_list=None, id=None, emailId=None
+                       ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -63,12 +70,15 @@ class ContactFactory:
             request_url = url + '/ems/api/v5/contacts/' + id
         elif emailId is not None:
             request_url = url + '/ems/api/v5/contacts/emailId=' + emailId
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("DELETE", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self
 
-    def replace_contact(self, contact_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, emailId=None):
+    def replace_contact(self, contact_json, expected_return_code, out_parameter_list, out_json_path_list, id=None,
+                        emailId=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -76,13 +86,15 @@ class ContactFactory:
             request_url = url + '/ems/api/v5/contacts/' + id
         elif emailId is not None:
             request_url = url + '/ems/api/v5/contacts/emailId=' + emailId
-        self.ems_api_request_wrapper(request_url, contact_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PUT", request_url, contact_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def search_contact(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None, ref_id1=None, ref_id2=None,
                       email_id=None, phone_number=None, state=None, customer_name=None, customer_id=None,
-                      market_group_id=None, market_group_name=None):
+                      market_group_id=None, market_group_name=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -111,7 +123,9 @@ class ContactFactory:
             request_url += "marketGroupName" + market_group_name + "&"
         request_url = url + "/ems/api/v5/contacts?" + request_url[0:-1]
         LOGGER.info(request_url)
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 

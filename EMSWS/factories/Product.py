@@ -13,7 +13,7 @@ password = Constant.EMSPassword
 class ProductFactory(object):
 
     def add_product_non_lvh(self, namespace_name, feature_name, feature_version, expected_return_code,
-                            out_parameter_list=None, out_json_path_list=None):
+                            out_parameter_list=None, out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -23,15 +23,16 @@ class ProductFactory(object):
                              '$..productFeature[0].feature.nameVersion.version'],
                             ["ptr" + self.RandomString(9), "1.0", namespace_name, feature_name, feature_version],
                             ["productRes"], ['$'])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/products', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password,expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self
 
     def add_product_non_lvh_json_file_path(self, product_json_file_path, product_name, product_version, namespace_name,
                                            feature_name,
                                            feature_version, expected_return_code, out_parameter_list=None,
-                                           out_json_path_list=None):
+                                           out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -42,24 +43,28 @@ class ProductFactory(object):
                             [product_name, product_version, namespace_name, feature_name, feature_version],
                             ["productRes"],
                             ['$'])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/products', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/products', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self
 
     def add_product_non_lvh_json(self, product_json, expected_return_code, out_parameter_list=None,
-                                 out_json_path_list=None):
+                                 out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.ems_api_request_wrapper(url + '/ems/api/v5/products', product_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/products',product_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self
 
     def partial_update_product(self, product_json, expected_return_code, out_parameter_list, out_json_path_list,
                                id=None,
-                               name_version=None, identifier_namespace=None, identifier=None, external_id=None):
+                               name_version=None, identifier_namespace=None, identifier=None, external_id=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -72,13 +77,15 @@ class ProductFactory(object):
             request_url =url + '/ems/api/v5/products/identifier=' + identifier
         elif external_id is not None:
             request_url =url + '/ems/api/v5/products/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, product_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, product_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def get_product(self, expected_return_code, out_parameter_list, out_json_path_list, product_id=None,
                     name_version=None,
-                    identifier=None, external_id=None, id=None):
+                    identifier=None, external_id=None, id=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -93,8 +100,10 @@ class ProductFactory(object):
             request_url =url + '/ems/api/v5/products/identifier=' + identifier
         elif external_id is not None:
             request_url =url + '/ems/api/v5/products/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def search_product(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, identifier=None,
@@ -103,7 +112,7 @@ class ProductFactory(object):
                        namespace_name=None, name=None, description=None, external_id=None, product_type=None,
                        ref_id1=None,
                        ref_id2=None, license_model_name=None, license_model_id=None, feature_id=None, feature_name=None,
-                       state=None):
+                       state=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -140,18 +149,17 @@ class ProductFactory(object):
             request_url = "featureId" + feature_id + "&"
         if state is not None:
             request_url = "state=" + state + "&"
-        LOGGER.info(url + "/ems/api/v5/products?" + request_url[0:-1])
-        self.get_request(url + "/ems/api/v5/products?" + request_url[0:-1], "", current_api_name(),
-                         expected_return_code, out_parameter_list, out_json_path_list)
-        if self.getApiresponse[1] == expected_return_code:
-            for i, out_param in enumerate(out_parameter_list):
-                LOGGER.info(out_parameter_list[i])
-                LOGGER.info(self.out_param_List[out_parameter_list[i]])
+        request_url = url + "/ems/api/v5/namespaces?" + request_url[0:-1]
+        LOGGER.info(request_url)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def replace_product(self, product_json, expected_return_code, out_parameter_list, out_json_path_list, id=None,
                         name_version=None,
-                        external_id=None, identifier=None):
+                        external_id=None, identifier=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -164,12 +172,14 @@ class ProductFactory(object):
             request_url=url + '/ems/api/v5/products/nameVersion=' + name_version
         elif identifier is not None:
             request_url=url + '/ems/api/v5/products/identifier=' + identifier
-        self.ems_api_request_wrapper(request_url,product_json, expected_return_code,
-                                         current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PUT", request_url, product_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def delete_product(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None,
-                       name_version=None, external_id=None, identifier=None):
+                       name_version=None, external_id=None, identifier=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -182,7 +192,9 @@ class ProductFactory(object):
             request_url =url + '/ems/api/v5/products/nameVersion=' + name_version
         elif identifier is not None:
             request_url =url + '/ems/api/v5/products/identifier=' + identifier
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("DELETE", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self

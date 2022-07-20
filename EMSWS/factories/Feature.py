@@ -13,7 +13,7 @@ password = Constant.EMSPassword
 class FeatureFactory(object):
 
     def add_feature(self, namespace_name, lm_name, expected_return_code, out_parameter_list=None,
-                    out_json_path_list=None):
+                    out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -21,12 +21,14 @@ class FeatureFactory(object):
                             ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$..namespace.name',
                              '$..featureLicenseModel[0].licenseModel.name'],
                             ["Ftr" + self.RandomString(9), "1.0", namespace_name, lm_name], ["featureRes"], ['$'])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/features', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/features', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def add_feature_json_file_path(self, feature_file_path, feature_name, feature_version, namespace_name, lm_name,
-                                   expected_return_code, out_parameter_list=None, out_json_path_list=None):
+                                   expected_return_code, out_parameter_list=None, out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -34,22 +36,26 @@ class FeatureFactory(object):
                             ['$.feature.nameVersion.name', '$.feature.nameVersion.version', '$..namespace.name',
                              '$..featureLicenseModel[0].licenseModel.name'],
                             [feature_name, feature_version, namespace_name, lm_name], ["featureRes"], ['$'])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/features', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/features', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def add_feature_json(self, feature_json, expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def add_feature_json(self, feature_json, expected_return_code, out_parameter_list=None, out_json_path_list=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.ems_api_request_wrapper(url + '/ems/api/v5/features', feature_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/features', feature_json, "",
+                                          current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
 
         return self
 
     def get_feature(self, expected_return_code, out_parameter_list, out_json_path_list, feature_id=None,
                     name_version=None,
-                    identifier_namespace=None, identifier=None, external_id=None, id=None):
+                    identifier_namespace=None, identifier=None, external_id=None, id=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -66,13 +72,15 @@ class FeatureFactory(object):
             request_url=url + '/ems/api/v5/features/identifier=' + identifier
         elif external_id is not None:
             request_url=url + '/ems/api/v5/features/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url,"", "",current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
+
         return self
 
     def partial_update_feature(self, feature_json, expected_return_code, out_parameter_list, out_json_path_list,
                                id=None,
-                               name_version=None, identifier_namespace=None, identifier=None, external_id=None):
+                               name_version=None, identifier_namespace=None, identifier=None, external_id=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -86,14 +94,15 @@ class FeatureFactory(object):
             request_url=url + '/ems/api/v5/features/externalId=' + external_id
         elif identifier_namespace is not None:
             request_url=url + '/ems/api/v5/features/identifierNamespace=' + identifier_namespace
-        self.ems_api_request_wrapper(request_url,feature_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url,feature_json, "",current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def search_feature(self, out_parameter_list, out_json_path_list, expected_return_code, id=None, identifier=None,
                        license_model_name=None, license_model_id=None, namespace_id=None,
                        namespace_name=None, name=None, description=None, version=None, external_id=None, ref_id1=None,
-                       ref_id2=None):
+                       ref_id2=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -123,48 +132,51 @@ class FeatureFactory(object):
         if ref_id2 is not None:
             request_url += "refId2=" + ref_id2 + "&"
         request_url = url + "/ems/api/v5/features?" + request_url[0:-1]
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "", current_api_name(), username,password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def delete_feature(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None,
                        name_version=None,
-                       identifier_namespace=None, identifier=None, external_id=None):
+                       identifier_namespace=None, identifier=None, external_id=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         request_url = ""
         if id is not None:
-            request_url =url + '/ems/api/v5/features/' + id
+            request_url = url + '/ems/api/v5/features/' + id
         elif name_version is not None:
-            request_url =url + '/ems/api/v5/features/nameVersion=' + name_version
+            request_url = url + '/ems/api/v5/features/nameVersion=' + name_version
         elif identifier_namespace is not None:
-            request_url =url + '/ems/api/v5/features/identifierNamespace=' + identifier_namespace
+            request_url = url + '/ems/api/v5/features/identifierNamespace=' + identifier_namespace
         elif identifier is not None:
-            request_url =url + '/ems/api/v5/features/identifier=' + identifier
+            request_url = url + '/ems/api/v5/features/identifier=' + identifier
         elif external_id is not None:
-            request_url =url + '/ems/api/v5/features/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+            request_url = url + '/ems/api/v5/features/externalId=' + external_id
+        self.ems_api_auth_request_wrapper("DELETE", request_url, "", "", current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def replace_feature(self, feature_json, expected_return_code, out_parameter_list, out_json_path_list, id=None,
                         name_version=None,
-                        identifier_namespace=None, identifier=None, external_id=None):
+                        identifier_namespace=None, identifier=None, external_id=None,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         request_url =""
         if id is not None:
-            request_url =url + '/ems/api/v5/features/' + id
+            request_url = url + '/ems/api/v5/features/' + id
         elif name_version is not None:
-            request_url =url + '/ems/api/v5/features/nameVersion=' + name_version
+            request_url = url + '/ems/api/v5/features/nameVersion=' + name_version
         elif identifier is not None:
-            request_url =url + '/ems/api/v5/features/identifier=' + identifier
+            request_url = url + '/ems/api/v5/features/identifier=' + identifier
         elif external_id is not None:
-            request_url =url + '/ems/api/v5/features/externalId=' + external_id
+            request_url = url + '/ems/api/v5/features/externalId=' + external_id
         elif identifier_namespace is not None:
-            request_url =url + '/ems/api/v5/features/identifierNamespace=' + identifier_namespace
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+            request_url = url + '/ems/api/v5/features/identifierNamespace=' + identifier_namespace
+        self.ems_api_auth_request_wrapper("PUT", request_url,feature_json, "", current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self

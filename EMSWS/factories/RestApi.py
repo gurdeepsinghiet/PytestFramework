@@ -321,7 +321,7 @@ class RestApiUtilityFactory(object):
     def UpdateJson(self, jsonDictionary, jsontagsList, jsonValueList, resVarList=None, resJpathList=None):
         utilityClass = UtilityClass()
         reportParam = ReportParam()
-        reportParam.setApiName("UpdateJsonPath")
+        reportParam.setApiName("UpdateJson")
         reportParam.setInputs(utilityClass.convertDictinarytoJson(jsonDictionary))
         reportParam.setExpectedCode("200")
         for i, jsonxpath in enumerate(jsontagsList):
@@ -369,54 +369,17 @@ class RestApiUtilityFactory(object):
                 self.emsout_parameter_list[resVarList[i]] = selected_Tag.text
         return self
 
-    def updateXML(self, xml_data, out_json_path_list, xpathValueList, resVarList=None, resJpathList=None):
-        pass
-
-    def getJsonXpathValue(self, jsonString, jsonVarible, jsonXpath):
-        json_data = json.loads(jsonString)
-        jsonpath_expression = parse(jsonXpath)
-        match = jsonpath_expression.find(json_data)
-        self.out_param_List[jsonVarible] = match[0].value
-        LOGGER.info(self.out_param_List)
-
-    def getJsonXpathsValues(self, jsonString, jsonVaribleList, jsonXpathList):
-        if (jsonVaribleList != None and jsonXpathList != None):
-            for i, jsonxpath in enumerate(jsonXpathList):
-                self.getJsonXpathValue(jsonString, jsonVaribleList[i], jsonXpathList[i])
+    def updateXML(self, xml_data, out_json_path_list, xpathValueList, resVarList=None, resout_json_path_list=None):
+        myRoot = ET.fromstring(xml_data)
+        for i, xpath in enumerate(out_json_path_list):
+            new_tag = myRoot.find(xpath)
+            new_tag.text = xpathValueList[i]
+        self.xmlstroutput = ET.tostring(myRoot, encoding='unicode', method='xml')
+        LOGGER.info(self.xmlstroutput)
+        if (resVarList != None and resout_json_path_list != None):
+            for i, xpath in enumerate(resout_json_path_list):
+                selected_Tag = myRoot.find(xpath)
+                self.emsout_parameter_list[resVarList[i]] = selected_Tag.text
         return self
 
-    def isJson(self, jsonString):
-        try:
-            json.loads(jsonString)
-        except ValueError as e:
-            return False
-        return True
 
-    def isXml(self, xmlString):
-        try:
-            ET.fromstring(xmlString)
-        except ET.ParseError:
-            return False
-        return True
-
-    def getModulePath(self):
-        path = os.path.dirname(Constant.__file__)
-        return path
-
-    def isJsonFile(self, jsonFilePath):
-        with open(jsonFilePath, 'r') as f:
-            data = f.read()
-            try:
-                json.loads(data)
-            except ValueError as e:
-                return False
-            return True
-
-    def isXmlFile(self, xmlFilePath):
-        with open(xmlFilePath, 'r') as f:
-            data = f.read()
-            try:
-                ET.fromstring(data)
-            except ET.ParseError:
-                return False
-            return True

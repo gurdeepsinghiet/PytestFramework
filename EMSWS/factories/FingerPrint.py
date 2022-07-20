@@ -12,7 +12,8 @@ password = Constant.EMSPassword
 
 class FingerPrintFactory(object):
 
-    def add_finger_print(self, expected_return_code, customer_id, out_parameter_list=None, out_json_path_list=None):
+    def add_finger_print(self, expected_return_code, customer_id, out_parameter_list=None, out_json_path_list=None
+                         ,output_res_xml_parameter=None):
         utility = UtilityClass()
         fp_xml = self.retrive_finger_print("testfp")
         LOGGER.info(fp_xml)
@@ -22,8 +23,9 @@ class FingerPrintFactory(object):
                             ['$..friendlyName', '$..refId1', '$..refId2', '$..fingerprintXml'],
                             ["fp" + self.RandomString(9), "fprefId1" + self.RandomString(9),
                              "fprefId2" + self.RandomString(9), fp_xml])
-
         request_url=url + '/ems/api/v5/customers/' + customer_id + '/fingerprints'
-        self.ems_api_request_wrapper(request_url, self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", request_url,self.UpdateJsonFileResponse, "", current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
+
         return self

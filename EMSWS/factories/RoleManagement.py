@@ -12,25 +12,30 @@ password = Constant.EMSPassword
 class RoleManagementFactory(object):
 
     def add_role_json_file_path(self, role_json_file_path, role_name,
-                                expected_return_code, out_parameter_list=None, out_json_path_list=None):
+                                expected_return_code, out_parameter_list=None, out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         self.UpdateJsonFile(role_json_file_path, ['$.role.name'], [role_name])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/roles', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
+
         return self
 
-    def add_role_json(self, role_json, expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def add_role_json(self, role_json, expected_return_code, out_parameter_list=None, out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.ems_api_request_wrapper(url + '/ems/api/v5/roles', role_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/roles', role_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def get_role(self, expected_return_code, out_parameter_list,
-                 out_json_path_list, id=None, name=None):
+                 out_json_path_list, id=None, name=None,output_res_xml_parameter=None):
 
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
@@ -39,13 +44,15 @@ class RoleManagementFactory(object):
             request_url = url + '/ems/api/v5/roles/' + id
         elif name is not None:
             request_url = url + '/ems/api/v5/roles/name=' + name
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def search_role(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None, description=None,
                    creation_date_from=None, creation_date_to=None, page_start_index=None, page_size=None, search_pattern=None,
-                   sort_by_asc=None, sort_by_desc=None):
+                   sort_by_asc=None, sort_by_desc=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -72,11 +79,14 @@ class RoleManagementFactory(object):
             request_url += "sortByDesc" + sort_by_desc + "&"
         request_url = url + "/ems/api/v5/roles?" + request_url[0:-1]
         LOGGER.info(request_url)
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def update_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None):
+    def update_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None
+                    ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -84,11 +94,14 @@ class RoleManagementFactory(object):
             request_url = url + '/ems/api/v5/roles/' + id
         elif name is not None:
             request_url = url + '/ems/api/v5/roles/name=' + name
-        self.ems_api_request_wrapper(request_url, role_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, role_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def replace_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None):
+    def replace_role(self, role_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None,
+                     output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -96,11 +109,14 @@ class RoleManagementFactory(object):
             request_url = url + '/ems/api/v5/roles/' + id
         elif name is not None:
             request_url = url + '/ems/api/v5/roles/name=' + name
-        self.ems_api_request_wrapper(request_url, role_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PUT", request_url, role_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def delete_role(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None, name=None):
+    def delete_role(self, expected_return_code, out_parameter_list=None, out_json_path_list=None, id=None, name=None
+                    ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -108,6 +124,8 @@ class RoleManagementFactory(object):
             request_url = url + '/ems/api/v5/roles/' + id
         elif name is not None:
             request_url = url + '/ems/api/v5/roles/name=' + name
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("DELETE", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self

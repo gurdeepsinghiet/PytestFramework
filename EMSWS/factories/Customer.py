@@ -1,8 +1,6 @@
 import logging
 from EMSWS.Utilities import UtilityClass
 import EMSWS.EMSConfig as Constant
-import  EMSWS.ErrorCode as ErrorCode
-import EMSWS.JsonPath as JsonPath
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -11,27 +9,33 @@ password = Constant.EMSPassword
 
 class CustomerFactory(object):
 
-    def add_customer_json_file_path(self, customerJsonFilePath,CustomerName,contact_id,
-                                    expected_return_code,out_parameter_list=None,out_json_path_list=None):
+    def add_customer_json_file_path(self, customer_json_file_path, customer_name,contact_id,
+                                    expected_return_code,out_parameter_list=None,out_json_path_list=None
+                                    ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.UpdateJsonFile(customerJsonFilePath, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
-                            [CustomerName,CustomerName,contact_id],["custRes"],['$'])
-        self.ems_api_request_wrapper(url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.UpdateJsonFile(customer_json_file_path, ['$.customer.name','$.customer.identifier','$..contacts.contact[0].id'],
+                            [customer_name, customer_name, contact_id], ["custRes"],['$'])
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/customers', self.UpdateJsonFileResponse, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def add_customer_json(self, customer_json, expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def add_customer_json(self, customer_json, expected_return_code, out_parameter_list=None, out_json_path_list=None
+                          ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
-        self.ems_api_request_wrapper(url + '/ems/api/v5/customers',customer_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("POST", url + '/ems/api/v5/customers', customer_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self
 
     def partial_update_customer(self, customer_json, expected_return_code, out_parameter_list, out_json_path_list, id=None, email_id=None,
-                              identifier=None, external_id=None):
+                              identifier=None, external_id=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -43,12 +47,13 @@ class CustomerFactory(object):
             request_url = url + '/ems/api/v5/customers/identifier=' + identifier
         elif external_id is not None:
             request_url = url + '/ems/api/v5/customers/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, customer_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, customer_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list,output_res_xml_parameter, bearerAuth=None)
         return self
 
     def delete_customer(self, expected_return_code,out_parameter_list=None, out_json_path_list=None,
-                        id=None, email_id=None, identifier=None,external_id=None):
+                        id=None, email_id=None, identifier=None,external_id=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -60,12 +65,14 @@ class CustomerFactory(object):
             request_url = url + '/ems/api/v5/customers/identifier=' + identifier
         elif external_id is not None:
             request_url = url + '/ems/api/v5/customers/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("DELETE", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def replace_customer(self, customer_json, expected_return_code, out_parameter_list, out_json_path_list,
-                        id=None, email_id=None,identifier=None, external_id=None):
+                        id=None, email_id=None,identifier=None, external_id=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         request_url = ""
@@ -77,13 +84,16 @@ class CustomerFactory(object):
             request_url = url + '/ems/api/v5/customers/identifier=' + identifier
         elif external_id is not None:
             request_url = url + '/ems/api/v5/customers/externalId=' + external_id
-        self.ems_api_request_wrapper(request_url, customer_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PUT", request_url, customer_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def search_customer(self, expected_return_code, out_parameter_list, out_json_path_list, id=None, name=None, identifier=None,
                        external_id=None, ref_id=None, crm_id=None, description=None, market_group_id=None,
-                       market_group_name=None, state=None, contact_email_id=None, contact_id=None):
+                       market_group_name=None, state=None, contact_email_id=None, contact_id=None
+                        ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -113,8 +123,10 @@ class CustomerFactory(object):
         if contact_id is not None:
             request_url += "contactId=" + contact_id + "&"
         request_url = url + "/ems/api/v5/customers?" + request_url[0:-1]
-        self.ems_api_request_wrapper(request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
 

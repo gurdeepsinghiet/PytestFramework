@@ -159,47 +159,55 @@ class LicenseModelFactory(object):
                     self.out_param_List[getvalueList[i]] = match.value[tagsList[i]]
         return self
 
-    def get_enforcement(self,expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def get_enforcement(self,expected_return_code, out_parameter_list=None, out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         request_url=url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS :10.0'
-        self.ems_api_request_wrapper("GET", request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "" , "",
+                                          current_api_name(), username, password,expected_return_code,
+                                          out_parameter_list, out_json_path_list,output_res_xml_parameter, bearerAuth=None)
         return self
 
-    def search_enforcement(self,expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def search_enforcement(self,expected_return_code, out_parameter_list=None, out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         request_url=url + '/ems/api/v5/enforcements?name=Sentinel RMS'
-        self.ems_api_request_wrapper("GET", request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                         current_api_name(), username, password, expected_return_code,
+                                         out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                         bearerAuth=None)
         return self
 
-    def search_flexible_license_model(self, expected_return_code, out_parameter_list=None, out_json_path_list=None):
+    def search_flexible_license_model(self, expected_return_code, out_parameter_list=None,
+                                      out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         self.search_enforcement(ErrorCode.HTTP200,["enforcement_id"],["$..enforcements.enforcement[0].id"])
         request_url=url + '/ems/api/v5/enforcements/' + self.out_param_List["enforcement_id"] + '/licenseModels/name=Flexible License Model'
-        self.ems_api_request_wrapper("GET", request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def search_cloud_connected_licence_model(self, expected_return_code, out_parameter_list=None,
-                                             out_json_path_list=None):
+                                             out_json_path_list=None ,output_res_xml_parameter =None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         self.search_enforcement(ErrorCode.HTTP200,["enforcement_id"],["$..enforcements.enforcement[0].id"]);
         request_url=url + '/ems/api/v5/enforcements/' + self.out_param_List["enforcement_id"] + '/licenseModels/name=Connected License Model'
-        self.ems_api_request_wrapper("GET", request_url, "", expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("GET", request_url, "", "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def add_flexible_licence_model_standalone(self, lm_name, response_lm_dict, expected_return_code,
-                                              out_parameter_list=None, out_json_path_list=None):
+                                              out_parameter_list=None, out_json_path_list=None ,output_res_xml_parameter=None):
         self.update_licence_model_attribute_by_tag("ENFORCE_CLOCK_TAMPERED", "value", "FALSE", response_lm_dict)
         self.update_licence_model_attribute_by_tag("LICENSE_TYPE", "value", "1", response_lm_dict)
         self.update_licence_model_attribute_by_tag("DEPLOYMENT_TYPE", "value", "1", response_lm_dict)
@@ -208,15 +216,15 @@ class LicenseModelFactory(object):
         LOGGER.info(current_api_name())
         response_lm_dict["licenseModel"]["name"] = lm_name
         response_LM_json1 = utility.convertDictinarytoJson(response_lm_dict)
-        self.ems_api_request_wrapper("POST",
-                                     url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                     response_LM_json1,
-                                     expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        request_url = url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels'
+        self.ems_api_auth_request_wrapper("POST", request_url, response_LM_json1, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def add_flexible_licence_model_network(self, lm_name, response_lm_dict, expected_return_code,
-                                           out_parameter_list=None, out_json_path_list=None):
+                                           out_parameter_list=None, out_json_path_list=None, output_res_xml_parameter=None):
         self.update_licence_model_attribute_by_tag("ENFORCE_CLOCK_TAMPERED", "value", "FALSE", response_lm_dict)
         self.update_licence_model_attribute_by_tag("LICENSE_TYPE", "value", "0", response_lm_dict)
         self.update_licence_model_attribute_by_tag("DEPLOYMENT_TYPE", "value", "1", response_lm_dict)
@@ -225,15 +233,15 @@ class LicenseModelFactory(object):
         LOGGER.info(current_api_name())
         response_lm_dict["licenseModel"]["name"] = lm_name
         response_LM_json1 = utility.convertDictinarytoJson(response_lm_dict)
-        self.ems_api_request_wrapper("POST",
-                                     url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                     response_LM_json1,
-                                     expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        request_url = url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels'
+        self.ems_api_auth_request_wrapper("POST", request_url, response_LM_json1, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def add_on_premise_lm_network(self, lm_name, response_lm_dict, expected_return_code, out_parameter_list=None,
-                                  out_json_path_list=None):
+                                  out_json_path_list=None ,output_res_xml_parameter=None):
         self.update_licence_model_attribute_by_tag("ENFORCE_CLOCK_TAMPERED", "value", "FALSE", response_lm_dict)
         self.update_licence_model_attribute_by_tag("LICENSE_TYPE", "value", "0", response_lm_dict)
         self.update_licence_model_attribute_by_tag("DEPLOYMENT_TYPE", "value", "0", response_lm_dict)
@@ -242,15 +250,15 @@ class LicenseModelFactory(object):
         LOGGER.info(current_api_name())
         response_lm_dict["licenseModel"]["name"] = lm_name
         response_LM_json1 = utility.convertDictinarytoJson(response_lm_dict)
-        self.ems_api_request_wrapper("POST",
-                                     url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                     response_LM_json1,
-                                     expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        request_url=url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels'
+        self.ems_api_auth_request_wrapper("POST", request_url, response_LM_json1, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def add_on_premise_lm_standalone(self, lm_name, response_lm_dict, expected_return_code, out_parameter_list=None,
-                                     out_json_path_list=None):
+                                     out_json_path_list=None ,output_res_xml_parameter=None):
         self.update_licence_model_attribute_by_tag("ENFORCE_CLOCK_TAMPERED", "value", "FALSE", response_lm_dict)
         self.update_licence_model_attribute_by_tag("LICENSE_TYPE", "value", "1", response_lm_dict)
         self.update_licence_model_attribute_by_tag("DEPLOYMENT_TYPE", "value", "0", response_lm_dict)
@@ -259,29 +267,32 @@ class LicenseModelFactory(object):
         LOGGER.info(current_api_name())
         response_lm_dict["licenseModel"]["name"] = lm_name
         response_LM_json1 = utility.convertDictinarytoJson(response_lm_dict)
-        self.ems_api_request_wrapper("POST",
-                                     url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels',
-                                     response_LM_json1,
-                                     expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        request_url=url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels'
+        self.ems_api_auth_request_wrapper("POST", request_url, response_LM_json1, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def add_cloud_connected_licence_model(self, lm_name, response_lm_dict, expected_return_code,
                                           out_parameter_list=None,
-                                          out_json_path_list=None):
+                                          out_json_path_list=None, output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
         response_lm_dict["licenseModel"]["name"] = lm_name
         response_LM_json1 = utility.convertDictinarytoJson(response_lm_dict)
-        self.ems_api_request_wrapper("POST", url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels', response_LM_json1,
-                                     expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        request_url=url + '/ems/api/v5/enforcements/nameVersion=Sentinel RMS:10.0/licenseModels'
+        self.ems_api_auth_request_wrapper("POST", request_url, response_LM_json1, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
 
     def partial_update_lm(self, lm_json, expected_return_code, out_parameter_list, out_json_path_list,
                           enforcement_id=None,
-                          enforcement_name_version=None, license_model_id=None, lmid=None, lm_name=None):
+                          enforcement_name_version=None, license_model_id=None, lmid=None, lm_name=None
+                          ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
         LOGGER.info(current_api_name())
@@ -300,6 +311,8 @@ class LicenseModelFactory(object):
             request_url = url + '/ems/api/v5/enforcements/' + enforcement_id + '/licenseModels/name=' + lm_name
         elif lm_name is not None and enforcement_name_version is not None:
             request_url =url + '/ems/api/v5/enforcements/nameVersion=' + enforcement_name_version + '/licenseModels/name=' + lm_name
-        self.ems_api_request_wrapper("PATCH", request_url, lm_json, expected_return_code,
-                                     current_api_name(), out_parameter_list, out_json_path_list)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, lm_json, "",
+                                          current_api_name(), username, password, expected_return_code,
+                                          out_parameter_list, out_json_path_list, output_res_xml_parameter,
+                                          bearerAuth=None)
         return self
