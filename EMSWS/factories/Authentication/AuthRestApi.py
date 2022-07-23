@@ -24,7 +24,7 @@ class RestApiAuthFactory(object):
                 postapiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers)
                 LOGGER.info(postapiAuthResponse.text)
             # Collectin data for Report
-            if postapiAuthResponse.status_code == expectedresCode and self.isJson(postapiAuthResponse.text):
+            if postapiAuthResponse.status_code == expectedresCode and self.isJson(postapiAuthResponse.text) and postapiAuthResponse.text != "":
                 reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 reportParam.setActualCode(postapiAuthResponse.status_code)
                 reportParam.setResponseTime(postapiAuthResponse.elapsed.total_seconds())
@@ -36,19 +36,30 @@ class RestApiAuthFactory(object):
                         LOGGER.info(xPathList[i])
                         LOGGER.info(variableList[i])
                         self.getJsonXpathValue(postapiAuthResponse.text, variableList[i], xPathList[i])
-            elif postapiAuthResponse.status_code == expectedresCode and  self.isXml(postapiAuthResponse.text):
-                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
+            elif postapiAuthResponse.status_code == expectedresCode and self.isXml(postapiAuthResponse.text) and postapiAuthResponse.text != "":
                 requestBody=requestBody.replace("<","&lt").replace(">","&gt")
                 reportParam.setInputs(requestBody)
-                self.emsVariableList[outputXmlResVar]=postapiAuthResponse.text
+                if outputXmlResVar is not None:
+                    self.out_param_List[outputXmlResVar]=postapiAuthResponse.text
                 myRoot = ET.fromstring(postapiAuthResponse.text)
-                for i, xpath in enumerate(xPathList):
-                    selected_Tag = myRoot.find(xpath)
-                    self.emsVariableList[variableList[i]] = selected_Tag.text
+                if (variableList != None and xPathList != None):
+                    for i, xpath in enumerate(xPathList):
+                        selected_Tag = myRoot.find(xpath)
+                        self.out_param_List[variableList[i]] = selected_Tag.text
                 reportParam.setActualCode(postapiAuthResponse.status_code)
                 reportParam.setResponseTime(postapiAuthResponse.elapsed.total_seconds())
                 postRes=postapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
                 reportParam.setActualRespone(postRes)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
+            elif postapiAuthResponse.status_code == expectedresCode and postapiAuthResponse.text == "":
+                if self.isXml(requestBody):
+                    reportParam.setInputs(requestBody.replace("<", "&lt").replace(">", "&gt"))
+                elif (self.isJson(requestBody)):
+                    reportParam.setInputs(requestBody)
+                reportParam.setActualCode(postapiAuthResponse.status_code)
+                reportParam.setResponseTime(postapiAuthResponse.elapsed.total_seconds())
+                reportParam.setActualRespone("")
                 reportParam.setStatus("Pass")
                 reportParam.setExpectedResponse("")
             else:
@@ -74,7 +85,6 @@ class RestApiAuthFactory(object):
             LOGGER.error(e)
         self.report_data.append(reportParam.getReportParameters())
         LOGGER.info(self.report_data)
-
         return self
 
 
@@ -85,9 +95,9 @@ class RestApiAuthFactory(object):
         try:
             reportParam.setApiName(ApiName)
             reportParam.setExpectedCode(expectedresCode)
-            if bearerAuth is None:
+            if bearerAuth == None:
                 get_api_auth_response = requests.get(requestUrl, data=requestBody, headers=headers,auth=(username, password))
-            elif bearerAuth is "Yes":
+            elif bearerAuth == "Yes":
                 get_api_auth_response = requests.get(requestUrl, data=requestBody, headers=headers)
             LOGGER.info(get_api_auth_response.text)
             if get_api_auth_response.status_code == expectedresCode and self.isJson(get_api_auth_response.text):
@@ -105,19 +115,28 @@ class RestApiAuthFactory(object):
                         self.getJsonXpathValue(get_api_auth_response.text, variableList[i], xPathList[i])
 
             elif get_api_auth_response.status_code == expectedresCode and self.isXml(get_api_auth_response.text):
-                reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 reportParam.setInputs("")
-                self.emsVariableList[outputXmlResVar] = get_api_auth_response.text
+                if outputXmlResVar is not None:
+                    self.out_param_List[outputXmlResVar] = get_api_auth_response.text
                 myRoot = ET.fromstring(get_api_auth_response.text)
-                for i, xpath in enumerate(xPathList):
-                    selected_Tag = myRoot.find(xpath)
-                    self.emsVariableList[variableList[i]] = selected_Tag.text
+                if (variableList != None and xPathList != None):
+                    for i, xpath in enumerate(xPathList):
+                        selected_Tag = myRoot.find(xpath)
+                        self.out_param_List[variableList[i]] = selected_Tag.text
                     reportParam.setActualCode(get_api_auth_response.status_code)
                     reportParam.setResponseTime(get_api_auth_response.elapsed.total_seconds())
                     getRes = get_api_auth_response.text.replace("<", "&lt").replace(">", "&gt")
                     reportParam.setActualRespone(getRes)
                     reportParam.setStatus("Pass")
                     reportParam.setExpectedResponse("")
+            elif get_api_auth_response.status_code == expectedresCode and get_api_auth_response.text == "":
+                reportParam.setInputs("")
+                reportParam.setActualCode(get_api_auth_response.status_code)
+                reportParam.setResponseTime(get_api_auth_response.elapsed.total_seconds())
+                getRes = get_api_auth_response.text.replace("<", "&lt").replace(">", "&gt")
+                reportParam.setActualRespone(getRes)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
             else:
                 reportParam.setInputs("")
                 reportParam.setActualCode(get_api_auth_response.status_code)
@@ -153,9 +172,9 @@ class RestApiAuthFactory(object):
             reportParam.setApiName(ApiName)
             reportParam.setExpectedCode(expectedresCode)
             if bearerAuth is None:
-                patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers,auth=(username, password))
+                patchApiAuthResponse = requests.patch(requestUrl, data=requestBody, headers=headers,auth=(username, password))
             elif bearerAuth == "Yes":
-                patchApiAuthResponse = requests.post(requestUrl, data=requestBody, headers=headers)
+                patchApiAuthResponse = requests.patch(requestUrl, data=requestBody, headers=headers)
                 LOGGER.info(patchApiAuthResponse.text)
             # Collectin data for Report
             self.output = patchApiAuthResponse.text
@@ -176,11 +195,11 @@ class RestApiAuthFactory(object):
                 reportParam.setInputs(u.convertDictinarytoJson(requestBody))
                 requestBody=requestBody.replace("<","&lt").replace(">","&gt")
                 reportParam.setInputs(requestBody)
-                self.emsVariableList[outputXmlResVar]=patchApiAuthResponse.text
+                self.report_data[outputXmlResVar]=patchApiAuthResponse.text
                 myRoot = ET.fromstring(patchApiAuthResponse.text)
                 for i, xpath in enumerate(xPathList):
                     selected_Tag = myRoot.find(xpath)
-                    self.emsVariableList[variableList[i]] = selected_Tag.text
+                    self.out_param_List[variableList[i]] = selected_Tag.text
                 reportParam.setActualCode(patchApiAuthResponse.status_code)
                 reportParam.setResponseTime(patchApiAuthResponse.elapsed.total_seconds())
                 putRes=patchApiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
@@ -247,11 +266,11 @@ class RestApiAuthFactory(object):
                     myRoot = ET.fromstring(deleteapiAuthResponse.text)
                     for i, xpath in enumerate(resxPathList):
                         selected_Tag = myRoot.find(xpath)
-                        self.emsVariableList[resvariableList[i]] = selected_Tag.text
+                        self.out_parm_list[resvariableList[i]] = selected_Tag.text
                         reportParam.setActualCode(deleteapiAuthResponse.status_code)
                         reportParam.setResponseTime(deleteapiAuthResponse.elapsed.total_seconds())
-                        getRes = deleteapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
-                        reportParam.setActualRespone(getRes)
+                        delRes = deleteapiAuthResponse.text.replace("<", "&lt").replace(">", "&gt")
+                        reportParam.setActualRespone(delRes)
                         reportParam.setStatus("Pass")
                         reportParam.setExpectedResponse("")
                 else:

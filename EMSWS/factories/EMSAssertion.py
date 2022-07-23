@@ -30,7 +30,7 @@ class EMSAssertionFactory:
             report_param.setActualRespone(str(actual))
             report_param.setStatus("Failed")
             report_param.setExpectedResponse(str(expected))
-            self.data.append(report_param.getReportParameters())
+            self.report_data.append(report_param.getReportParameters())
             LOGGER.error("expected value " + str(expected) + " is not matched with " + str(actual))
             pytest.fail("Test case is  Failed as expected value is not matched with actual value")
         self.report_data.append(report_param.getReportParameters())

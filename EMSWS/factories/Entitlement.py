@@ -45,7 +45,7 @@ class EntitlementFacory(object):
                                                   out_json_path_list=None ,output_res_xml_parameter=None):
         utility = UtilityClass()
         current_api_name = utility.currentApiName()
-        self.UpdateJsonFile(self.getModulePath()+entitlementjsonPath, ['$..customer.name',
+        self.UpdateJsonFile(entitlementjsonPath, ['$..customer.name',
                                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.name',
                                                            '$..productKeys.productKey[0].item.itemProduct.product.nameVersion.version',
                                                            '$.entitlement.entitlementAsWhole'],[customerName, product_name,

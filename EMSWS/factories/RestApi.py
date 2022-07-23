@@ -356,7 +356,7 @@ class RestApiUtilityFactory(object):
 
     def updateXMLFile(self, xmlFilePath, out_json_path_list, xpathValueList, resVarList=None,
                       resout_json_path_list=None):
-        xmlTree = ET.parse(xmlFilePath)
+        xmlTree = ET.parse(self.getModulePath() +xmlFilePath)
         myRoot = xmlTree.getroot()
         for i, xpath in enumerate(out_json_path_list):
             new_tag = myRoot.find(xpath)
@@ -366,7 +366,7 @@ class RestApiUtilityFactory(object):
         if (resVarList != None and resout_json_path_list != None):
             for i, xpath in enumerate(resout_json_path_list):
                 selected_Tag = myRoot.find(xpath)
-                self.emsout_parameter_list[resVarList[i]] = selected_Tag.text
+                self.out_param_List[resVarList[i]] = selected_Tag.text
         return self
 
     def updateXML(self, xml_data, out_json_path_list, xpathValueList, resVarList=None, resout_json_path_list=None):

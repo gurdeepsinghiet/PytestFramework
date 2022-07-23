@@ -1,6 +1,5 @@
 import EMSWS.EMSConfig as Constant
 import EMSWS.JsonPath as JsonPath
-import EMSWS.ErrorCode as ErrorCode
 import logging
 from EMSWS.Utilities import UtilityClass
 
@@ -28,4 +27,21 @@ class FingerPrintFactory(object):
                                           expected_return_code, out_parameter_list, out_json_path_list,
                                           output_res_xml_parameter, bearerAuth=None)
 
+        return self
+
+
+    def associate_fingerprint_with_product_key(self,friendly_name,pk_id,registeredQuantity,expected_return_code,out_parameter_list=None, out_json_path_list=None
+                         ,output_res_xml_parameter=None):
+        utility = UtilityClass()
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.UpdateJsonFile(JsonPath.productKeyFingerPrintJsonPath,
+                            ['$..friendlyName','$..registeredQuantity'],
+                            [friendly_name,registeredQuantity])
+        request_url = url + '/ems/api/v5/productKeys/'+pk_id+'/productKeyFingerprints'
+        LOGGER.info(request_url)
+        self.ems_api_auth_request_wrapper("PATCH", request_url, self.UpdateJsonFileResponse, "", current_api_name(),
+                                          username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter, bearerAuth=None)
         return self

@@ -84,6 +84,8 @@ class EMSFactory(EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFact
         return self
 
     def isJson(self, jsonString):
+        if jsonString == "":
+            return False
         try:
             json.loads(jsonString)
         except ValueError as e:
@@ -91,6 +93,8 @@ class EMSFactory(EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFact
         return True
 
     def isXml(self, xmlString):
+        if xmlString == "":
+            return False
         try:
             ET.fromstring(xmlString)
         except ET.ParseError:
