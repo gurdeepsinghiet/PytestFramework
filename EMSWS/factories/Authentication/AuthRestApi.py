@@ -123,12 +123,12 @@ class RestApiAuthFactory(object):
                     for i, xpath in enumerate(xPathList):
                         selected_Tag = myRoot.find(xpath)
                         self.out_param_List[variableList[i]] = selected_Tag.text
-                    reportParam.setActualCode(get_api_auth_response.status_code)
-                    reportParam.setResponseTime(get_api_auth_response.elapsed.total_seconds())
-                    getRes = get_api_auth_response.text.replace("<", "&lt").replace(">", "&gt")
-                    reportParam.setActualRespone(getRes)
-                    reportParam.setStatus("Pass")
-                    reportParam.setExpectedResponse("")
+                reportParam.setActualCode(get_api_auth_response.status_code)
+                reportParam.setResponseTime(get_api_auth_response.elapsed.total_seconds())
+                getRes = get_api_auth_response.text.replace("<", "&lt").replace(">", "&gt")
+                reportParam.setActualRespone(getRes)
+                reportParam.setStatus("Pass")
+                reportParam.setExpectedResponse("")
             elif get_api_auth_response.status_code == expectedresCode and get_api_auth_response.text == "":
                 reportParam.setInputs("")
                 reportParam.setActualCode(get_api_auth_response.status_code)

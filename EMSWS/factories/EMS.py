@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 from EMSWS.EmsApiAuthWrapper import EmsAuthApiWrapper
 from EMSWS.EmsApiWrapper import EmsApiWrapper
 from EMSWS.Utilities import UtilityClass
+from EMSWS.factories.CustomerAttribute import CustomerAttributeFactory
 from EMSWS.factories.EMSProperties import EmsPropertiesFactory
 from EMSWS.factories.Feature import FeatureFactory
 from EMSWS.factories.FingerPrint import FingerPrintFactory
@@ -40,7 +41,8 @@ class EMSFactory(EMSAssertionFactory,NameSpaceFactory,FeatureFactory,ProductFact
                  ContactFactory,CustomerFactory,EntitlementFacory,LicenseModelFactory,ReportGenerator,
                  RestApiUtilityFactory,ActivationFactory,RestApiAuthFactory,AuthenticationFactory,
                  UserManagementFactory,RoleManagementFactory,
-                 AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory,EmsApiWrapper,EmsAuthApiWrapper,EmsPropertiesFactory,SCCFactory):
+                 AuthProxyStubFactory,RestAuthProxyStubFactory,FingerPrintFactory,CustomerAttributeFactory,
+                 EmsApiWrapper,EmsAuthApiWrapper,EmsPropertiesFactory,SCCFactory):
 
     def __init__(self):
         self.report_data=[]

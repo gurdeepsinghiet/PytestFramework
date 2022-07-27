@@ -1,7 +1,7 @@
 from EMSWS.Utilities import UtilityClass
 import EMSWS.EMSConfig as Constant
 import logging
-
+import EMSWS.JsonPath as JsonPath
 LOGGER = logging.getLogger(__name__)
 url = Constant.EMSURL
 username = Constant.EMSUserName
@@ -61,4 +61,17 @@ class EmsPropertiesFactory(object):
                                           current_api_name(), username, password, expected_return_code,
                                           out_parameter_list, out_json_path_list,
                                           output_res_xml_parameter, bearerAuth=None)
+        return self
+
+
+    def bulk_update_aplication_properties(self,application_property_id,application_property_value,expected_return_code, out_parameter_list=None, out_json_path_list=None,output_res_xml_parameter=None):
+
+        utility = UtilityClass()
+        current_api_name = utility.currentApiName()
+        LOGGER.info(current_api_name())
+        self.UpdateJsonFile(JsonPath.applicationPropsJsonPath, ['$..id','$..value'], [application_property_id,application_property_value])
+        LOGGER.info(self.UpdateJsonFileResponse)
+        self.ems_api_auth_request_wrapper("PATCH", url + '/ems/api/v5/applicationProperties/bulk', self.UpdateJsonFileResponse, "", current_api_name(), username, password,
+                                          expected_return_code, out_parameter_list, out_json_path_list,
+                                          output_res_xml_parameter,bearerAuth=None)
         return self

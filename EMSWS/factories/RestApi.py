@@ -356,6 +356,10 @@ class RestApiUtilityFactory(object):
 
     def updateXMLFile(self, xmlFilePath, out_json_path_list, xpathValueList, resVarList=None,
                       resout_json_path_list=None):
+        reportParam = ReportParam()
+        reportParam.setApiName("updateXMLFile")
+        reportParam.setInputs(xmlFilePath)
+        reportParam.setExpectedCode("200")
         xmlTree = ET.parse(self.getModulePath() +xmlFilePath)
         myRoot = xmlTree.getroot()
         for i, xpath in enumerate(out_json_path_list):
@@ -367,6 +371,12 @@ class RestApiUtilityFactory(object):
             for i, xpath in enumerate(resout_json_path_list):
                 selected_Tag = myRoot.find(xpath)
                 self.out_param_List[resVarList[i]] = selected_Tag.text
+        reportParam.setActualCode("200")
+        reportParam.setResponseTime("")
+        reportParam.setActualRespone(self.xmlstroutput.replace("<","&lt").replace(">","&gt"))
+        reportParam.setStatus("Pass")
+        reportParam.setExpectedResponse("")
+        self.report_data.append(reportParam.getReportParameters())
         return self
 
     def updateXML(self, xml_data, out_json_path_list, xpathValueList, resVarList=None, resout_json_path_list=None):

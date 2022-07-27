@@ -29,8 +29,8 @@ class EmsAuthApiWrapper(object):
 
         elif request_type == 'GET':
             self.get_auth_request(request_url,request_body, headers, api_name, username, password,
-                                  expected_return_code,out_parameter_list,out_json_path_list, bearerAuth="Yes")
-            if self.getApiresponse[1] == expected_return_code and out_parameter_list is not None and out_json_path_list is not None:
+                                  expected_return_code,out_parameter_list,out_json_path_list, bearerAuth=bearerAuth,outputXmlResVar = output_res_xml_parameter)
+            if self.getAuthApiresponse[1] == expected_return_code and out_parameter_list is not None and out_json_path_list is not None:
                 for i, out_param in enumerate(out_parameter_list):
                     LOGGER.info(out_parameter_list[i])
                     LOGGER.info(self.out_param_List[out_parameter_list[i]])
@@ -40,10 +40,10 @@ class EmsAuthApiWrapper(object):
                                      request_body, headers, api_name, username, password, expected_return_code,
                                      out_parameter_list,
                                      out_json_path_list, bearerAuth=bearerAuth)
-            if self.deleteApiresponse[0] == expected_return_code:
-                if self.deleteApiresponse[0] == ErrorCode.HTTP204:
+            if self.deleteapiAuthResponse[0] == expected_return_code:
+                if self.deleteapiAuthResponse[0] == ErrorCode.HTTP204:
                     LOGGER.info("NameSpace deleted successfully")
-                elif self.deleteApiresponse[0] == expected_return_code and \
+                elif self.deleteapiAuthResponse[0] == expected_return_code and \
                         out_parameter_list is not None and out_json_path_list is not None:
                     for i, out_param in enumerate(out_parameter_list):
                         LOGGER.info(out_parameter_list[i])
